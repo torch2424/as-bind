@@ -1,0 +1,36 @@
+{
+  "name": "asbind",
+  "description": "Library to handle passing high-level data structures between AssemblyScript and JavaScript",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/torch2424/asbind.git"
+  },
+  "keywords": [
+    "assemblyscript",
+    "wasm",
+    "bindgen",
+    "bind",
+    "type",
+    "loader",
+    "load",
+    "strings",
+    "object",
+    "arrays",
+    "assembly",
+    "script",
+    "typescript"
+  ],
+  "author": "Aaron Turner",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/torch2424/asbind/issues"
+  },
+  "homepage": "https://github.com/torch2424/asbind#readme",
+  "scripts": {
+    "asbuild:untouched": "asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --validate --debug",
+    "asbuild:optimized": "asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --validate --optimize",
+    "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized"
+  }
+}
