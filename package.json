@@ -6,6 +6,7 @@
   "module": "dist/asbuild.esm.js",
   "browser": "dist/asbuid.iife.js",
   "scripts": {
+    "dev": "npx watch \"npx run-s build test\" lib/ test/ assembly/",
     "build": "npx run-s build:wasm build:lib",
     "build:wasm": "npx run-s build:wasm:untouched build:wasm:optimized",
     "build:wasm:untouched": "npx asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --validate --debug --runtime full",
@@ -27,7 +28,8 @@
     "rollup-plugin-bundle-size": "^1.0.3",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-node-resolve": "^5.2.0"
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "watch": "^1.0.2"
   },
   "repository": {
     "type": "git",
