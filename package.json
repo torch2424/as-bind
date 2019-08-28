@@ -2,7 +2,33 @@
   "name": "asbind",
   "description": "Library to handle passing high-level data structures between AssemblyScript and JavaScript",
   "version": "0.0.1",
-  "main": "index.js",
+  "main": "dist/asbuild.cjs.js",
+  "module": "dist/asbuild.esm.js",
+  "browser": "dist/asbuid.iife.js",
+  "scripts": {
+    "build": "npx run-s build:wasm build:lib",
+    "build:wasm": "npx run-s build:wasm:untouched build:wasm:optimized",
+    "build:wasm:untouched": "npx asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --validate --debug --runtime full",
+    "build:wasm:optimized": "npx asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --validate --optimize --runtime full",
+    "build:lib": "npx rollup -c --environment LIB,PROD",
+    "test": "npx mocha"
+  },
+  "devDependencies": {
+    "@ampproject/rollup-plugin-closure-compiler": "^0.10.0",
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
+    "assemblyscript": "github:AssemblyScript/assemblyscript",
+    "babel-preset-es2015-rollup": "^3.0.0",
+    "mocha": "^6.2.0",
+    "npm-run-all": "^4.1.5",
+    "rollup": "^1.20.2",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-bundle-size": "^1.0.3",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/torch2424/asbind.git"
@@ -27,13 +53,5 @@
   "bugs": {
     "url": "https://github.com/torch2424/asbind/issues"
   },
-  "homepage": "https://github.com/torch2424/asbind#readme",
-  "scripts": {
-    "asbuild:untouched": "npx asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --validate --debug --runtime full",
-    "asbuild:optimized": "npx asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --validate --optimize --runtime full",
-    "asbuild": "npx run-s asbuild:untouched asbuild:optimized"
-  },
-  "devDependencies": {
-    "npm-run-all": "^4.1.5"
-  }
+  "homepage": "https://github.com/torch2424/asbind#readme"
 }
