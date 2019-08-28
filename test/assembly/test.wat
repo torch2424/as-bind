@@ -7,6 +7,7 @@
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (type $FUNCSIG$vi (func (param i32)))
+ (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00")
@@ -30,7 +31,8 @@
  (export "__release" (func $~lib/rt/pure/__release))
  (export "__collect" (func $~lib/rt/pure/__collect))
  (export "__rtti_base" (global $~lib/rt/__rtti_base))
- (export "add" (func $assembly/index/add))
+ (export "test" (func $test/assembly/test/test))
+ (export "add" (func $lib/assembly/asbind/add))
  (func $~lib/rt/tlsf/removeBlock (; 1 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3201,12 +3203,15 @@
   local.get $0
   global.set $~lib/rt/pure/CUR
  )
- (func $assembly/index/add (; 27 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $test/assembly/test/test (; 27 ;) (type $FUNCSIG$i) (result i32)
+  i32.const 24
+ )
+ (func $lib/assembly/asbind/add (; 28 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
  )
- (func $~lib/rt/pure/__visit (; 28 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 29 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -3336,7 +3341,7 @@
    end
   end
  )
- (func $~lib/rt/__visit_members (; 29 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 30 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $switch$1$default
    block $switch$1$case$4
@@ -3361,6 +3366,6 @@
   end
   unreachable
  )
- (func $null (; 30 ;) (type $FUNCSIG$v)
+ (func $null (; 31 ;) (type $FUNCSIG$v)
  )
 )

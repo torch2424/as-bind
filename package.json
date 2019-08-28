@@ -6,15 +6,15 @@
   "module": "dist/asbuild.esm.js",
   "browser": "dist/asbuid.iife.js",
   "scripts": {
-    "dev": "npx run-p watch:wasm watch:lib watch:test",
-    "watch:wasm": "npx watch \"npx run-s build:wasm test\" assembly/",
-    "watch:lib": "npx watch \"npx run-s build:lib test\" lib/",
-    "watch:test": "npx watch \"npx run-s test\" test/",
+    "dev": "npx run-p watch:lib watch:test",
+    "watch:lib": "npx chokidar \"lib/**/*\" -c \"npx run-s build:wasm build:lib test\"",
+    "watch:test": "npx chokidar \"test/**/*.js\" \"test/**/*.ts\" -c \"npx run-s build:test test\"",
     "build": "npx run-s build:wasm build:lib",
-    "build:wasm": "npx run-s build:wasm:untouched build:wasm:optimized",
-    "build:wasm:untouched": "npx asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --validate --debug --runtime full",
-    "build:wasm:optimized": "npx asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --validate --optimize --runtime full",
+    "build:wasm": "npx run-s build:wasm:debug build:wasm:optimized",
+    "build:wasm:debug": "npx asc lib/assembly/asbind.ts -b dist/asbind.debug.wasm -t dist/asbind.debug.wat --sourceMap --validate --debug --runtime full",
+    "build:wasm:optimized": "npx asc lib/assembly/asbind.ts -b dist/asbind.wasm -t dist/asbind.wat --sourceMap --validate --optimize --runtime full",
     "build:lib": "npx rollup -c --environment LIB,PROD",
+    "build:test": "npx asc test/assembly/test.ts -b test/assembly/test.wasm --validate --debug --runtime full",
     "test": "npx mocha"
   },
   "devDependencies": {
@@ -24,6 +24,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
     "assemblyscript": "github:AssemblyScript/assemblyscript",
     "babel-preset-es2015-rollup": "^3.0.0",
+    "chokidar-cli": "^2.0.0",
     "mocha": "^6.2.0",
     "npm-run-all": "^4.1.5",
     "rollup": "^1.20.2",
@@ -31,8 +32,7 @@
     "rollup-plugin-bundle-size": "^1.0.3",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "watch": "^1.0.2"
+    "rollup-plugin-node-resolve": "^5.2.0"
   },
   "repository": {
     "type": "git",
