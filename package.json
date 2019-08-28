@@ -6,7 +6,10 @@
   "module": "dist/asbuild.esm.js",
   "browser": "dist/asbuid.iife.js",
   "scripts": {
-    "dev": "npx watch \"npx run-s build test\" lib/ test/ assembly/",
+    "dev": "npx run-p watch:wasm watch:lib watch:test",
+    "watch:wasm": "npx watch \"npx run-s build:wasm test\" assembly/",
+    "watch:lib": "npx watch \"npx run-s build:lib test\" lib/",
+    "watch:test": "npx watch \"npx run-s test\" test/",
     "build": "npx run-s build:wasm build:lib",
     "build:wasm": "npx run-s build:wasm:untouched build:wasm:optimized",
     "build:wasm:untouched": "npx asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --validate --debug --runtime full",
