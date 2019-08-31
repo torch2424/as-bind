@@ -2,9 +2,9 @@
   "name": "asbind",
   "description": "Library to handle passing high-level data structures between AssemblyScript and JavaScript",
   "version": "0.0.1",
-  "main": "dist/asbuild.cjs.js",
-  "module": "dist/asbuild.esm.js",
-  "browser": "dist/asbuid.iife.js",
+  "main": "dist/asbind.cjs.js",
+  "module": "dist/asbind.esm.js",
+  "browser": "dist/asbind.iife.js",
   "scripts": {
     "dev": "npx run-p watch:lib watch:test",
     "watch:lib": "npx chokidar \"lib/**/*\" -c \"npx run-s build:wasm build:lib test\"",
@@ -14,7 +14,7 @@
     "build:wasm:debug": "npx asc lib/assembly/asbind.ts -b dist/asbind.debug.wasm -t dist/asbind.debug.wat --sourceMap --validate --debug --runtime full",
     "build:wasm:optimized": "npx asc lib/assembly/asbind.ts -b dist/asbind.wasm -t dist/asbind.wat --sourceMap --validate --optimize --runtime full",
     "build:lib": "npx rollup -c --environment LIB,PROD",
-    "build:test": "npx asc test/assembly/test.ts -b test/assembly/test.wasm --validate --debug --runtime full",
+    "build:test": "npx asc test/assembly/test.ts -b test/assembly/test.wasm --validate --runtime full",
     "test": "npx mocha"
   },
   "devDependencies": {

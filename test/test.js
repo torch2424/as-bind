@@ -1,15 +1,15 @@
 const fs = require('fs');
 const assert = require('assert');
-const asbuild = require('../dist/asbuild.cjs');
+const asbind = require('../dist/asbind.cjs');
 
 const wasmBytes = new Uint8Array(fs.readFileSync('./test/assembly/test.wasm'));
 
 describe('asbind', () => {
 
-  let wasmInstance;
+  let wasmInstanceExports;
 
   before(async () => {
-    const wasmModule = await WebAssembly.instantiate(
+    wasmInstanceExports = asbind.instantiateBuffer(
       wasmBytes, 
       {
         env: {
@@ -18,12 +18,11 @@ describe('asbind', () => {
       }
     );
 
-    wasmInstance = wasmModule.instance;
+    console.log(wasmInstanceExports);
   });
 
   it('should handle strings', () => {
-    console.log(asbuild);
-    console.log(asbuild.call(wasmInstance.exports, wasmInstance.exports.add, "Hello World"));
+    console.log(asbind.call(wasmInstanceExports, wasmInstanceExports.helloWorld, "asbind"));
     assert.equal(true, true);
   });
 });
