@@ -4,12 +4,9 @@
 export const __asbind_String_ID = idof<String>();
 
 // ArrayBuffers
+// TODO: Maybe support these?
 export const __asbind_ArrayBuffer_ID = idof<ArrayBuffer>();
 export const __asbind_ArrayBufferView_ID = idof<ArrayBufferView>();
-
-// Arrays of type
-// TODO: Not Supported by the Loader
-// export const __asbind_StringArray_ID = idof<Array<string>>();
 
 // Typed Arrays
 export const __asbind_Int8Array_ID = idof<Int8Array>();
