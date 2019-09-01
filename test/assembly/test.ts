@@ -9,11 +9,6 @@ export function helloWorldTwo(world: string, worldTwo: string): string {
   return "Hello " + world + " and " + worldTwo + "!";
 }
 
-export function pushStringArray(array: Array<string>): Array<string> {
-  array.push(array[0]);
-  return array;
-}
-
 export function mapInt8Array(array: Int8Array): Int8Array {
   return array.map((value: i8) => value * 2);
 }

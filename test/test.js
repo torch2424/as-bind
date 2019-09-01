@@ -49,8 +49,7 @@ describe('asbind', () => {
     assert.equal(helloWorldResponse, "Hello asbind and world!");
   });
 
-
-  it('should handle strings', () => {
+  it('should handle Strings', () => {
     const helloWorldResponse = asbind.apply(
       wasmInstanceExports, 
       wasmInstanceExports.helloWorld, 
@@ -59,14 +58,27 @@ describe('asbind', () => {
     assert.equal(helloWorldResponse, "Hello asbind!");
   });
 
-  it('should handle Uint8Array', () => {
-    const array = Uint8Array.from([24]);
-    const arrayMapResponse = asbind.apply(
-      wasmInstanceExports, 
-      wasmInstanceExports.mapUint8Array, 
-      [array]
-    );
-    assert.equal(arrayMapResponse[0], 48);
+  // TypedArrays
+  [
+    'Int8Array',
+    'Uint8Array',
+    'Int16Array',
+    'Uint16Array',
+    'Int32Array',
+    'Uint32Array',
+    'Float32Array',
+    'Float64Array',
+  ].forEach(typedArrayKey => {
+    it(`should handle ${typedArrayKey}`, () => {
+      const randomValue = Math.floor(Math.random() * 10);
+      const array = global[typedArrayKey].from([randomValue]);
+      const arrayMapResponse = asbind.apply(
+        wasmInstanceExports, 
+        wasmInstanceExports['map' + typedArrayKey], 
+        [array]
+      );
+      assert.equal(arrayMapResponse[0], randomValue * 2);
+    });
   });
 
 });

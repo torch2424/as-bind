@@ -8,7 +8,8 @@ export const __asbind_ArrayBuffer_ID = idof<ArrayBuffer>();
 export const __asbind_ArrayBufferView_ID = idof<ArrayBufferView>();
 
 // Arrays of type
-export const __asbind_StringArray_ID = idof<Array<string>>();
+// TODO: Not Supported by the Loader
+// export const __asbind_StringArray_ID = idof<Array<string>>();
 
 // Typed Arrays
 export const __asbind_Int8Array_ID = idof<Int8Array>();
