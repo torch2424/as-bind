@@ -17,14 +17,58 @@ describe('asbind', () => {
         }
       }
     );
-
-    console.log(wasmInstanceExports);
   });
+
+  it('should allow a function.call', () => {
+    assert(asbind.call !== undefined, true);
+    const helloWorldResponse = asbind.call(
+      wasmInstanceExports, 
+      wasmInstanceExports.helloWorld, 
+      "asbind"
+    );
+    assert.equal(helloWorldResponse, "Hello asbind!");
+  })
+
+  it('should allow a function.apply', () => {
+    assert(asbind.apply !== undefined, true);
+    const helloWorldResponse = asbind.apply(
+      wasmInstanceExports, 
+      wasmInstanceExports.helloWorld, 
+      ["asbind"]
+    );
+    assert.equal(helloWorldResponse, "Hello asbind!");
+  });
+
+  it('should allow multiple arguments', () => {
+    const helloWorldResponse = asbind.call(
+      wasmInstanceExports, 
+      wasmInstanceExports.helloWorldTwo, 
+      "asbind",
+      "world"
+    );
+    assert.equal(helloWorldResponse, "Hello asbind and world!");
+  });
+
 
   it('should handle strings', () => {
-    console.log(asbind.call(wasmInstanceExports, wasmInstanceExports.helloWorld, "asbind"));
-    assert.equal(true, true);
+    const helloWorldResponse = asbind.apply(
+      wasmInstanceExports, 
+      wasmInstanceExports.helloWorld, 
+      ["asbind"]
+    );
+    assert.equal(helloWorldResponse, "Hello asbind!");
   });
+
+  it('should handle Uint8Array', () => {
+    const array = Uint8Array.from([24]);
+    const arrayMapResponse = asbind.apply(
+      wasmInstanceExports, 
+      wasmInstanceExports.mapUint8Array, 
+      [array]
+    );
+    assert.equal(arrayMapResponse[0], 48);
+  });
+
 });
 
 
