@@ -15,7 +15,13 @@
     "build:wasm:optimized": "npx asc lib/assembly/asbind.ts -b dist/asbind.wasm -t dist/asbind.wat --sourceMap --validate --optimize --runtime full",
     "build:lib": "npx rollup -c --environment LIB,PROD",
     "build:test": "npx asc test/assembly/test.ts -b test/assembly/test.wasm --validate --runtime full",
-    "test": "npx mocha"
+    "test": "npx mocha",
+    "lint": "npx prettier --write **/*.js **/*.ts **/*.json"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   },
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.10.0",
@@ -25,8 +31,11 @@
     "assemblyscript": "github:AssemblyScript/assemblyscript",
     "babel-preset-es2015-rollup": "^3.0.0",
     "chokidar-cli": "^2.0.0",
+    "husky": "^3.0.5",
     "mocha": "^6.2.0",
     "npm-run-all": "^4.1.5",
+    "prettier": "1.18.2",
+    "pretty-quick": "^1.11.1",
     "rollup": "^1.20.2",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-bundle-size": "^1.0.3",

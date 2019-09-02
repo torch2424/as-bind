@@ -17,4 +17,3 @@ export const __asbind_Int32Array_ID = idof<Int32Array>();
 export const __asbind_Uint32Array_ID = idof<Uint32Array>();
 export const __asbind_Float32Array_ID = idof<Float32Array>();
 export const __asbind_Float64Array_ID = idof<Float64Array>();
-

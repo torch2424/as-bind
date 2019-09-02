@@ -4,11 +4,9 @@ function matchOne(pattern: string, text: string): i32 {
   return pattern === "." || text === pattern ? 1 : -1;
 }
 
-
 function matchQuestion(pattern: string, text: string): i32 {
-
   let doesMatch: i32 = matchOne(pattern.charAt(0), text.charAt(0)) ? 1 : -1;
-  let doesRestMatch: i32 = match(pattern.slice(2), text.slice(1) ? 1 : -1;
+  let doesRestMatch: i32 = match(pattern.slice(2), text.slice(1)) ? 1 : -1;
   let doesMatchWithoutQuestion: i32 = match(pattern.slice(2), text) ? 1 : -1;
 
   if (doesMatch > 0 && doesRestMatch > 0) {
@@ -21,9 +19,8 @@ function matchQuestion(pattern: string, text: string): i32 {
 }
 
 function matchStar(pattern: string, text: string): i32 {
-
   let doesMatch: i32 = matchOne(pattern.charAt(0), text.charAt(0)) ? 1 : -1;
-  let doesRestMatch: i32 = match(pattern, text.slice(1) ? 1 : -1;
+  let doesRestMatch: i32 = match(pattern, text.slice(1)) ? 1 : -1;
   let doesMatchWithoutStar: i32 = match(pattern.slice(2), text) ? 1 : -1;
 
   if (doesMatch > 0 && doesRestMatch > 0) {
@@ -41,13 +38,21 @@ function matchGroup(pattern: string, text: string) {
   if (pattern.charAt(groupEnd + 1) === "?") {
     const remainderPattern = pattern.slice(groupEnd + 2); // +2 needed to slice off the ')?'
 
-    const doesGroupPatternMatch = match(groupPattern, text.slice(0, groupPattern.length) ? 1 : 0;
-    const doesRemainderPatternWithoutGroupMatch = match(remainderPattern, text.slice(groupPattern.length)) ? 1 : 0;
-      const doesRemainderPatternMatch = match(remainderPattern, text) ? 1 : 0;
-
+    const doesGroupPatternMatch = match(
+      groupPattern,
+      text.slice(0, groupPattern.length)
+    )
+      ? 1
+      : 0;
+    const doesRemainderPatternWithoutGroupMatch = match(
+      remainderPattern,
+      text.slice(groupPattern.length)
+    )
+      ? 1
+      : 0;
+    const doesRemainderPatternMatch = match(remainderPattern, text) ? 1 : 0;
   } else if (pattern[groupEnd + 1] === "*") {
     const remainderPattern = pattern.slice(groupEnd + 2); // +2 needed to slice off the ')*'
-
 
     return (
       (match(groupPattern, text.slice(0, groupPattern.length)) &&
@@ -56,7 +61,6 @@ function matchGroup(pattern: string, text: string) {
     );
   } else {
     const remainderPattern = pattern.slice(groupEnd + 1); // +1 needed to slice off the ')'
-
 
     return (
       match(groupPattern, text.slice(0, groupPattern.length)) &&
@@ -74,7 +78,10 @@ export function match(pattern: string, text: string): i32 {
   } else if (pattern.charAt(0) === "(") {
     return matchGroup(pattern, text);
   } else {
-    return matchOne(pattern.charAt(0), text.charAt(0)) && match(pattern.slice(1), text.slice(1));
+    return (
+      matchOne(pattern.charAt(0), text.charAt(0)) &&
+      match(pattern.slice(1), text.slice(1))
+    );
   }
 }
 
@@ -85,5 +92,3 @@ export function search(pattern: string, text: string): i32 {
     return match(".*" + pattern, text);
   }
 }
-
-

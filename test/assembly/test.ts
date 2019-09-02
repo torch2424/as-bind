@@ -40,4 +40,3 @@ export function mapFloat32Array(array: Float32Array): Float32Array {
 export function mapFloat64Array(array: Float64Array): Float64Array {
   return array.map((value: f64) => value * 2);
 }
-
