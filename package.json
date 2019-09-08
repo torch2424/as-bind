@@ -9,7 +9,7 @@
     "build": "npx run-s lib:wasm:build lib:js:build",
     "dev": "npx run-p lib:watch lib:test:watch",
     "test": "npx mocha",
-    "lint": "npx prettier --write **/*.js **/*.ts **/*.json",
+    "lint": "npx prettier --write **/*.js **/*.ts **/*.json !build/**/* !dist/**/*",
     "lib:watch": "npx chokidar \"lib/**/*\" -c \"npx run-s build:wasm build:lib test\"",
     "lib:test:watch": "npx chokidar \"test/**/*.js\" \"test/**/*.ts\" -c \"npx run-s build:test test\"",
     "lib:wasm:build": "npx run-s lib:wasm:build:debug lib:wasm:build:optimized lib:wasm:build:cp",
