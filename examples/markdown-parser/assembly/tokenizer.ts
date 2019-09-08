@@ -5,11 +5,15 @@ class Token {
   value: string;
 }
 
-function isWhitespace(character: string) {
+function isWhitespace(character: string): boolean {
   return character === " " || character === " ";
 }
 
-function checkForTriplet(character: string, index: i32, markdown: string) {
+function checkForTriplet(
+  character: string,
+  index: i32,
+  markdown: string
+): boolean {
   return (
     markdown.charAt(index + 0) === character &&
     markdown.charAt(index + 1) === character &&
@@ -37,7 +41,7 @@ export function markdownTokenizer(markdown: string): Array<Token> {
       let tokenContinueLength = 0;
       while (
         tokenContinueLength < markdown.length - i &&
-        isWhiteSpace(markdown.charAt(i + tokenContinueLength))
+        isWhitespace(markdown.charAt(i + tokenContinueLength))
       ) {
         token.value += markdown.charAt(i + tokenContinueLength);
         tokenContinueLength += 1;
@@ -129,7 +133,7 @@ export function markdownTokenizer(markdown: string): Array<Token> {
     }
 
     // Check for block quotes
-    if (token.value === ">" && isWhiteSpace(markdown.charAt(i + 1))) {
+    if (token.value === ">" && isWhitespace(markdown.charAt(i + 1))) {
       token.value = "> ";
       token.type = "BlockQuote";
       i += 1;
@@ -168,4 +172,6 @@ export function markdownTokenizer(markdown: string): Array<Token> {
     // Lastly, simply add the character
     token.type = "Character";
   }
+
+  return tokens;
 }

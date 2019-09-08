@@ -18,6 +18,7 @@
     "lib:wasm:build:cp": "npx cpy 'lib/assembly/**/*' dist",
     "lib:js:build": "npx rollup -c --environment LIB,PROD",
     "lib:test:build": "npx asc test/assembly/test.ts -b test/assembly/test.wasm --validate --runtime full",
+    "md:build": "npx run-s md:wasm:build md:js:build",
     "md:dev": "npx run-p md:wasm:watch md:js:watch",
     "md:wasm:watch": "npx chokidar \"examples/markdown-parser/assembly/**/*\" -c \"npx run-s build:md:wasm\"",
     "md:js:watch": "npx rollup -c -w --environment MD,DEV",
