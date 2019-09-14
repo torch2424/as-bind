@@ -1,6 +1,5 @@
 // Console.log
-let currentLog: string = "";
-declare function consoleLog(): void;
-export function log(value: string): void {
-  currentLog = value;
+declare function consoleLog(message: string): void;
+export function log(message: string): void {
+  consoleLog(message);
 }

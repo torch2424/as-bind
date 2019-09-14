@@ -49,12 +49,10 @@ describe("asbind", () => {
       assert(wasmInstanceExports.__release !== undefined, true);
     });
 
-    it("should instantiate Response", async () => {
+    it("should instantiate Promise/Response", async () => {
       // Mock our Browser Response, and Wasm Instantiate streaming for response
-      global.Response = function() {
-        this.bytes = wasmBytes;
-      };
-      global.WebAssembly.instantiateStreaming = function(response, imports) {
+      global.WebAssembly.instantiateStreaming = async (response, imports) => {
+        response = await response;
         const wasmModulePromise = WebAssembly.instantiate(
           response.bytes,
           imports
@@ -64,10 +62,10 @@ describe("asbind", () => {
         });
       };
 
-      const wasmResponse = new Response();
-
       wasmInstanceExports = await asbind.instantiate(
-        wasmResponse,
+        Promise.resolve({
+          bytes: wasmBytes
+        }),
         baseImportObject
       );
 

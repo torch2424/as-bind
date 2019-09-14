@@ -3,9 +3,12 @@ import asbind from "../../dist/asbind.esm";
 
 import "index.css";
 
-let asbindExportsPromise = asbind.instantiateStreaming(fetch("index.wasm"), {
+let asbindExportsPromise = asbind.instantiate(fetch("index.wasm"), {
   index: {
-    consoleLog: () => {}
+    consoleLog: asbind.wrapImportObjectFunction(message => {
+      console.log("asdasd");
+      console.log(message);
+    })
   },
   env: {
     abort: () => {
@@ -19,7 +22,15 @@ class App extends Component {
     super();
   }
 
-  onComponentDidMount() {}
+  async componentDidMount() {
+    const asbindExports = await asbindExportsPromise;
+    console.log("sup", asbindExports);
+    const helloWorldResponse = asbind.call(
+      asbindExports,
+      asbindExports.convertMarkdownToHTML,
+      "# asbind conver markdown to html"
+    );
+  }
 
   render() {
     let time = new Date().toLocaleTimeString();

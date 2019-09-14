@@ -24,6 +24,8 @@ function checkForTriplet(
 export function markdownTokenizer(markdown: string): Array<Token> {
   let tokens = new Array<Token>(0);
 
+  log("from ts");
+
   for (let i: i32 = 0; i < markdown.length; i++) {
     let token = new Token();
     token.value = markdown.charAt(i);
