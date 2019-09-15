@@ -7,7 +7,7 @@ class Token {
 }
 
 function isWhitespace(character: string): boolean {
-  return character.indexOf(" ") === 0 || character.indexOf(" ") === 0;
+  return character.includes(" ") || character.includes(" ");
 }
 
 function checkForTriplet(
@@ -16,16 +16,18 @@ function checkForTriplet(
   markdown: string
 ): boolean {
   return (
-    markdown.charAt(index + 0) === character &&
-    markdown.charAt(index + 1) === character &&
-    markdown.charAt(index + 2) === character
+    markdown.charAt(index + 0).includes(character) &&
+    markdown.charAt(index + 1).includes(character) &&
+    markdown.charAt(index + 2).includes(character)
   );
 }
 
-export function markdownTokenizer(markdown: string): Array<Token> {
+export function markdownTokenizer(markdown: string): void {
+  // TODO: I don't think array of objects work in AS?
+  // Switch over to array of strings.
+  // first string is index, second string is type, third string is value.
+  // Then repeat until we get all of our tokens in an array
   let tokens = new Array<Token>(0);
-
-  let currentToken = new Token();
 
   for (let i: i32 = 0; i < markdown.length; i++) {
     let token = new Token();
@@ -37,7 +39,7 @@ export function markdownTokenizer(markdown: string): Array<Token> {
     // Pushing / Upadating the character token happens last
 
     // We care about newlines, as they specify blocks, and whether something is in the same newline
-    if (token.value === "\n") {
+    if (token.value.includes("\n")) {
       token.type === "NewLine";
       tokens.push(token);
       continue;
@@ -61,21 +63,14 @@ export function markdownTokenizer(markdown: string): Array<Token> {
     }
 
     // Check for the # Headers in the beginning of a line
-    if (token.value.indexOf("#") === 0) {
-      log("hello");
+    if (token.value.includes("#")) {
       token.type = "Header";
       tokens.push(token);
       continue;
     }
 
-    log(token.value);
-
     // Check for Italics
-    if (
-      token.value.indexOf("*") === 0 &&
-      markdown.charAt(i + 1).indexOf("*") === 0
-    ) {
-      log("itsics;");
+    if (token.value.includes("*") && markdown.charAt(i + 1).includes("*")) {
       token.value = "**";
       token.type = "Italics";
       tokens.push(token);
@@ -84,7 +79,7 @@ export function markdownTokenizer(markdown: string): Array<Token> {
     }
 
     // Check for bold
-    if (token.value === "_" && markdown.charAt(i + 1) === "_") {
+    if (token.value.includes("_") && markdown.charAt(i + 1).includes("_")) {
       token.value = "__";
       token.type = "Bold";
       tokens.push(token);
@@ -93,7 +88,7 @@ export function markdownTokenizer(markdown: string): Array<Token> {
     }
 
     // Check for strikethrough
-    if (token.value === "~" && markdown.charAt(i + 1) === "~") {
+    if (token.value.includes("~") && markdown.charAt(i + 1).includes("~")) {
       token.value = "~~";
       token.type = "Strikethrough";
       tokens.push(token);
@@ -102,7 +97,7 @@ export function markdownTokenizer(markdown: string): Array<Token> {
     }
 
     // Check for Unordered List
-    if (token.value === "*" && isWhitespace(markdown.charAt(i + 1))) {
+    if (token.value.includes("*") && isWhitespace(markdown.charAt(i + 1))) {
       token.value = "* ";
       token.type = "Unordered List";
       tokens.push(token);
@@ -112,8 +107,8 @@ export function markdownTokenizer(markdown: string): Array<Token> {
 
     // Check for ordered list
     if (
-      token.value === "1" &&
-      markdown.charAt(i + 1) === "." &&
+      token.value.includes("1") &&
+      markdown.charAt(i + 1).includes(".") &&
       isWhitespace(markdown.charAt(i + 2))
     ) {
       token.value = "1. ";
@@ -124,7 +119,7 @@ export function markdownTokenizer(markdown: string): Array<Token> {
     }
 
     // Check for Images
-    if (token.value === "!" && markdown.charAt(i + 1) === "[") {
+    if (token.value.includes("!") && markdown.charAt(i + 1).includes("[")) {
       token.value = "![";
       token.type = "ImageStart";
       tokens.push(token);
@@ -133,32 +128,32 @@ export function markdownTokenizer(markdown: string): Array<Token> {
     }
 
     // Check for Link Brackets
-    if (token.value === "[") {
+    if (token.value.includes("[")) {
       token.type = "BracketStart";
       tokens.push(token);
       continue;
     }
 
-    if (token.value === "]") {
+    if (token.value.includes("]")) {
       token.type = "BracketEnd";
       tokens.push(token);
       continue;
     }
 
     // Check for Link definitions
-    if (token.value === "(") {
+    if (token.value.includes("(")) {
       token.type = "ParenStart";
       continue;
     }
 
-    if (token.value === ")") {
+    if (token.value.includes(")")) {
       token.type = "ParenEnd";
       tokens.push(token);
       continue;
     }
 
     // Check for block quotes
-    if (token.value === ">" && isWhitespace(markdown.charAt(i + 1))) {
+    if (token.value.includes(">") && isWhitespace(markdown.charAt(i + 1))) {
       token.value = "> ";
       token.type = "BlockQuote";
       tokens.push(token);
@@ -176,7 +171,7 @@ export function markdownTokenizer(markdown: string): Array<Token> {
     }
 
     // Check for inline code blocks
-    if (token.value === "`") {
+    if (token.value.includes("`")) {
       token.type = "InlineCode";
       tokens.push(token);
       continue;
@@ -202,10 +197,10 @@ export function markdownTokenizer(markdown: string): Array<Token> {
     // We forsure have a character token
     // Check if we should updae the previous token
     if (
-      token.type === "Character" &&
+      token.type.includes("Character") &&
       i > 0 &&
       tokens.length > 0 &&
-      tokens[tokens.length - 1].type === "Character"
+      tokens[tokens.length - 1].type.includes("Character")
     ) {
       tokens[tokens.length - 1].value += token.value;
     } else {
@@ -213,13 +208,7 @@ export function markdownTokenizer(markdown: string): Array<Token> {
     }
   }
 
-  log("Tokens:");
-  for (let i = 0; i < tokens.length; i++) {
-    log("yo");
-    log(tokens[i].value);
-  }
+  // log(tokens[0].value);
 
-  log("Done Tokenizing!");
-
-  return tokens;
+  // return tokens;
 }
