@@ -42,3 +42,5 @@ export * from "asbind";
 ```
 
 Honestly, just get it working first, then design API.
+
+Shoutout: https://github.com/jamiebuilds/the-super-tiny-compiler/blob/master/the-super-tiny-compiler.js

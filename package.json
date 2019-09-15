@@ -20,7 +20,7 @@
     "lib:test:build": "npx asc test/assembly/test.ts -b test/assembly/test.wasm --validate --runtime full",
     "md:build": "npx run-s md:wasm:build md:js:build",
     "md:dev": "npx run-p lib:watch md:wasm:watch md:js:watch",
-    "md:wasm:watch": "npx chokidar \"examples/markdown-parser/assembly/**/*\" -c \"npx run-s build:md:wasm\"",
+    "md:wasm:watch": "npx chokidar \"examples/markdown-parser/assembly/**/*\" -c \"npx run-s md:wasm:build\"",
     "md:js:watch": "npx rollup -c -w --environment MD,DEV",
     "md:wasm:build": "npx asc examples/markdown-parser/assembly/index.ts -b dist/examples/markdown-parser/index.wasm --validate --runtime full -O3",
     "md:js:build": "npx rollup -c --environment MD,PROD"

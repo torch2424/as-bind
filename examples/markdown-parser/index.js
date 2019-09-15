@@ -4,9 +4,8 @@ import asbind from "../../dist/asbind.esm";
 import "index.css";
 
 let asbindExportsPromise = asbind.instantiate(fetch("index.wasm"), {
-  index: {
+  util: {
     consoleLog: asbind.wrapImportObjectFunction(message => {
-      console.log("asdasd");
       console.log(message);
     })
   },
@@ -24,11 +23,10 @@ class App extends Component {
 
   async componentDidMount() {
     const asbindExports = await asbindExportsPromise;
-    console.log("sup", asbindExports);
     const helloWorldResponse = asbind.call(
       asbindExports,
       asbindExports.convertMarkdownToHTML,
-      "# asbind conver markdown to html"
+      "# asbind **convert** markdown to html"
     );
   }
 
