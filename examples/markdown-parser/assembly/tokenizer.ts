@@ -41,7 +41,7 @@ export function markdownTokenizer(markdown: string): Array<string> {
     }
 
     // Check for whitespace
-    if (isWhitespace(currentCharacter)) {
+    if (isWhitespace(tokenValue)) {
       let tokenContinueLength = 0;
       tokenValue = "";
       while (
@@ -52,12 +52,16 @@ export function markdownTokenizer(markdown: string): Array<string> {
         tokenContinueLength += 1;
       }
 
+      log("hello");
+
       tokenTuples.push(i.toString());
       tokenTuples.push("Whitespace");
       tokenTuples.push(tokenValue);
       i += tokenContinueLength;
       continue;
     }
+  } /*
+
 
     // Check for the # Headers in the beginning of a line
     if (tokenValue.includes("#")) {
@@ -66,6 +70,7 @@ export function markdownTokenizer(markdown: string): Array<string> {
       tokenTuples.push(tokenValue);
       continue;
     }
+
 
     // Check for Italics
     if (tokenValue.includes("*") && markdown.charAt(i + 1).includes("*")) {
@@ -212,22 +217,23 @@ export function markdownTokenizer(markdown: string): Array<string> {
     }
 
     // We forsure have a character token
-    // Check if we should updae the previous token
+    // Check if we should update the previous token
     if (
       i > 0 &&
-      tokens.length > 0 &&
-      tokens[tokens.length - 3].includes("Character")
+      tokenTuples.length > 0 &&
+      tokenTuples[tokenTuples.length - 2].includes("Character")
     ) {
-      tokens[tokens.length - 1] += tokenValue;
+      tokenTuples[tokenTuples.length - 1] += tokenValue;
     } else {
-      tokens.push(token);
       tokenTuples.push(i.toString());
       tokenTuples.push("Character");
       tokenTuples.push(tokenValue);
     }
   }
 
-  log(tokens[6]);
+*/
 
-  return tokens;
+  log("Made the tokens!");
+
+  return tokenTuples;
 }

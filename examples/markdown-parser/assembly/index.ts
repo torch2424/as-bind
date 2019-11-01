@@ -12,6 +12,8 @@ export function convertMarkdownToHTML(markdown: string): string {
 
   markdownTokenizer(markdown);
 
+  log("Tokenized");
+
   /*
   log("Tokenss:" + tokens.length.toString());
   for (let i = 0; i < tokens.length; i++) {

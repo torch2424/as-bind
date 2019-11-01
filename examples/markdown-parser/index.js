@@ -23,12 +23,19 @@ class App extends Component {
 
   async componentDidMount() {
     const asbindExports = await asbindExportsPromise;
-    const response = asbind.call(
+    let response = asbind.call(
       asbindExports,
       asbindExports.convertMarkdownToHTML,
       "# asbind **convert** markdown to html"
     );
     console.log("Response: ", response);
+
+    response = asbind.call(
+      asbindExports,
+      asbindExports.convertMarkdownToHTML,
+      "# asbind **convert** markdown to html"
+    );
+    console.log("Response2 : ", response);
   }
 
   render() {
