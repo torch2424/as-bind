@@ -1,12 +1,12 @@
 import { log } from "./util";
 
-let tokenTuples = new Array<string>(0);
-
 class Token {
   index: i32;
   type: string;
   value: string;
 }
+
+let tokens = new Array<Token>(0);
 
 function isWhitespace(character: string): boolean {
   return character.includes(" ");
@@ -24,32 +24,32 @@ function checkForTriplet(
   );
 }
 
-function addTokenToTuples(
-  markdown: string,
-  tokenIndex: i32,
-  tokenValue: string
-): i32 {
+function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
+  let token = new Token();
+  token.index = tokenIndex;
+  token.value = tokenValue;
+
   // We care about newlines, as they specify blocks, and whether something is in the same newline
   if (tokenValue.includes("\n")) {
-    tokenTuples.push(tokenIndex.toString());
-    tokenTuples.push("NewLine");
-    tokenTuples.push(tokenValue);
+    token.type = "Newline";
+
+    tokens.push(token);
     return 0;
   }
 
   // Check for whitespace
   if (isWhitespace(tokenValue)) {
-    tokenTuples.push(tokenIndex.toString());
-    tokenTuples.push("Whitespace");
-    tokenTuples.push(tokenValue);
+    tokens.type = "Whitespace";
+
+    tokens.push(token);
     return 0;
   }
 
   // Check for the # Headers in the beginning of a line
   if (tokenValue.includes("#")) {
-    tokenTuples.push(tokenIndex.toString());
-    tokenTuples.push("Header");
-    tokenTuples.push(tokenValue);
+    token.type = "Header";
+
+    tokens.push(token);
     return 0;
   }
 
@@ -58,10 +58,10 @@ function addTokenToTuples(
     tokenValue.includes("*") &&
     markdown.charAt(tokenIndex + 1).includes("*")
   ) {
-    tokenTuples.push(tokenIndex.toString());
-    tokenTuples.push("Italics");
-    tokenTuples.push("**");
+    token.type = "Italics";
+    token.value = "**";
 
+    tokens.push(token);
     return 1;
   }
 
@@ -70,10 +70,10 @@ function addTokenToTuples(
     tokenValue.includes("_") &&
     markdown.charAt(tokenIndex + 1).includes("_")
   ) {
-    tokenTuples.push(tokenIndex.toString());
-    tokenTuples.push("Bold");
-    tokenTuples.push("__");
+    token.type = "Bold";
+    token.value = "__";
 
+    tokens.push(token);
     return 1;
   }
 
@@ -82,10 +82,10 @@ function addTokenToTuples(
     tokenValue.includes("~") &&
     markdown.charAt(tokenIndex + 1).includes("~")
   ) {
-    tokenTuples.push(tokenIndex.toString());
-    tokenTuples.push("Strikethrough");
-    tokenTuples.push("~~");
+    token.type = "Strikethrough";
+    token.value = "~~";
 
+    tokens.push(token);
     return 1;
   }
 
@@ -94,10 +94,10 @@ function addTokenToTuples(
     tokenValue.includes("*") &&
     isWhitespace(markdown.charAt(tokenIndex + 1))
   ) {
-    tokenTuples.push(tokenIndex.toString());
-    tokenTuples.push("Unordered List");
-    tokenTuples.push("* ");
+    token.type = "UnorderedList";
+    token.value = "* ";
 
+    tokens.push(token);
     return 1;
   }
 
@@ -107,10 +107,10 @@ function addTokenToTuples(
     markdown.charAt(tokenIndex + 1).includes(".") &&
     isWhitespace(markdown.charAt(tokenIndex + 2))
   ) {
-    tokenTuples.push(tokenIndex.toString());
-    tokenTuples.push("Ordered List");
-    tokenTuples.push("1. ");
+    token.type = "OrderedList";
+    token.value = "1. ";
 
+    tokens.push(token);
     return 1;
   }
 
@@ -119,42 +119,44 @@ function addTokenToTuples(
     tokenValue.includes("!") &&
     markdown.charAt(tokenIndex + 1).includes("[")
   ) {
-    tokenTuples.push(tokenIndex.toString());
-    tokenTuples.push("ImageStart");
-    tokenTuples.push("![");
+    token.type = "ImageStart";
+    token.value = "![";
 
+    tokens.push(token);
     return 1;
   }
 
   // Check for Link Brackets
   if (tokenValue.includes("[")) {
-    tokenTuples.push(tokenIndex.toString());
-    tokenTuples.push("BracketStart");
-    tokenTuples.push("[");
+    token.type = "BracketStart";
+    token.value = "[";
+
+    tokens.push(token);
     return 0;
   }
 
   if (tokenValue.includes("]")) {
-    tokenTuples.push(tokenIndex.toString());
-    tokenTuples.push("BracketEnd");
-    tokenTuples.push("[");
+    token.type = "BracketEnd";
+    token.value = "]";
+
+    tokens.push(token);
     return 0;
   }
 
   // Check for Link definitions
   if (tokenValue.includes("(")) {
-    tokenTuples.push(tokenIndex.toString());
-    tokenTuples.push("ParenStart");
-    tokenTuples.push("(");
+    token.type = "ParenStart";
+    token.value = "(";
 
+    tokens.push(token);
     return 0;
   }
 
   if (tokenValue.includes(")")) {
-    tokenTuples.push(tokenIndex.toString());
-    tokenTuples.push("ParenEnd");
-    tokenTuples.push(")");
+    token.type = "ParenEnd";
+    token.value = ")";
 
+    tokens.push(token);
     return 0;
   }
 
@@ -224,13 +226,13 @@ function addTokenToTuples(
   }
 }
 
-export function markdownTokenizer(markdown: string): Array<string> {
-  tokenTuples = new Array<string>(0);
+export function markdownTokenizer(markdown: string): Array<Token> {
+  tokens = new Array<Token>(0);
 
   for (let i: i32 = 0; i < markdown.length; i++) {
     let tokenValue: string = markdown.charAt(i);
 
-    let additionalIndex = addTokenToTuples(markdown, i, tokenValue);
+    let additionalIndex = addToken(markdown, i, tokenValue);
     i += additionalIndex;
   }
 
