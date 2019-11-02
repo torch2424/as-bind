@@ -7,7 +7,7 @@ class Token {
 }
 
 function isWhitespace(character: string): boolean {
-  return character.includes(" ") || character.includes(" ");
+  return character.includes(" ");
 }
 
 function checkForTriplet(
@@ -44,11 +44,18 @@ export function markdownTokenizer(markdown: string): Array<string> {
     if (isWhitespace(tokenValue)) {
       let tokenContinueLength = 0;
       tokenValue = "";
+
+      let didReachEndOfMarkdown: boolean =
+        tokenContinueLength < markdown.length - i;
+
+      log("ewiafn");
+
       while (
-        tokenContinueLength < markdown.length - i &&
+        didReachEndOfMarkdown &&
         isWhitespace(markdown.charAt(i + tokenContinueLength))
       ) {
-        tokenValue += markdown.charAt(i + tokenContinueLength);
+        log("ayyeee");
+        tokenValue += " ";
         tokenContinueLength += 1;
       }
 
