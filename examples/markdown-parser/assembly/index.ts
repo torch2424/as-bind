@@ -10,18 +10,15 @@ import { markdownTokenizer } from "./tokenizer";
 export function convertMarkdownToHTML(markdown: string): string {
   log(markdown);
 
-  markdownTokenizer(markdown);
+  let tokenTuples: Array<string> = markdownTokenizer(markdown);
 
   log("Tokenized");
 
-  /*
-  log("Tokenss:" + tokens.length.toString());
-  for (let i = 0; i < tokens.length; i++) {
-    // NOTE: You cannot pass a string that is on an object. A New variable must be allocated.
-    log("Token Value:" + tokens[i].index.toString());
+  log("Tokens lengths:" + tokenTuples.length.toString());
+  for (let i = 0; i < tokenTuples.length; i++) {
+    log("Token tuple part:" + tokenTuples[i].toString());
   }
   log("Done");
-   */
 
   return markdown + " yoyoyoyo";
 }

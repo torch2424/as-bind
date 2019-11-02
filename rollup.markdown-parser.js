@@ -8,7 +8,6 @@ import copy from "rollup-plugin-copy";
 import hash from "rollup-plugin-hash";
 import postcss from "rollup-plugin-postcss";
 import postcssImport from "postcss-import";
-import serve from "rollup-plugin-serve";
 import del from "rollup-plugin-delete";
 import pkg from "./package.json";
 
@@ -56,13 +55,6 @@ let plugins = [
 ];
 
 if (process.env.DEV) {
-  plugins = [
-    ...plugins,
-    serve({
-      contentBase: ["dist/examples/markdown-parser/"],
-      port: 8080
-    })
-  ];
   writeIndexHtmlToBuild("index.iife.js");
 }
 

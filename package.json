@@ -8,18 +8,20 @@
   "scripts": {
     "build": "npx run-s lib:wasm:build lib:js:build",
     "dev": "npx run-p lib:watch lib:test:watch",
+    "serve": "npx serve dist -p 8080",
     "test": "npx mocha",
     "lint": "npx prettier --write **/*.js **/*.ts **/*.json !build/**/* !dist/**/*",
-    "lib:watch": "npx chokidar \"lib/**/*\" -c \"npx run-s lib:wasm:build lib:js:build test\"",
+    "lib:watch": "npx chokidar \"lib/**/*\" -c \"npx run-s lib:wasm:build lib:js:build:dev test\"",
     "lib:test:watch": "npx chokidar \"test/**/*.js\" \"test/**/*.ts\" -c \"npx run-s lib:test:build test\"",
     "lib:wasm:build": "npx run-s lib:wasm:build:debug lib:wasm:build:optimized lib:wasm:build:cp",
     "lib:wasm:build:debug": "npx asc lib/assembly/asbind.ts -b dist/asbind.debug.wasm -t dist/asbind.debug.wat --sourceMap --validate --debug --runtime full",
     "lib:wasm:build:optimized": "npx asc lib/assembly/asbind.ts -b dist/asbind.wasm -t dist/asbind.wat --sourceMap --validate --optimize --runtime full",
     "lib:wasm:build:cp": "npx cpy 'lib/assembly/**/*' dist",
     "lib:js:build": "npx rollup -c --environment LIB,PROD",
+    "lib:js:build:dev": "npx rollup -c --environment LIB,DEV",
     "lib:test:build": "npx asc test/assembly/test.ts -b test/assembly/test.wasm --validate --runtime full",
     "md:build": "npx run-s md:wasm:build md:js:build",
-    "md:dev": "npx run-p lib:watch md:wasm:watch md:js:watch",
+    "md:dev": "npx run-p lib:watch md:wasm:watch md:js:watch serve",
     "md:wasm:watch": "npx chokidar \"examples/markdown-parser/assembly/**/*\" -c \"npx run-s md:wasm:build\"",
     "md:js:watch": "npx rollup -c -w --environment MD,DEV",
     "md:wasm:build": "npx asc examples/markdown-parser/assembly/index.ts -b dist/examples/markdown-parser/index.wasm --validate --runtime full -O3",
@@ -58,7 +60,7 @@
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-postcss": "^2.0.3",
-    "rollup-plugin-serve": "^1.0.1"
+    "serve": "^11.2.0"
   },
   "repository": {
     "type": "git",
