@@ -37,13 +37,27 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
   if (isWhitespace(tokenValue)) {
     token.type = "Whitespace";
 
+    let tokenContinueLength = 0;
+    tokenValue = "";
+
+    while (
+      tokenContinueLength < markdown.length - tokenIndex &&
+      isWhitespace(markdown.charAt(tokenIndex + tokenContinueLength))
+    ) {
+      tokenValue += " ";
+      tokenContinueLength += 1;
+    }
+
+    token.value = tokenValue;
+
     tokens.push(token);
-    return 0;
+    return tokenContinueLength - 1;
   }
 
   // Check for the # Headers in the beginning of a line
   if (tokenValue.includes("#")) {
     token.type = "Header";
+    token.value = "#";
 
     tokens.push(token);
     return 0;

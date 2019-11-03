@@ -8,9 +8,16 @@ import { log } from "./util";
 import { Token } from "./tokenizer/token";
 import { markdownTokenizer } from "./tokenizer/tokenizer";
 
+import { AstNode } from "./parser/ast";
+import { markdownTokenParser } from "./parser/";
+
+// https://www.geeksforgeeks.org/compiler-design-phases-compiler/
+// https://github.com/jamiebuilds/the-super-tiny-compiler/blob/master/the-super-tiny-compiler.js
+
 export function convertMarkdownToHTML(markdown: string): string {
   log(markdown);
 
+  // Turn the text into seperate tokens
   let tokens: Array<Token> = markdownTokenizer(markdown);
 
   log("Tokenized");
@@ -22,5 +29,10 @@ export function convertMarkdownToHTML(markdown: string): string {
   }
   log("Done");
 
-  return markdown + " yoyoyoyo";
+  // Parse the tokens into an AST
+  let ast: Array<AstNode> = markdownTokenParser(tokens);
+
+  // Generate code (HTML) from our AST
+
+  return markdown;
 }
