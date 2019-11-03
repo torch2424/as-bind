@@ -5,18 +5,20 @@ export * from "../../../dist/asbind";
 
 import { log } from "./util";
 
-import { markdownTokenizer } from "./tokenizer";
+import { Token } from "./tokenizer/token";
+import { markdownTokenizer } from "./tokenizer/tokenizer";
 
 export function convertMarkdownToHTML(markdown: string): string {
   log(markdown);
 
-  let tokenTuples: Array<string> = markdownTokenizer(markdown);
+  let tokens: Array<Token> = markdownTokenizer(markdown);
 
   log("Tokenized");
 
-  log("Tokens lengths:" + tokenTuples.length.toString());
-  for (let i = 0; i < tokenTuples.length; i++) {
-    log("Token tuple part:" + tokenTuples[i].toString());
+  log("Tokens lengths:" + tokens.length.toString());
+  for (let i = 0; i < tokens.length; i++) {
+    log("Token index:" + tokens[i].index.toString());
+    log("Token value:" + tokens[i].value);
   }
   log("Done");
 

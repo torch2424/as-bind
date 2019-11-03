@@ -1,10 +1,6 @@
-import { log } from "./util";
+import { log } from "../util";
 
-class Token {
-  index: i32;
-  type: string;
-  value: string;
-}
+import { Token } from "./token";
 
 let tokens = new Array<Token>(0);
 
@@ -39,7 +35,7 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
 
   // Check for whitespace
   if (isWhitespace(tokenValue)) {
-    tokens.type = "Whitespace";
+    token.type = "Whitespace";
 
     tokens.push(token);
     return 0;
@@ -165,45 +161,45 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
     tokenValue.includes(">") &&
     isWhitespace(markdown.charAt(tokenIndex + 1))
   ) {
-    tokenTuples.push(tokenIndex.toString());
-    tokenTuples.push("BlockQuote");
-    tokenTuples.push(">");
+    token.type = "BlockQuote";
+    token.value = ">";
 
+    tokens.push(token);
     return 1;
   }
 
   // Check for code blocks
   if (checkForTriplet("`", tokenIndex, markdown)) {
-    tokenTuples.push(tokenIndex.toString());
-    tokenTuples.push("CodeBlock");
-    tokenTuples.push("```");
+    token.type = "CodeBlock";
+    token.value = "```";
 
+    tokens.push(token);
     return 2;
   }
 
   // Check for inline code blocks
   if (tokenValue.includes("`")) {
-    tokenTuples.push(tokenIndex.toString());
-    tokenTuples.push("InlineCode");
-    tokenTuples.push("`");
+    token.type = "InlineCode";
+    token.value = "`";
 
+    tokens.push(token);
     return 0;
   }
 
   // Check for horizontal lines
   if (checkForTriplet("-", tokenIndex, markdown)) {
-    tokenTuples.push(tokenIndex.toString());
-    tokenTuples.push("HorizontalLine");
-    tokenTuples.push("---");
+    token.type = "HorizontalLine";
+    token.value = "---";
 
+    tokens.push(token);
     return 2;
   }
 
   if (checkForTriplet("=", tokenIndex, markdown)) {
-    tokenTuples.push(tokenIndex.toString());
-    tokenTuples.push("HorizontalLine");
-    tokenTuples.push("---");
+    token.type = "HorizontalLine";
+    token.value = "===";
 
+    tokens.push(token);
     return 2;
   }
 
@@ -211,17 +207,16 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
   // Check if we should update the previous token
   if (
     tokenIndex > 0 &&
-    tokenTuples.length > 0 &&
-    tokenTuples[tokenTuples.length - 2].includes("Character")
+    tokens.length > 0 &&
+    tokens[tokens.length - 1].value.includes("Character")
   ) {
-    let newValue = tokenTuples[tokenTuples.length - 1];
-    newValue += tokenValue;
-    tokenTuples[tokenTuples.length - 1] = newValue;
+    tokens[tokens.length - 1].value += tokenValue;
     return 0;
   } else {
-    tokenTuples.push(tokenIndex.toString());
-    tokenTuples.push("Character");
-    tokenTuples.push(tokenValue);
+    token.type = "Character";
+    token.value = tokenValue;
+
+    tokens.push(token);
     return 0;
   }
 }
@@ -236,5 +231,5 @@ export function markdownTokenizer(markdown: string): Array<Token> {
     i += additionalIndex;
   }
 
-  return tokenTuples;
+  return tokens;
 }
