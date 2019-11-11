@@ -9,7 +9,7 @@ import { Token } from "./tokenizer/token";
 import { markdownTokenizer } from "./tokenizer/tokenizer";
 
 import { AstNode } from "./parser/ast";
-import { markdownTokenParser } from "./parser/";
+import { markdownTokenParser } from "./parser/parser";
 
 // https://www.geeksforgeeks.org/compiler-design-phases-compiler/
 // https://github.com/jamiebuilds/the-super-tiny-compiler/blob/master/the-super-tiny-compiler.js

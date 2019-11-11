@@ -12,12 +12,14 @@ import del from "rollup-plugin-delete";
 import pkg from "./package.json";
 
 const fs = require("fs");
+const mkdirp = require("mkdirp");
 
 const writeIndexHtmlToBuild = bundleName => {
   let indexHtml = fs.readFileSync(
     "examples/markdown-parser/index.html",
     "utf8"
   );
+  mkdirp.sync("dist/examples/markdown-parser");
   indexHtml = indexHtml.replace(
     "<%BUNDLE%>",
     bundleName.replace("dist/examples/markdown-parser/", "")
