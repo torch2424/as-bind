@@ -55,47 +55,125 @@ function addAstNode(tokens: Array<Token>, tokenIndex: i32): i32 {
       indexOffset += 1;
 
       // Get the content of the header
-      let content: string = getContentOfTokensUntilTokenReached(
+      let response: Array<string> = getOffsetOfTokensUntilTokenReached(
         tokens,
         tokenIndex + indexOffset + 1,
         "NewLine"
       );
+      let content: string = response[0];
+      let offsetTokenLength: i32 = parseInt(response[1]) as i32;
 
       astNode.type = "Header" + headerLevel.toString();
       astNode.value = content;
 
+      indexOffset += offsetTokenLength;
+
       ast.push(astNode);
-      return indexOffset;
+      return offsetTokenLength;
     }
   }
 
   if (token.type == "Italics") {
-    // TODO: Find the content between the two italics tokens
-    // checkIfTypeIsFoundBeforeOtherType()
+    if (
+      checkIfTypeIsFoundBeforeOtherType(
+        tokens,
+        tokenIndex + 1,
+        "Italics",
+        "NewLine"
+      )
+    ) {
+      let response: Array<string> = getOffsetOfTokensUntilTokenReached(
+        tokens,
+        tokenIndex + 1,
+        "NewLine"
+      );
+      let content: string = response[0];
+      let offsetTokens: i32 = parseInt(response[1]) as i32;
+
+      astNode.type = "Italics";
+      astNode.value = content;
+
+      ast.push(astNode);
+      return offsetTokens;
+    }
+  }
+
+  if (token.type == "Bold") {
+    if (
+      checkIfTypeIsFoundBeforeOtherType(
+        tokens,
+        tokenIndex + 1,
+        "Bold",
+        "NewLine"
+      )
+    ) {
+      let response: Array<string> = getOffsetOfTokensUntilTokenReached(
+        tokens,
+        tokenIndex + 1,
+        "NewLine"
+      );
+      let content: string = response[0];
+      let offsetTokens: i32 = parseInt(response[1]) as i32;
+
+      astNode.type = "Bold";
+      astNode.value = content;
+
+      ast.push(astNode);
+      return offsetTokens;
+    }
+  }
+
+  if (token.type == "Strikethrough") {
+    if (
+      checkIfTypeIsFoundBeforeOtherType(
+        tokens,
+        tokenIndex + 1,
+        "Strikethrough",
+        "NewLine"
+      )
+    ) {
+      let response: Array<string> = getOffsetOfTokensUntilTokenReached(
+        tokens,
+        tokenIndex + 1,
+        "NewLine"
+      );
+      let content: string = response[0];
+      let offsetTokens: i32 = parseInt(response[1]) as i32;
+
+      astNode.type = "Strikethrough";
+      astNode.value = content;
+
+      ast.push(astNode);
+      return offsetTokens;
+    }
   }
 
   ast.push(astNode);
   return 0;
 }
 
-function getContentOfTokensUntilTokenReached(
+function getOffsetOfTokensUntilTokenReached(
   tokens: Array<Token>,
   startTokenIndex: i32,
   stopTokenType: string
-): string {
+): Array<string> {
   // Get the content of the header
-  let contentTokens: Array<tokens> = getAllTokensUntilTokenReached(
+  let contentTokens: Array<Token> = getAllTokensUntilTokenReached(
     tokens,
-    tokenIndex + indexOffset + 1,
+    startTokenIndex,
     "NewLine"
   );
 
   let content: string = "";
   for (let i = 0; i < contentTokens.length; i++) {
-    content += token.value;
+    content += contentTokens[i].value;
   }
 
-  return content;
+  let response = new Array<string>();
+
+  response.push(contentTokens.length.toString());
+  response.push(content);
+  return response;
 }
 
 function checkIfTypeIsFoundBeforeOtherType(
@@ -104,18 +182,18 @@ function checkIfTypeIsFoundBeforeOtherType(
   checkTokenType: string,
   otherTokenType: string
 ): boolean {
-  let checkTokens: Array<tokens> = getAllTokensUntilTokenReached(
+  let checkTokens: Array<Token> = getAllTokensUntilTokenReached(
     tokens,
-    tokenIndex + indexOffset + 1,
+    startTokenIndex,
     checkTokenType
   );
-  let otherTokens: Array<tokens> = getAllTokensUntilTokenReached(
+  let otherTokens: Array<Token> = getAllTokensUntilTokenReached(
     tokens,
-    tokenIndex + indexOffset + 1,
+    startTokenIndex,
     otherTokenType
   );
 
-  if (checkTokens.length < otherTokens) {
+  if (checkTokens.length < otherTokens.length) {
     return true;
   } else {
     return false;
