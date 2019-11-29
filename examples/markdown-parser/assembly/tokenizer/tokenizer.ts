@@ -1,6 +1,7 @@
 import { log } from "../util";
 
 import { Token } from "./token";
+import { TokenType } from "./token-type";
 
 let tokens = new Array<Token>(0);
 
@@ -27,7 +28,7 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
 
   // We care about newlines, as they specify blocks, and whether something is in the same newline
   if (tokenValue.includes("\n")) {
-    token.type = "Newline";
+    token.type = TokenType.NEWLINE;
 
     tokens.push(token);
     return 0;
@@ -35,7 +36,7 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
 
   // Check for whitespace
   if (isWhitespace(tokenValue)) {
-    token.type = "Whitespace";
+    token.type = TokenType.WHITESPACE;
 
     let tokenContinueLength = 0;
     tokenValue = "";
@@ -56,7 +57,7 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
 
   // Check for the # Headers in the beginning of a line
   if (tokenValue.includes("#")) {
-    token.type = "Header";
+    token.type = TokenType.HEADER;
     token.value = "#";
 
     tokens.push(token);
@@ -68,7 +69,7 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
     tokenValue.includes("*") &&
     markdown.charAt(tokenIndex + 1).includes("*")
   ) {
-    token.type = "Italics";
+    token.type = TokenType.ITALICS;
     token.value = "**";
 
     tokens.push(token);
@@ -80,7 +81,7 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
     tokenValue.includes("_") &&
     markdown.charAt(tokenIndex + 1).includes("_")
   ) {
-    token.type = "Bold";
+    token.type = TokenType.BOLD;
     token.value = "__";
 
     tokens.push(token);
@@ -92,7 +93,7 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
     tokenValue.includes("~") &&
     markdown.charAt(tokenIndex + 1).includes("~")
   ) {
-    token.type = "Strikethrough";
+    token.type = TokenType.STRIKETHROUGH;
     token.value = "~~";
 
     tokens.push(token);
@@ -104,7 +105,7 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
     tokenValue.includes("*") &&
     isWhitespace(markdown.charAt(tokenIndex + 1))
   ) {
-    token.type = "UnorderedList";
+    token.type = TokenType.UNORDERED_LIST_ITEM;
     token.value = "* ";
 
     tokens.push(token);
@@ -117,7 +118,7 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
     markdown.charAt(tokenIndex + 1).includes(".") &&
     isWhitespace(markdown.charAt(tokenIndex + 2))
   ) {
-    token.type = "OrderedList";
+    token.type = TokenType.ORDERED_LIST_ITEM;
     token.value = "1. ";
 
     tokens.push(token);
@@ -129,7 +130,7 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
     tokenValue.includes("!") &&
     markdown.charAt(tokenIndex + 1).includes("[")
   ) {
-    token.type = "ImageStart";
+    token.type = TokenType.IMAGE_START;
     token.value = "![";
 
     tokens.push(token);
@@ -138,7 +139,7 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
 
   // Check for Link Brackets
   if (tokenValue.includes("[")) {
-    token.type = "BracketStart";
+    token.type = TokenType.BRACKET_START;
     token.value = "[";
 
     tokens.push(token);
@@ -146,7 +147,7 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
   }
 
   if (tokenValue.includes("]")) {
-    token.type = "BracketEnd";
+    token.type = TokenType.BRACKET_END;
     token.value = "]";
 
     tokens.push(token);
@@ -155,7 +156,7 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
 
   // Check for Link definitions
   if (tokenValue.includes("(")) {
-    token.type = "ParenStart";
+    token.type = TokenType.PAREN_START;
     token.value = "(";
 
     tokens.push(token);
@@ -163,7 +164,7 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
   }
 
   if (tokenValue.includes(")")) {
-    token.type = "ParenEnd";
+    token.type = TokenType.PAREN_END;
     token.value = ")";
 
     tokens.push(token);
@@ -175,7 +176,7 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
     tokenValue.includes(">") &&
     isWhitespace(markdown.charAt(tokenIndex + 1))
   ) {
-    token.type = "BlockQuote";
+    token.type = TokenType.BLOCK_QUOTE;
     token.value = ">";
 
     tokens.push(token);
@@ -184,7 +185,7 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
 
   // Check for code blocks
   if (checkForTriplet("`", tokenIndex, markdown)) {
-    token.type = "CodeBlock";
+    token.type = TokenType.CODE_BLOCK;
     token.value = "```";
 
     tokens.push(token);
@@ -193,7 +194,7 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
 
   // Check for inline code blocks
   if (tokenValue.includes("`")) {
-    token.type = "InlineCode";
+    token.type = TokenType.INLINE_CODE;
     token.value = "`";
 
     tokens.push(token);
@@ -202,7 +203,7 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
 
   // Check for horizontal lines
   if (checkForTriplet("-", tokenIndex, markdown)) {
-    token.type = "HorizontalLine";
+    token.type = TokenType.HORIZONTAL_LINE;
     token.value = "---";
 
     tokens.push(token);
@@ -210,7 +211,7 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
   }
 
   if (checkForTriplet("=", tokenIndex, markdown)) {
-    token.type = "HorizontalLine";
+    token.type = TokenType.HORIZONTAL_LINE;
     token.value = "===";
 
     tokens.push(token);
@@ -222,12 +223,12 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
   if (
     tokenIndex > 0 &&
     tokens.length > 0 &&
-    tokens[tokens.length - 1].value.includes("Character")
+    tokens[tokens.length - 1].type.includes(TokenType.CHARACTER)
   ) {
     tokens[tokens.length - 1].value += tokenValue;
     return 0;
   } else {
-    token.type = "Character";
+    token.type = TokenType.CHARACTER;
     token.value = tokenValue;
 
     tokens.push(token);

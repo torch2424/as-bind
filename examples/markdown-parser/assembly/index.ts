@@ -32,6 +32,15 @@ export function convertMarkdownToHTML(markdown: string): string {
   // Parse the tokens into an AST
   let ast: Array<AstNode> = markdownTokenParser(tokens);
 
+  log("AST'd");
+
+  log("AST length:" + ast.length.toString());
+  for (let i = 0; i < ast.length; i++) {
+    log("ast type:" + ast[i].type);
+    log("ast value:" + ast[i].value);
+  }
+  log("Done");
+
   // Generate code (HTML) from our AST
 
   return markdown;
