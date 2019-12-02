@@ -4,32 +4,49 @@ import { Token } from "../tokenizer/token";
 import { TokenType } from "../tokenizer/token-type";
 
 import { AstNode } from "./ast";
+import { AstNodeType } from "./ast-node-type";
 
-let ast = new Array<AstNode>(0);
-
-export function markdownTokenParser(tokens: Array<Token>): Array<AstNode> {
-  ast = new Array<AstNode>(0);
-
+function addTokensToAst(tokens: Array<Token>, ast: Array<AstNode>): void {
   for (let i: i32 = 0; i < tokens.length; i++) {
-    let indexOffset = addAstNode(tokens, i);
+    let indexOffset = addAstNode(ast, tokens, i);
     i += indexOffset;
   }
+}
+
+export function markdownTokenParser(tokens: Array<Token>): Array<AstNode> {
+  let ast = new Array<AstNode>(0);
+
+  addTokensToAst(tokens, ast);
 
   return ast;
 }
 
-function addAstNode(tokens: Array<Token>, tokenIndex: i32): i32 {
+function getNewAstNode(): AstNode {
+  // AS Bugfix: Make sure the child array for the AstNode is properly initialized
+  // E.g, Make sure the child nodes of the ast is properly allocated as a new AST
   let astNode: AstNode = new AstNode();
+  astNode.childNodes = new Array<AstNode>(0);
+  return astNode;
+}
+
+function addAstNode(
+  ast: Array<AstNode>,
+  tokens: Array<Token>,
+  tokenIndex: i32
+): i32 {
+  let astNode: AstNode = getNewAstNode();
   let token: Token = tokens[tokenIndex];
 
+  log("Checking Token:" + token.value);
+
   if (token.type == TokenType.NEWLINE) {
-    astNode.type = TokenType.NEWLINE;
+    astNode.type = AstNodeType.NEWLINE;
     ast.push(astNode);
     return 0;
   }
 
   if (token.type == TokenType.WHITESPACE) {
-    astNode.type = "Whitespace";
+    astNode.type = AstNodeType.WHITESPACE;
     ast.push(astNode);
     return 0;
   }
@@ -56,20 +73,28 @@ function addAstNode(tokens: Array<Token>, tokenIndex: i32): i32 {
       indexOffset += 1;
 
       // Get the content of the header
-      let response: Array<string> = getOffsetOfTokensUntilTokenReached(
+      let contentTokens: Array<Token> = getAllTokensUntilTokenReached(
         tokens,
         tokenIndex + indexOffset + 1,
         TokenType.NEWLINE
       );
-      let content: string = response[0];
-      let offsetTokenLength: i32 = parseInt(response[1]) as i32;
+      let content: string = getTokensAsString(contentTokens);
+      let offsetTokenLength: i32 = contentTokens.length;
 
-      astNode.type = "Header" + headerLevel.toString();
-      astNode.value = content;
+      for (let j: i32 = 0; j < contentTokens.length; j++) {
+        log("header token:" + contentTokens[j].value);
+      }
+
+      astNode.type = AstNodeType.HEADER;
+      astNode.value = headerLevel.toString();
 
       indexOffset += offsetTokenLength;
 
       ast.push(astNode);
+
+      // Go through the child tokens as well
+      addTokensToAst(contentTokens, astNode.childNodes);
+
       return offsetTokenLength;
     }
   }
@@ -83,19 +108,21 @@ function addAstNode(tokens: Array<Token>, tokenIndex: i32): i32 {
         TokenType.NEWLINE
       )
     ) {
-      let response: Array<string> = getOffsetOfTokensUntilTokenReached(
+      let contentTokens: Array<Token> = getAllTokensUntilTokenReached(
         tokens,
         tokenIndex + 1,
-        TokenType.NEWLINE
+        TokenType.ITALICS
       );
-      let content: string = response[0];
-      let offsetTokens: i32 = parseInt(response[1]) as i32;
+      let content: string = getTokensAsString(contentTokens);
+      let offsetTokenLength: i32 = contentTokens.length;
 
-      astNode.type = TokenType.ITALICS;
-      astNode.value = content;
+      astNode.type = AstNodeType.ITALICS;
+
+      // Go through the child tokens as well
+      addTokensToAst(contentTokens, astNode.childNodes);
 
       ast.push(astNode);
-      return offsetTokens;
+      return offsetTokenLength;
     }
   }
 
@@ -108,19 +135,21 @@ function addAstNode(tokens: Array<Token>, tokenIndex: i32): i32 {
         TokenType.NEWLINE
       )
     ) {
-      let response: Array<string> = getOffsetOfTokensUntilTokenReached(
+      let contentTokens: Array<Token> = getAllTokensUntilTokenReached(
         tokens,
         tokenIndex + 1,
-        TokenType.NEWLINE
+        TokenType.BOLD
       );
-      let content: string = response[0];
-      let offsetTokens: i32 = parseInt(response[1]) as i32;
+      let content: string = getTokensAsString(contentTokens);
+      let offsetTokenLength: i32 = contentTokens.length;
 
-      astNode.type = TokenType.BOLD;
-      astNode.value = content;
+      astNode.type = AstNodeType.BOLD;
+
+      // Go through the child tokens as well
+      addTokensToAst(contentTokens, astNode.childNodes);
 
       ast.push(astNode);
-      return offsetTokens;
+      return offsetTokenLength;
     }
   }
 
@@ -133,159 +162,167 @@ function addAstNode(tokens: Array<Token>, tokenIndex: i32): i32 {
         TokenType.NEWLINE
       )
     ) {
-      let response: Array<string> = getOffsetOfTokensUntilTokenReached(
+      let contentTokens: Array<Token> = getAllTokensUntilTokenReached(
         tokens,
         tokenIndex + 1,
-        TokenType.NEWLINE
+        TokenType.STRIKETHROUGH
       );
-      let content: string = response[0];
-      let offsetTokens: i32 = parseInt(response[1]) as i32;
+      let content: string = getTokensAsString(contentTokens);
+      let offsetTokenLength: i32 = contentTokens.length;
 
-      astNode.type = TokenType.STRIKETHROUGH;
+      astNode.type = AstNodeType.STRIKETHROUGH;
       astNode.value = content;
 
+      // Go through the child tokens as well
+      addTokensToAst(contentTokens, astNode.childNodes);
+
       ast.push(astNode);
-      return offsetTokens;
+      return offsetTokenLength;
     }
   }
 
   if (token.type == TokenType.UNORDERED_LIST_ITEM) {
-    let response: Array<string> = getOffsetOfTokensUntilTokenReached(
+    let contentTokens: Array<Token> = getAllTokensUntilTokenReached(
       tokens,
       tokenIndex + 1,
       TokenType.NEWLINE
     );
-    let content: string = response[0];
-    let offsetTokens: i32 = parseInt(response[1]) as i32;
+    let content: string = getTokensAsString(contentTokens);
+    let offsetTokenLength: i32 = contentTokens.length;
 
-    astNode.type = TokenType.UNORDERED_LIST_ITEM;
-    astNode.value = content;
+    astNode.type = AstNodeType.UNORDERED_LIST_ITEM;
+
+    // Go through the child tokens as well
+    addTokensToAst(contentTokens, astNode.childNodes);
 
     ast.push(astNode);
-    return offsetTokens;
+    return offsetTokenLength;
   }
 
   if (token.type == TokenType.ORDERED_LIST_ITEM) {
-    let response: Array<string> = getOffsetOfTokensUntilTokenReached(
+    let contentTokens: Array<Token> = getAllTokensUntilTokenReached(
       tokens,
       tokenIndex + 1,
       TokenType.NEWLINE
     );
-    let content: string = response[0];
-    let offsetTokens: i32 = parseInt(response[1]) as i32;
+    let content: string = getTokensAsString(contentTokens);
+    let offsetTokenLength: i32 = contentTokens.length;
 
-    astNode.type = TokenType.ORDERED_LIST_ITEM;
-    astNode.value = content;
+    astNode.type = AstNodeType.ORDERED_LIST_ITEM;
+
+    // Go through the child tokens as well
+    addTokensToAst(contentTokens, astNode.childNodes);
 
     ast.push(astNode);
-    return offsetTokens;
+    return offsetTokenLength;
   }
 
   // Let's look for images
   if (token.type == TokenType.IMAGE_START) {
-    let response: Array<string> = getOffsetOfTokensUntilTokenReached(
+    let altTokens: Array<Token> = getAllTokensUntilTokenReached(
       tokens,
       tokenIndex + 1,
       TokenType.BRACKET_END
     );
-    let altText: string = response[0];
-    let altTextOffsetTokens: i32 = parseInt(response[1]) as i32;
+    let altText: string = getTokensAsString(altTokens);
+    let altTextOffsetTokenLength: i32 = altTokens.length;
 
-    let altTextAstNode = new AstNode();
+    let altTextAstNode = getNewAstNode();
     altTextAstNode.type = "Alt";
     altTextAstNode.value = altText;
 
     // We have the alt text, if this is an image
     // We need to check if this is immediately followed by a parentheses
     if (
-      tokens[tokenIndex + 1 + altTextOffsetTokens].type == TokenType.PAREN_START
+      tokens[tokenIndex + 1 + altTextOffsetTokenLength].type ==
+      TokenType.PAREN_START
     ) {
-      let response: Array<string> = getOffsetOfTokensUntilTokenReached(
+      let imageTokens: Array<Token> = getAllTokensUntilTokenReached(
         tokens,
-        tokenIndex + 1,
-        TokenType.BRACKET_END
+        tokenIndex + 1 + altTextOffsetTokenLength,
+        TokenType.PAREN_END
       );
-      let imageUrl: string = response[0];
-      let imageUrlOffsetTokens: i32 = parseInt(response[1]) as i32;
+      let imageUrl: string = getTokensAsString(imageTokens);
+      let imageUrlOffsetTokenLength: i32 = imageTokens.length;
 
       // Let's create the Ast Node for the image
-      astNode.type = "Image";
+      astNode.type = AstNodeType.IMAGE;
       astNode.value = imageUrl;
       astNode.childNodes.push(altTextAstNode);
 
       ast.push(astNode);
-      return altTextOffsetTokens + imageUrlOffsetTokens;
+      return altTextOffsetTokenLength + imageUrlOffsetTokenLength;
     }
   }
 
   // Let's look for links
   if (token.type == TokenType.BRACKET_START) {
-    let response: Array<string> = getOffsetOfTokensUntilTokenReached(
+    let linkTokens: Array<Token> = getAllTokensUntilTokenReached(
       tokens,
       tokenIndex + 1,
       TokenType.BRACKET_END
     );
-    let linkContent: string = response[0];
-    let linkContentOffsetTokens: i32 = parseInt(response[1]) as i32;
+    let linkContent: string = getTokensAsString(linkTokens);
+    let linkContentOffsetTokenLength: i32 = linkTokens.length;
 
-    let linkContentAstNode = new AstNode();
+    let linkContentAstNode = getNewAstNode();
     linkContentAstNode.type = "Link Content";
     linkContentAstNode.value = linkContent;
 
     // We have the link content, if this is an link
     // We need to check if this is immediately followed by a parentheses
     if (
-      tokens[tokenIndex + 1 + linkContentOffsetTokens].type ==
+      tokens[tokenIndex + 1 + linkContentOffsetTokenLength].type ==
       TokenType.PAREN_START
     ) {
-      let response: Array<string> = getOffsetOfTokensUntilTokenReached(
+      let urlTokens: Array<Token> = getAllTokensUntilTokenReached(
         tokens,
-        tokenIndex + 1,
-        TokenType.BRACKET_END
+        tokenIndex + 1 + linkContentOffsetTokenLength,
+        TokenType.PAREN_END
       );
-      let linkUrl: string = response[0];
-      let linkUrlOffsetTokens: i32 = parseInt(response[1]) as i32;
+      let urlContent: string = getTokensAsString(urlTokens);
+      let urlContentOffsetTokenLength: i32 = urlTokens.length;
 
       // Let's create the Ast Node for the image
-      astNode.type = "Link";
-      astNode.value = linkUrl;
+      astNode.type = AstNodeType.LINK;
+      astNode.value = urlContent;
       astNode.childNodes.push(linkContentAstNode);
 
       ast.push(astNode);
-      return linkContentOffsetTokens + linkUrlOffsetTokens;
+      return linkContentOffsetTokenLength + urlContentOffsetTokenLength;
     }
   }
 
   if (token.type == TokenType.BLOCK_QUOTE) {
-    let response: Array<string> = getOffsetOfTokensUntilTokenReached(
+    let contentTokens: Array<Token> = getAllTokensUntilTokenReached(
       tokens,
       tokenIndex + 1,
       TokenType.NEWLINE
     );
-    let content: string = response[0];
-    let offsetTokens: i32 = parseInt(response[1]) as i32;
+    let content: string = getTokensAsString(contentTokens);
+    let offsetTokenLength: i32 = contentTokens.length;
 
-    astNode.type = TokenType.BLOCK_QUOTE;
+    astNode.type = AstNodeType.BLOCK_QUOTE;
     astNode.value = content;
 
     ast.push(astNode);
-    return offsetTokens;
+    return offsetTokenLength;
   }
 
   if (token.type == TokenType.CODE_BLOCK) {
-    let response: Array<string> = getOffsetOfTokensUntilTokenReached(
+    let contentTokens: Array<Token> = getAllTokensUntilTokenReached(
       tokens,
       tokenIndex + 1,
       TokenType.CODE_BLOCK
     );
-    let content: string = response[0];
-    let offsetTokens: i32 = parseInt(response[1]) as i32;
+    let content: string = getTokensAsString(contentTokens);
+    let offsetTokenLength: i32 = contentTokens.length;
 
-    astNode.type = TokenType.CODE_BLOCK;
+    astNode.type = AstNodeType.CODE_BLOCK;
     astNode.value = content;
 
     ast.push(astNode);
-    return offsetTokens;
+    return offsetTokenLength;
   }
 
   if (token.type == TokenType.INLINE_CODE) {
@@ -297,19 +334,19 @@ function addAstNode(tokens: Array<Token>, tokenIndex: i32): i32 {
         TokenType.NEWLINE
       )
     ) {
-      let response: Array<string> = getOffsetOfTokensUntilTokenReached(
+      let contentTokens: Array<Token> = getAllTokensUntilTokenReached(
         tokens,
         tokenIndex + 1,
         TokenType.NEWLINE
       );
-      let content: string = response[0];
-      let offsetTokens: i32 = parseInt(response[1]) as i32;
+      let content: string = getTokensAsString(contentTokens);
+      let offsetTokenLength: i32 = contentTokens.length;
 
-      astNode.type = TokenType.INLINE_CODE;
+      astNode.type = AstNodeType.INLINE_CODE;
       astNode.value = content;
 
       ast.push(astNode);
-      return offsetTokens;
+      return offsetTokenLength;
     }
   }
 
@@ -317,13 +354,13 @@ function addAstNode(tokens: Array<Token>, tokenIndex: i32): i32 {
     token.type == TokenType.HORIZONTAL_LINE &&
     tokens[tokenIndex + 1].type == TokenType.NEWLINE
   ) {
-    astNode.type = TokenType.HORIZONTAL_LINE;
+    astNode.type = AstNodeType.HORIZONTAL_LINE;
     ast.push(astNode);
     return 0;
   }
 
   // It did not match our cases, let's assume the node is for characters
-  astNode.type = TokenType.CHARACTER;
+  astNode.type = AstNodeType.CHARACTER;
   astNode.value = token.value;
   ast.push(astNode);
   return 0;
@@ -353,6 +390,15 @@ function getOffsetOfTokensUntilTokenReached(
   response.push(content);
   response.push(contentTokens.length.toString());
   return response;
+}
+
+// Function to return tokens as a string
+function getTokensAsString(tokens: Array<Token>): string {
+  let content: string = "";
+  for (let i = 0; i < tokens.length; i++) {
+    content += tokens[i].value;
+  }
+  return content;
 }
 
 function checkIfTypeIsFoundBeforeOtherType(
