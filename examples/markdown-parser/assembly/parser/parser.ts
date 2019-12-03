@@ -37,16 +37,16 @@ function addAstNode(
   let astNode: AstNode = getNewAstNode();
   let token: Token = tokens[tokenIndex];
 
-  log("Checking Token:" + token.value);
-
   if (token.type == TokenType.NEWLINE) {
     astNode.type = AstNodeType.NEWLINE;
+    astNode.value = token.value;
     ast.push(astNode);
     return 0;
   }
 
   if (token.type == TokenType.WHITESPACE) {
     astNode.type = AstNodeType.WHITESPACE;
+    astNode.value = token.value;
     ast.push(astNode);
     return 0;
   }
@@ -81,10 +81,6 @@ function addAstNode(
       let content: string = getTokensAsString(contentTokens);
       let offsetTokenLength: i32 = contentTokens.length;
 
-      for (let j: i32 = 0; j < contentTokens.length; j++) {
-        log("header token:" + contentTokens[j].value);
-      }
-
       astNode.type = AstNodeType.HEADER;
       astNode.value = headerLevel.toString();
 
@@ -95,7 +91,7 @@ function addAstNode(
       // Go through the child tokens as well
       addTokensToAst(contentTokens, astNode.childNodes);
 
-      return offsetTokenLength;
+      return offsetTokenLength + 1;
     }
   }
 
@@ -122,7 +118,7 @@ function addAstNode(
       addTokensToAst(contentTokens, astNode.childNodes);
 
       ast.push(astNode);
-      return offsetTokenLength;
+      return offsetTokenLength + 1;
     }
   }
 
@@ -149,7 +145,7 @@ function addAstNode(
       addTokensToAst(contentTokens, astNode.childNodes);
 
       ast.push(astNode);
-      return offsetTokenLength;
+      return offsetTokenLength + 1;
     }
   }
 
@@ -171,13 +167,12 @@ function addAstNode(
       let offsetTokenLength: i32 = contentTokens.length;
 
       astNode.type = AstNodeType.STRIKETHROUGH;
-      astNode.value = content;
 
       // Go through the child tokens as well
       addTokensToAst(contentTokens, astNode.childNodes);
 
       ast.push(astNode);
-      return offsetTokenLength;
+      return offsetTokenLength + 1;
     }
   }
 
@@ -196,7 +191,7 @@ function addAstNode(
     addTokensToAst(contentTokens, astNode.childNodes);
 
     ast.push(astNode);
-    return offsetTokenLength;
+    return offsetTokenLength + 1;
   }
 
   if (token.type == TokenType.ORDERED_LIST_ITEM) {
@@ -214,7 +209,7 @@ function addAstNode(
     addTokensToAst(contentTokens, astNode.childNodes);
 
     ast.push(astNode);
-    return offsetTokenLength;
+    return offsetTokenLength + 1;
   }
 
   // Let's look for images
@@ -251,7 +246,7 @@ function addAstNode(
       astNode.childNodes.push(altTextAstNode);
 
       ast.push(astNode);
-      return altTextOffsetTokenLength + imageUrlOffsetTokenLength;
+      return altTextOffsetTokenLength + imageUrlOffsetTokenLength + 1;
     }
   }
 
@@ -289,7 +284,7 @@ function addAstNode(
       astNode.childNodes.push(linkContentAstNode);
 
       ast.push(astNode);
-      return linkContentOffsetTokenLength + urlContentOffsetTokenLength;
+      return linkContentOffsetTokenLength + urlContentOffsetTokenLength + 1;
     }
   }
 
@@ -306,7 +301,7 @@ function addAstNode(
     astNode.value = content;
 
     ast.push(astNode);
-    return offsetTokenLength;
+    return offsetTokenLength + 1;
   }
 
   if (token.type == TokenType.CODE_BLOCK) {
@@ -322,7 +317,7 @@ function addAstNode(
     astNode.value = content;
 
     ast.push(astNode);
-    return offsetTokenLength;
+    return offsetTokenLength + 1;
   }
 
   if (token.type == TokenType.INLINE_CODE) {
@@ -346,7 +341,7 @@ function addAstNode(
       astNode.value = content;
 
       ast.push(astNode);
-      return offsetTokenLength;
+      return offsetTokenLength + 1;
     }
   }
 

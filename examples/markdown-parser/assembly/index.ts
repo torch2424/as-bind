@@ -53,7 +53,6 @@ export function convertMarkdownToHTML(markdown: string): string {
   let ast: Array<AstNode> = markdownTokenParser(tokens);
 
   log("AST'd");
-  log(ast[0].childNodes[0].childNodes.length.toString());
   printAst(ast);
   log("AST Done");
 
