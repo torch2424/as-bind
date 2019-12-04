@@ -5,7 +5,7 @@ import { TokenType } from "./token-type";
 
 let tokens = new Array<Token>(0);
 
-function isWhitespace(character: string): boolean {
+function isWhitespace(character: string): bool {
   return character.includes(" ");
 }
 
@@ -13,7 +13,7 @@ function checkForTriplet(
   character: string,
   index: i32,
   markdown: string
-): boolean {
+): bool {
   return (
     markdown.charAt(index + 0).includes(character) &&
     markdown.charAt(index + 1).includes(character) &&

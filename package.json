@@ -20,11 +20,12 @@
     "lib:js:build": "rollup -c --environment LIB,PROD",
     "lib:js:build:dev": "rollup -c --environment LIB,DEV",
     "lib:test:build": "asc test/assembly/test.ts -b test/assembly/test.wasm --validate --runtime full",
-    "md:build": "run-s md:wasm:build md:js:build",
+    "md:build": "run-s md:wasm:build md:ts:build md:js:build",
     "md:dev": "run-p lib:watch md:wasm:watch md:js:watch serve",
     "md:wasm:watch": "chokidar \"examples/markdown-parser/assembly/**/*\" -c \"run-s md:wasm:build\"",
     "md:js:watch": "rollup -c -w --environment MD,DEV",
     "md:wasm:build": "asc examples/markdown-parser/assembly/index.ts -b dist/examples/markdown-parser/index.wasm --validate --runtime full -O3",
+    "md:ts:build": "tsc --project examples/markdown-parser/assembly/ --outDir dist/ --module \"es2015\"",
     "md:js:build": "rollup -c --environment MD,PROD"
   },
   "husky": {
@@ -87,5 +88,8 @@
   "bugs": {
     "url": "https://github.com/torch2424/asbind/issues"
   },
-  "homepage": "https://github.com/torch2424/asbind#readme"
+  "homepage": "https://github.com/torch2424/asbind#readme",
+  "dependencies": {
+    "typescript": "^3.7.3"
+  }
 }
