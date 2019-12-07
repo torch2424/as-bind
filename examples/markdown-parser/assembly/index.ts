@@ -16,6 +16,9 @@ import { generateHtmlString } from "./code-generator/code-generator";
 // https://www.geeksforgeeks.org/compiler-design-phases-compiler/
 // https://github.com/jamiebuilds/the-super-tiny-compiler/blob/master/the-super-tiny-compiler.js
 
+// TODO: Performance: "also the AS module might grow memory multiple times, which also adds to the overall time, while js doesn't have to do this" - dcode
+// Maybe to a memory grow here?
+
 function printTokens(tokens: Array<Token>): void {
   log("Tokens lengths:" + tokens.length.toString());
   for (let i = 0; i < tokens.length; i++) {
