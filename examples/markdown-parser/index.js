@@ -34,7 +34,7 @@ let testMarkdown = `# __asbind__ ~~convert~~ **markdown** to     html
 
       #### Let's write some quotes and code and stuff
 
-      > "WebAssembly is cool" - Torch2424, 2019
+      > WebAssembly is cool - Torch2424, 2019
 
       \`npm install asbind\`
 
@@ -105,10 +105,8 @@ class App extends Component {
   }
 
   render() {
-    let time = new Date().toLocaleTimeString();
     return (
       <div>
-        <span>Testing Time: {time}</span>
         <h1>AssemblyScript</h1>
         <h2>Div with Html:</h2>
         <div
@@ -116,21 +114,11 @@ class App extends Component {
             __html: this.state.assemblyscriptResponse
           }}
         ></div>
-        <h2>Pre with Html:</h2>
-        <pre
-          dangerouslySetInnerHTML={{
-            __html: this.state.assemblyscriptResponse
-          }}
-        ></pre>
         <h1>TypeScript</h1>
         <h2>Div with Html:</h2>
         <div
           dangerouslySetInnerHTML={{ __html: this.state.typescriptResponse }}
         ></div>
-        <h2>Pre with Html:</h2>
-        <pre
-          dangerouslySetInnerHTML={{ __html: this.state.typescriptResponse }}
-        ></pre>
       </div>
     );
   }
