@@ -243,8 +243,6 @@ function addAstNode(
       }
     }
 
-    log(tokensSkippedForWhitespace.toString());
-
     return tokensToSkip;
   }
 
@@ -265,12 +263,12 @@ function addAstNode(
     // We have the alt text, if this is an image
     // We need to check if this is immediately followed by a parentheses
     if (
-      tokens[tokenIndex + 1 + altTextOffsetTokenLength].type ==
+      tokens[tokenIndex + altTextOffsetTokenLength + 2].type ==
       TokenType.PAREN_START
     ) {
       let imageTokens: Array<Token> = getAllTokensUntilTokenReached(
         tokens,
-        tokenIndex + 1 + altTextOffsetTokenLength,
+        tokenIndex + altTextOffsetTokenLength + 3,
         TokenType.PAREN_END
       );
       let imageUrl: string = getTokensAsString(imageTokens);
@@ -282,7 +280,7 @@ function addAstNode(
       astNode.childNodes.push(altTextAstNode);
 
       ast.push(astNode);
-      return altTextOffsetTokenLength + imageUrlOffsetTokenLength + 1;
+      return altTextOffsetTokenLength + imageUrlOffsetTokenLength + 4;
     }
   }
 
@@ -303,12 +301,12 @@ function addAstNode(
     // We have the link content, if this is an link
     // We need to check if this is immediately followed by a parentheses
     if (
-      tokens[tokenIndex + 1 + linkContentOffsetTokenLength].type ==
+      tokens[tokenIndex + linkContentOffsetTokenLength + 2].type ==
       TokenType.PAREN_START
     ) {
       let urlTokens: Array<Token> = getAllTokensUntilTokenReached(
         tokens,
-        tokenIndex + 1 + linkContentOffsetTokenLength,
+        tokenIndex + linkContentOffsetTokenLength + 3,
         TokenType.PAREN_END
       );
       let urlContent: string = getTokensAsString(urlTokens);
@@ -320,7 +318,7 @@ function addAstNode(
       astNode.childNodes.push(linkContentAstNode);
 
       ast.push(astNode);
-      return linkContentOffsetTokenLength + urlContentOffsetTokenLength + 1;
+      return linkContentOffsetTokenLength + urlContentOffsetTokenLength + 4;
     }
   }
 
