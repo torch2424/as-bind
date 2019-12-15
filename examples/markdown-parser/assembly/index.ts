@@ -22,17 +22,18 @@ import { generateHtmlString } from "./code-generator/code-generator";
 function printTokens(tokens: Array<Token>): void {
   log("Tokens lengths:" + tokens.length.toString());
   for (let i = 0; i < tokens.length; i++) {
-    log("Token index:" + tokens[i].index.toString());
-    log("Token value:" + tokens[i].value);
+    log("Token Type: " + tokens[i].type);
+    log("Token index: " + tokens[i].index.toString());
+    log("Token value: " + tokens[i].value);
   }
 }
 
 function printAst(ast: Array<AstNode>): void {
   log("AST length:" + ast.length.toString());
   for (let i = 0; i < ast.length; i++) {
-    log("ast type:" + ast[i].type);
-    log("ast value:" + ast[i].value);
-    log("ast number of children:" + ast[i].childNodes.length.toString());
+    log("ast type: " + ast[i].type);
+    log("ast value: " + ast[i].value);
+    log("ast number of children: " + ast[i].childNodes.length.toString());
     if (ast[i].childNodes.length > 0) {
       log("printing childNodes...");
       log("------");
@@ -56,7 +57,7 @@ export function convertMarkdownToHTML(markdown: string): string {
   let ast: Array<AstNode> = markdownTokenParser(tokens);
 
   log("AST'd");
-  printAst(ast);
+  // printAst(ast);
   log("AST Done");
 
   // Generate code (HTML) from our AST

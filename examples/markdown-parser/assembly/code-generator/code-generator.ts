@@ -60,18 +60,24 @@ function generateHtmlStringForAstNode(
     return htmlString;
   }
 
-  // TODO: Fix Parser so that Unordered lists are the token, and has a child of items
-  if (astNode.type == AstNodeType.UNORDERED_LIST_ITEM) {
-    htmlString = "<ul><li>";
+  if (astNode.type == AstNodeType.UNORDERED_LIST) {
+    htmlString = "<ul>";
     htmlString += generateHtmlString(astNode.childNodes);
-    htmlString += "</li></ul>";
+    htmlString += "</ul>";
     return htmlString;
   }
 
-  if (astNode.type == AstNodeType.ORDERED_LIST_ITEM) {
-    htmlString = "<ol><li>";
+  if (astNode.type == AstNodeType.ORDERED_LIST) {
+    htmlString = "<ol>";
     htmlString += generateHtmlString(astNode.childNodes);
-    htmlString += "</li></ol>";
+    htmlString += "</ol>";
+    return htmlString;
+  }
+
+  if (astNode.type == AstNodeType.LIST_ITEM) {
+    htmlString = "<li>";
+    htmlString += generateHtmlString(astNode.childNodes);
+    htmlString += "</li>";
     return htmlString;
   }
 

@@ -6,7 +6,7 @@ import { convertMarkdownToHTML } from "../../dist/examples/markdown-parser/assem
 
 import "index.css";
 
-const testMarkdown = `# __asbind__ ~~convert~~ **markdown** to     html
+let testMarkdown = `# __asbind__ ~~convert~~ **markdown** to     html
 
       * Item 1
       * Item 2
@@ -73,7 +73,7 @@ class App extends Component {
     const asbindExports = await asbindExportsPromise;
 
     let largeTestMarkdown = "";
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 1; i++) {
       largeTestMarkdown += `${testMarkdown}\n`;
     }
 

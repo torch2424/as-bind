@@ -176,40 +176,76 @@ function addAstNode(
     }
   }
 
-  if (token.type == TokenType.UNORDERED_LIST_ITEM) {
-    let contentTokens: Array<Token> = getAllTokensUntilTokenReached(
-      tokens,
-      tokenIndex + 1,
-      TokenType.NEWLINE
-    );
-    let content: string = getTokensAsString(contentTokens);
-    let offsetTokenLength: i32 = contentTokens.length;
+  // Doing lists as one, as they share list item logic
+  if (
+    token.type == TokenType.UNORDERED_LIST_ITEM ||
+    token.type == TokenType.ORDERED_LIST_ITEM
+  ) {
+    // Set up the item type we are looking for
+    let listItemType: string = "";
 
-    astNode.type = AstNodeType.UNORDERED_LIST_ITEM;
-
-    // Go through the child tokens as well
-    addTokensToAst(contentTokens, astNode.childNodes);
-
+    // Set our list node, and add it to the parent ast.
+    if (token.type == TokenType.UNORDERED_LIST_ITEM) {
+      astNode.type = AstNodeType.UNORDERED_LIST;
+      listItemType = TokenType.UNORDERED_LIST_ITEM;
+    } else {
+      astNode.type = AstNodeType.ORDERED_LIST;
+      listItemType = TokenType.ORDERED_LIST_ITEM;
+    }
     ast.push(astNode);
-    return offsetTokenLength + 1;
-  }
 
-  if (token.type == TokenType.ORDERED_LIST_ITEM) {
-    let contentTokens: Array<Token> = getAllTokensUntilTokenReached(
-      tokens,
-      tokenIndex + 1,
-      TokenType.NEWLINE
-    );
-    let content: string = getTokensAsString(contentTokens);
-    let offsetTokenLength: i32 = contentTokens.length;
+    // Need to add all the list items to our list
+    let tokensToSkip = 0;
+    let tokensSkippedForWhitespace = 0;
+    let listItemTokenIndex = tokenIndex;
+    while (
+      listItemTokenIndex + tokensSkippedForWhitespace < tokens.length &&
+      tokens[listItemTokenIndex + tokensSkippedForWhitespace].type ==
+        listItemType
+    ) {
+      // Add the tokens we skipped for whitespace to our other skip/index values
+      tokensToSkip += tokensSkippedForWhitespace;
+      listItemTokenIndex += tokensSkippedForWhitespace;
 
-    astNode.type = AstNodeType.ORDERED_LIST_ITEM;
+      // Create the node for the list item
+      let listItemAstNode: AstNode = getNewAstNode();
+      listItemAstNode.type = AstNodeType.LIST_ITEM;
 
-    // Go through the child tokens as well
-    addTokensToAst(contentTokens, astNode.childNodes);
+      // Get its content tokens
+      let contentTokens: Array<Token> = getAllTokensUntilTokenReached(
+        tokens,
+        listItemTokenIndex + 1,
+        TokenType.NEWLINE
+      );
+      let content: string = getTokensAsString(contentTokens);
+      let offsetTokenLength: i32 = contentTokens.length;
 
-    ast.push(astNode);
-    return offsetTokenLength + 1;
+      // Add the content to the list item
+      addTokensToAst(contentTokens, listItemAstNode.childNodes);
+
+      // Add the list item to the list
+      astNode.childNodes.push(listItemAstNode);
+
+      let nextTokenIndex = offsetTokenLength + 2;
+
+      // Increase our values to keep looking through nodes!
+      tokensToSkip += nextTokenIndex;
+      listItemTokenIndex += nextTokenIndex;
+
+      // Need to handle whitespace here for tabbing as well
+      tokensSkippedForWhitespace = 0;
+      while (
+        listItemTokenIndex + tokensSkippedForWhitespace < tokens.length &&
+        tokens[listItemTokenIndex + tokensSkippedForWhitespace].type ==
+          TokenType.WHITESPACE
+      ) {
+        tokensSkippedForWhitespace += 1;
+      }
+    }
+
+    log(tokensSkippedForWhitespace.toString());
+
+    return tokensToSkip;
   }
 
   // Let's look for images
