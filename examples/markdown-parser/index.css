@@ -1,7 +1,81 @@
 html,
 body {
+  padding: 0px;
+  margin: 0px;
+  height: 100vh;
 }
 
-body {
-  padding: 10px;
+#root,
+.app {
+  width: 100%;
+  height: 100%;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+}
+
+.app > h1 {
+  text-align: center;
+}
+
+.link-row {
+  margin: 5px;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.editor-container {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.editor {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.markdown {
+  min-width: 350px;
+  width: 45%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.markdown > h2 {
+  text-align: center;
+}
+
+.markdown textarea {
+  width: 100%;
+  flex-grow: 1;
+}
+
+.result {
+  min-width: 350px;
+  width: 45%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.result > h2 {
+  text-align: center;
+}
+
+.result-html {
+  flex-grow: 1;
+  overflow: auto;
 }

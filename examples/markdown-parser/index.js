@@ -3,8 +3,7 @@ import asbind from "../../dist/asbind.esm";
 
 // Import our TypeScript equivalent
 import { convertMarkdownToHTML } from "../../dist/examples/markdown-parser/assembly/index";
-
-import "index.css";
+import "./index.css";
 
 let testMarkdown = `# __asbind__ ~~convert~~ **markdown** to     html
 
@@ -64,61 +63,64 @@ class App extends Component {
     super();
 
     this.state = {
-      assemblyscriptResponse: "",
-      typescriptResponse: ""
+      markdown: testMarkdown,
+      html: ""
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.handleChange();
+  }
+
+  async handleChange(event) {
+    let markdown = this.state.markdown;
+    if (event) {
+      markdown = event.target.value;
+    }
     const asbindExports = await asbindExportsPromise;
 
-    let largeTestMarkdown = "";
-    for (let i = 0; i < 1; i++) {
-      largeTestMarkdown += `${testMarkdown}\n`;
-    }
-
     // Get the assemblyscript response
-    const asStart = performance.now();
-    let assemblyscriptResponse = asbind.call(
+    let html = asbind.call(
       asbindExports,
       asbindExports.convertMarkdownToHTML,
-      largeTestMarkdown
+      markdown
     );
-    const asEnd = performance.now();
-    // console.log('asbind assemblyscript response:');
-    // console.log(assemblyscriptResponse);
-
-    // Get the typescript response
-    const tsStart = performance.now();
-    let typescriptResponse = convertMarkdownToHTML(largeTestMarkdown);
-    // console.log('asbind typescript response:');
-    // console.log(typescriptResponse);
-    const tsEnd = performance.now();
-
-    console.log(`AssemblyScript (performance.now()) Time: ${asEnd - asStart}`);
-    console.log(`TypeScript (preformance.now()) Time: ${tsEnd - tsStart}`);
 
     this.setState({
-      assemblyscriptResponse: assemblyscriptResponse,
-      typescriptResponse: typescriptResponse
+      markdown,
+      html
     });
   }
 
   render() {
     return (
-      <div>
-        <h1>AssemblyScript</h1>
-        <h2>Div with Html:</h2>
-        <div
-          dangerouslySetInnerHTML={{
-            __html: this.state.assemblyscriptResponse
-          }}
-        ></div>
-        <h1>TypeScript</h1>
-        <h2>Div with Html:</h2>
-        <div
-          dangerouslySetInnerHTML={{ __html: this.state.typescriptResponse }}
-        ></div>
+      <div class="app">
+        <h1>as-bind Markdown Parser Demo</h1>
+        <nav class="link-row">
+          <div>
+            <a href="https://github.com/torch2424/as-bind">Source</a>
+          </div>
+        </nav>
+        <div class="editor-container">
+          <div class="editor">
+            <div class="markdown">
+              <h2>Markdown</h2>
+              <textarea
+                value={this.state.markdown}
+                onInput={event => this.handleChange(event)}
+              ></textarea>
+            </div>
+            <div class="result">
+              <h2>Result</h2>
+              <div
+                class="result-html"
+                dangerouslySetInnerHTML={{
+                  __html: this.state.html
+                }}
+              ></div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

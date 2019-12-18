@@ -44,8 +44,6 @@ function printAst(ast: Array<AstNode>): void {
 }
 
 export function convertMarkdownToHTML(markdown: string): string {
-  log(markdown);
-
   // Turn the text into seperate tokens
   let tokens: Array<Token> = markdownTokenizer(markdown);
   // printTokens(tokens);
