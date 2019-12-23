@@ -91,7 +91,7 @@ function addAstNode(
       // Go through the child tokens as well
       addTokensToAst(contentTokens, astNode.childNodes);
 
-      return offsetTokenLength + 1;
+      return offsetTokenLength + headerLevel;
     }
   }
 

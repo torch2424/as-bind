@@ -47,12 +47,13 @@ let testMarkdown = `# __asbind__ ~~convert~~ **markdown** to     html
 
 testMarkdown = `
 
-Here is a [link to the source code](https://github.com/torch2424/asbind)
+# Test 1
 
+## Test two
 
-And an image of the author!
+### More items yoo
 
-      ![torch2424 avatar](https://avatars1.githubusercontent.com/u/1448289?s=460&v=4)
+#### Even more items please
 
 `;
 
