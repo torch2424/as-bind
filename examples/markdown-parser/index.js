@@ -86,6 +86,20 @@ class App extends Component {
       markdown
     );
 
+    // Log the input and output to the console
+
+    console.log(`
+Input Markdown:
+
+${markdown}
+
+------
+
+asbind response:
+
+${html}
+`);
+
     this.setState({
       markdown,
       html
@@ -101,7 +115,8 @@ class App extends Component {
           between AssemblyScript and JavaScript. This demo takes the input from
           the markdown text area, and passes the string directly to and exported
           function of the as-bind instantiated AssemblyScript module, and then
-          binds the returned string to the result div.
+          binds the returned string to the result div. The input and response
+          are logged into the JavaScript console.
         </p>
         <nav class="link-row">
           <div>
