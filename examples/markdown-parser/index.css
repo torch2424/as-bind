@@ -1,8 +1,17 @@
+@import "../../node_modules/normalize.css/normalize.css";
+@import "../../node_modules/sakura.css/css/sakura.css";
+
 html,
 body {
   padding: 0px;
   margin: 0px;
   height: 100vh;
+  max-width: none;
+}
+
+textarea {
+  background-color: #fff;
+  color: #000;
 }
 
 #root,
@@ -17,6 +26,15 @@ body {
 }
 
 .app > h1 {
+  text-align: center;
+}
+
+.description {
+  width: 100%;
+  max-width: 800px;
+
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
 }
 
@@ -77,6 +95,26 @@ body {
 .result-html {
   flex-grow: 1;
   overflow: auto;
+
+  margin-bottom: 10px;
+}
+
+@keyframes donut-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.donut {
+  display: inline-block;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #7983ff;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: donut-spin 1.2s linear infinite;
 }
 
 .markdown textarea,
