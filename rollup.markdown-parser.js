@@ -69,7 +69,7 @@ if (process.env.PROD) {
       targets: ["dist/examples/markdown-parser/bundle.*.js"]
     }),
     hash({
-      dest: "build/bundle.[hash].js",
+      dest: "dist/examples/markdown-parser/bundle.[hash].js",
       callback: bundleName => {
         writeIndexHtmlToBuild(bundleName);
       }
@@ -83,10 +83,11 @@ const mdBundles = [
     output: {
       file: "dist/examples/markdown-parser/index.iife.js",
       format: "iife",
-      sourcemap: sourcemapOption
-    },
-    watch: {
-      clearScreen: false
+      sourcemap: sourcemapOption,
+      banner: fs.readFileSync(
+        "examples/markdown-parser/assembly/as-mocks-banner.js",
+        "utf8"
+      )
     },
     plugins: plugins
   }

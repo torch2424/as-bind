@@ -50,7 +50,7 @@ export function convertMarkdownToHTML(markdown: string): string {
 
   // Parse the tokens into an AST
   let ast: Array<AstNode> = markdownTokenParser(tokens);
-  // printAst(ast);
+  printAst(ast);
 
   // Generate code (HTML) from our AST
   let htmlString = generateHtmlString(ast);
