@@ -45,18 +45,6 @@ let testMarkdown = `# __asbind__ ~~convert~~ **markdown** to     html
       # The End!
 `;
 
-testMarkdown = `
-
-# Test 1
-
-## Test two
-
-### More items yoo
-
-#### Even more items please
-
-`;
-
 let asbindExportsPromise = asbind.instantiate(fetch("index.wasm"), {
   util: {
     consoleLog: asbind.wrapImportObjectFunction(message => {

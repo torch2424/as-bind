@@ -366,7 +366,7 @@ function addAstNode(
       let contentTokens: Array<Token> = getAllTokensUntilTokenReached(
         tokens,
         tokenIndex + 1,
-        TokenType.NEWLINE
+        TokenType.INLINE_CODE
       );
       let content: string = getTokensAsString(contentTokens);
       let offsetTokenLength: i32 = contentTokens.length;
