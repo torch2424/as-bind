@@ -55,5 +55,7 @@ export function convertMarkdownToHTML(markdown: string): string {
   // Generate code (HTML) from our AST
   let htmlString = generateHtmlString(ast);
 
+  log(htmlString);
+
   return htmlString;
 }

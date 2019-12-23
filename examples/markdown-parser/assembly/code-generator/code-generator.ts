@@ -93,7 +93,7 @@ function generateHtmlStringForAstNode(
     htmlString = "<a ";
     htmlString += 'href="' + astNode.value + '">';
     htmlString += astNode.childNodes[0].value;
-    htmlString += "<a/>";
+    htmlString += "</a>";
     return htmlString;
   }
 
