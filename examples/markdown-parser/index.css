@@ -58,7 +58,6 @@ body {
 }
 
 .markdown textarea {
-  width: 100%;
   flex-grow: 1;
 }
 
@@ -78,4 +77,35 @@ body {
 .result-html {
   flex-grow: 1;
   overflow: auto;
+}
+
+.markdown textarea,
+.result .result-html {
+  padding: 5px;
+  border: 2px solid #000;
+}
+
+@media only screen and (max-width: 800px) {
+  .editor {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .editor-container {
+    overflow: initial;
+  }
+
+  .markdown,
+  .result {
+    min-width: 200px;
+    width: 90%;
+    height: 500px;
+
+    margin: 5px;
+  }
 }

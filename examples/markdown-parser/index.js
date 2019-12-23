@@ -96,6 +96,10 @@ class App extends Component {
     return (
       <div class="app">
         <h1>as-bind Markdown Parser Demo</h1>
+        <p>
+          as-bind is a library to handle passing high-level data structures
+          between AssemblyScript and JavaScript.
+        </p>
         <nav class="link-row">
           <div>
             <a href="https://github.com/torch2424/as-bind">Source</a>
