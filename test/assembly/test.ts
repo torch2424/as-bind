@@ -9,6 +9,14 @@ export function helloWorldTwo(world: string, worldTwo: string): string {
   return "Hello " + world + " and " + worldTwo + "!";
 }
 
+export function refAndNumberArgsReturnsRef(ref: string, num: i32): string {
+  return "Ref: " + ref + " Number: " + num.toString();
+}
+
+export function numberAndRefArgsReturnsNumber(ref: string, num: i32): number {
+  return ref.length + num;
+}
+
 export function mapInt8Array(array: Int8Array): Int8Array {
   return array.map((value: i8) => value * 2);
 }

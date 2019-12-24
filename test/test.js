@@ -26,27 +26,21 @@ describe("asbind", () => {
   describe("instantiation", () => {
     it("should instantiate WebAssembly.Module", async () => {
       const wasmModule = await WebAssembly.compile(wasmBytes);
-      wasmInstanceExports = await asbind.instantiate(
-        wasmModule,
-        baseImportObject
-      );
+      asbindInstance = await asbind.instantiate(wasmModule, baseImportObject);
 
-      assert(wasmInstanceExports !== undefined, true);
-      assert(wasmInstanceExports.helloWorld !== undefined, true);
-      assert(wasmInstanceExports.__alloc !== undefined, true);
-      assert(wasmInstanceExports.__release !== undefined, true);
+      assert(asbindInstance.exports !== undefined, true);
+      assert(asbindInstance.exports.helloWorld !== undefined, true);
+      assert(asbindInstance.exports.__alloc !== undefined, true);
+      assert(asbindInstance.exports.__release !== undefined, true);
     });
 
     it("should instantiate Uint8Array", async () => {
-      wasmInstanceExports = await asbind.instantiate(
-        wasmBytes,
-        baseImportObject
-      );
+      asbindInstance = await asbind.instantiate(wasmBytes, baseImportObject);
 
-      assert(wasmInstanceExports !== undefined, true);
-      assert(wasmInstanceExports.helloWorld !== undefined, true);
-      assert(wasmInstanceExports.__alloc !== undefined, true);
-      assert(wasmInstanceExports.__release !== undefined, true);
+      assert(asbindInstance.exports !== undefined, true);
+      assert(asbindInstance.exports.helloWorld !== undefined, true);
+      assert(asbindInstance.exports.__alloc !== undefined, true);
+      assert(asbindInstance.exports.__release !== undefined, true);
     });
 
     it("should instantiate Promise/Response", async () => {
@@ -62,47 +56,30 @@ describe("asbind", () => {
         });
       };
 
-      wasmInstanceExports = await asbind.instantiate(
+      asbindInstance = await asbind.instantiate(
         Promise.resolve({
           bytes: wasmBytes
         }),
         baseImportObject
       );
 
-      assert(wasmInstanceExports !== undefined, true);
-      assert(wasmInstanceExports.helloWorld !== undefined, true);
-      assert(wasmInstanceExports.__alloc !== undefined, true);
-      assert(wasmInstanceExports.__release !== undefined, true);
+      assert(asbindInstance.exports !== undefined, true);
+      assert(asbindInstance.exports.helloWorld !== undefined, true);
+      assert(asbindInstance.exports.__alloc !== undefined, true);
+      assert(asbindInstance.exports.__release !== undefined, true);
     });
   });
 
   describe("exported functions", () => {
-    let wasmInstanceExports;
+    let asbindInstance;
 
     before(async () => {
-      wasmInstanceExports = await asbind.instantiate(
-        wasmBytes,
-        baseImportObject
-      );
+      asbindInstance = await asbind.instantiate(wasmBytes, baseImportObject);
     });
 
-    it("should allow a function.call", () => {
-      assert(asbind.call !== undefined, true);
-      const helloWorldResponse = asbind.call(
-        wasmInstanceExports,
-        wasmInstanceExports.helloWorld,
-        "asbind"
-      );
-      assert.equal(helloWorldResponse, "Hello asbind!");
-    });
-
-    it("should allow a function.apply", () => {
-      assert(asbind.apply !== undefined, true);
-      const helloWorldResponse = asbind.apply(
-        wasmInstanceExports,
-        wasmInstanceExports.helloWorld,
-        ["asbind"]
-      );
+    it("should allow passing high level types to asbind instance exports", () => {
+      assert(asbindInstance.exports.helloWorld !== undefined, true);
+      const helloWorldResponse = asbindInstance.exports.helloWorld("asbind");
       assert.equal(helloWorldResponse, "Hello asbind!");
     });
 
@@ -159,21 +136,17 @@ describe("asbind", () => {
     let testImportCalledWith = [];
 
     before(async () => {
-      const wrappedImportObjectFunction = asbind.wrapImportObjectFunction(
-        value => {
-          testImportCalledWith = [value];
-        }
-      );
+      const importObjectFunction = value => {
+        testImportCalledWith = [value];
+      };
 
       const wrappedBaseImportObject = {
         ...baseImportObject,
         test: {
           testImportString: wrappedImportObjectFunction,
-          testImportTwoStrings: asbind.wrapImportObjectFunction(
-            (value1, value2) => {
-              testImportCalledWith = [value1, value2];
-            }
-          ),
+          testImportTwoStrings: (value1, value2) => {
+            testImportCalledWith = [value1, value2];
+          },
           testImportInt8Array: wrappedImportObjectFunction,
           testImportUint8Array: wrappedImportObjectFunction,
           testImportInt16Array: wrappedImportObjectFunction,
