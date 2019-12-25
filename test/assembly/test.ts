@@ -13,7 +13,11 @@ export function refAndNumberArgsReturnsRef(ref: string, num: i32): string {
   return "Ref: " + ref + " Number: " + num.toString();
 }
 
-export function numberAndRefArgsReturnsNumber(ref: string, num: i32): number {
+export function numberAndRefArgsReturnsRef(num: i32, ref: string): string {
+  return "Ref: " + ref + " Number: " + num.toString();
+}
+
+export function numberAndRefArgsReturnsNumber(num: i32, ref: string): i32 {
   return ref.length + num;
 }
 

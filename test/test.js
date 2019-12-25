@@ -79,21 +79,42 @@ describe("asbind", () => {
 
     it("should allow passing high level types to asbind instance exports", () => {
       assert(asbindInstance.exports.helloWorld !== undefined, true);
-      const helloWorldResponse = asbindInstance.exports.helloWorld("asbind");
-      assert.equal(helloWorldResponse, "Hello asbind!");
+      const response = asbindInstance.exports.helloWorld("asbind");
+      assert.equal(response, "Hello asbind!");
     });
 
     it("should allow multiple arguments", () => {
-      const helloWorldResponse = asbindInstance.exports.helloWorldTwo(
+      const response = asbindInstance.exports.helloWorldTwo("asbind", "world");
+      assert.equal(response, "Hello asbind and world!");
+    });
+
+    it("should allow passing in a ref and a number, and return a ref", () => {
+      const response = asbindInstance.exports.refAndNumberArgsReturnsRef(
         "asbind",
-        "world"
+        24
       );
-      assert.equal(helloWorldResponse, "Hello asbind and world!");
+      assert.equal(response, "Ref: asbind Number: 24");
+    });
+
+    it("should allow passing in a number and a ref, and return a ref", () => {
+      const response = asbindInstance.exports.numberAndRefArgsReturnsRef(
+        24,
+        "asbind"
+      );
+      assert.equal(response, "Ref: asbind Number: 24");
+    });
+
+    it("should allow passing in a number and a ref, and return a number", () => {
+      const response = asbindInstance.exports.numberAndRefArgsReturnsNumber(
+        24,
+        "asbind"
+      );
+      assert.equal(response, 30);
     });
 
     it("should handle Strings", () => {
-      const helloWorldResponse = asbindInstance.exports.helloWorld("asbind");
-      assert.equal(helloWorldResponse, "Hello asbind!");
+      const response = asbindInstance.exports.helloWorld("asbind");
+      assert.equal(response, "Hello asbind!");
     });
 
     // TypedArrays
