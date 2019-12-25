@@ -84,9 +84,7 @@ describe("asbind", () => {
     });
 
     it("should allow multiple arguments", () => {
-      const helloWorldResponse = asbind.call(
-        wasmInstanceExports,
-        wasmInstanceExports.helloWorldTwo,
+      const helloWorldResponse = asbindInstance.exports.helloWorldTwo(
         "asbind",
         "world"
       );
@@ -94,11 +92,7 @@ describe("asbind", () => {
     });
 
     it("should handle Strings", () => {
-      const helloWorldResponse = asbind.apply(
-        wasmInstanceExports,
-        wasmInstanceExports.helloWorld,
-        ["asbind"]
-      );
+      const helloWorldResponse = asbindInstance.exports.helloWorld("asbind");
       assert.equal(helloWorldResponse, "Hello asbind!");
     });
 
@@ -116,10 +110,8 @@ describe("asbind", () => {
       it(`should handle ${typedArrayKey}`, () => {
         const randomValue = Math.floor(Math.random() * 10);
         const array = global[typedArrayKey].from([randomValue]);
-        const arrayMapResponse = asbind.apply(
-          wasmInstanceExports,
-          wasmInstanceExports["map" + typedArrayKey],
-          [array]
+        const arrayMapResponse = asbindInstance.exports["map" + typedArrayKey](
+          array
         );
 
         // Ensure it is a type array
@@ -132,7 +124,7 @@ describe("asbind", () => {
   });
 
   describe("importObject functions", () => {
-    let wasmInstanceExports;
+    let asbindInstance;
     let testImportCalledWith = [];
 
     before(async () => {
@@ -143,22 +135,22 @@ describe("asbind", () => {
       const wrappedBaseImportObject = {
         ...baseImportObject,
         test: {
-          testImportString: wrappedImportObjectFunction,
+          testImportString: importObjectFunction,
           testImportTwoStrings: (value1, value2) => {
             testImportCalledWith = [value1, value2];
           },
-          testImportInt8Array: wrappedImportObjectFunction,
-          testImportUint8Array: wrappedImportObjectFunction,
-          testImportInt16Array: wrappedImportObjectFunction,
-          testImportUint16Array: wrappedImportObjectFunction,
-          testImportInt32Array: wrappedImportObjectFunction,
-          testImportUint32Array: wrappedImportObjectFunction,
-          testImportFloat32Array: wrappedImportObjectFunction,
-          testImportFloat64Array: wrappedImportObjectFunction
+          testImportInt8Array: importObjectFunction,
+          testImportUint8Array: importObjectFunction,
+          testImportInt16Array: importObjectFunction,
+          testImportUint16Array: importObjectFunction,
+          testImportInt32Array: importObjectFunction,
+          testImportUint32Array: importObjectFunction,
+          testImportFloat32Array: importObjectFunction,
+          testImportFloat64Array: importObjectFunction
         }
       };
 
-      wasmInstanceExports = await asbind.instantiate(
+      asbindInstance = await asbind.instantiate(
         wasmBytes,
         wrappedBaseImportObject
       );
@@ -169,20 +161,12 @@ describe("asbind", () => {
     });
 
     it("should handle strings being passed to the import object", () => {
-      asbind.apply(
-        wasmInstanceExports,
-        wasmInstanceExports.callTestImportString,
-        ["asbind"]
-      );
+      asbindInstance.exports.callTestImportString("asbind");
       assert.equal(testImportCalledWith[0], "asbind");
     });
 
     it("should handle multiple values being passed to the import object", () => {
-      asbind.apply(
-        wasmInstanceExports,
-        wasmInstanceExports.callTestImportTwoStrings,
-        ["asbind", "asbind2"]
-      );
+      asbindInstance.exports.callTestImportTwoStrings("asbind", "asbind2");
       assert.equal(testImportCalledWith[0], "asbind");
       assert.equal(testImportCalledWith[1], "asbind2");
     });
@@ -201,11 +185,9 @@ describe("asbind", () => {
       it(`should handle ${typedArrayKey} being passed to the import object`, () => {
         const randomValue = Math.floor(Math.random() * 10);
         const array = global[typedArrayKey].from([randomValue]);
-        const arrayMapResponse = asbind.apply(
-          wasmInstanceExports,
-          wasmInstanceExports["callTestImport" + typedArrayKey],
-          [array]
-        );
+        const arrayMapResponse = asbindInstance.exports[
+          "callTestImport" + typedArrayKey
+        ](array);
         // Ensure it is a typed array
         assert.equal(testImportCalledWith[0].byteLength !== undefined, true);
         // Ensure it has the correct values
