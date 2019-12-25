@@ -45,11 +45,11 @@ let testMarkdown = `# __asbind__ ~~convert~~ **markdown** to     html
       # The End!
 `;
 
-let asbindExportsPromise = asbind.instantiate(fetch("index.wasm"), {
+let asbindInstancePromise = asbind.instantiate(fetch("index.wasm"), {
   util: {
-    consoleLog: asbind.wrapImportObjectFunction(message => {
+    consoleLog: message => {
       console.log(message);
-    })
+    }
   },
   env: {
     abort: () => {
@@ -77,14 +77,10 @@ class App extends Component {
     if (event) {
       markdown = event.target.value;
     }
-    const asbindExports = await asbindExportsPromise;
+    const asbindInstance = await asbindInstancePromise;
 
     // Get the assemblyscript response
-    let html = asbind.call(
-      asbindExports,
-      asbindExports.convertMarkdownToHTML,
-      markdown
-    );
+    let html = asbindInstance.exports.convertMarkdownToHTML(markdown);
 
     // Log the input and output to the console
 
