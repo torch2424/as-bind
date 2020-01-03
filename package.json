@@ -69,7 +69,8 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-postcss": "^2.0.3",
     "sakura.css": "^1.0.0",
-    "serve": "^11.2.0"
+    "serve": "^11.2.0",
+    "typescript": "^3.7.3"
   },
   "repository": {
     "type": "git",
@@ -96,7 +97,5 @@
     "url": "https://github.com/torch2424/asbind/issues"
   },
   "homepage": "https://github.com/torch2424/asbind#readme",
-  "dependencies": {
-    "typescript": "^3.7.3"
-  }
+  "dependencies": {}
 }
