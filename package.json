@@ -1,7 +1,7 @@
 {
   "name": "as-bind",
   "description": "Library to handle passing high-level data structures between AssemblyScript and JavaScript 🤝🚀",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "dist/asbind.cjs.js",
   "module": "dist/asbind.esm.js",
   "browser": "dist/asbind.iife.js",
