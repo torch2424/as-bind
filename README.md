@@ -4,6 +4,24 @@ Library to handle passing high-level data structures between AssemblyScript and 
 
 ![Asbind Markdown Parser Demo Gif](./assets/asbind.gif)
 
+## Installation
+
+You can install as-bind in your project by running the following:
+
+`npm install --save as-bind`
+
+## Quick Start
+
+**In your Assemblyscript**
+
+1. Export everything from the asbind assemblyscript library:
+
+```
+// This should be in your entry point file for your Assemblyscript project
+
+
+```
+
 # Compatibility notes
 
 Supported types (params and returns on exported functions FROM Assemblyscript):
