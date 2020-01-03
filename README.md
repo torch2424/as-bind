@@ -1,6 +1,6 @@
 # as-bind
 
-Library to handle passing high-level data structures between AssemblyScript and JavaScript. 🤝🚀
+Isomorphic library to handle passing high-level data structures between AssemblyScript and JavaScript. 🤝🚀
 
 ![Asbind Markdown Parser Demo Gif](./assets/asbind.gif)
 
