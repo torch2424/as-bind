@@ -114,6 +114,9 @@ ${html}
           binds the returned string to the result div. The input and response
           are logged into the JavaScript console.
         </p>
+        <p class="description">
+          <b>as-bind version:</b> {asbind.version}
+        </p>
         <nav class="link-row">
           <div>
             <a href="https://github.com/torch2424/as-bind">

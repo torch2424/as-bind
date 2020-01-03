@@ -20,13 +20,16 @@
     "lib:js:build": "rollup -c --environment LIB,PROD",
     "lib:js:build:dev": "rollup -c --environment LIB,DEV",
     "lib:test:build": "asc test/assembly/test.ts -b test/assembly/test.wasm --validate --runtime full --debug",
+    "lib:deploy": "np",
     "md:build": "run-s md:wasm:build md:ts:build md:js:build",
     "md:dev": "run-p lib:watch md:wasm:watch md:js:watch serve",
     "md:wasm:watch": "chokidar --initial \"examples/markdown-parser/assembly/**/*\" -c \"run-s md:wasm:build\"",
     "md:js:watch": "chokidar --initial \"examples/markdown-parser/**/*\" -c \"rollup -c --environment MD,DEV\"",
     "md:wasm:build": "asc examples/markdown-parser/assembly/index.ts -b dist/examples/markdown-parser/index.wasm --sourceMap dist/examples/markdown-parser/index.wasm.map --validate --runtime stub",
     "md:ts:build": "tsc --project examples/markdown-parser/assembly/ --outDir dist/ --module \"es2015\"",
-    "md:js:build": "rollup -c --environment MD,PROD"
+    "md:js:build": "rollup -c --environment MD,PROD",
+    "md:deploy": "run-s build md:build md:deploy:gh-pages",
+    "md:deploy:gh-pages": "gh-pages -d dist/examples/markdown-parser"
   },
   "husky": {
     "hooks": {
