@@ -212,7 +212,7 @@ Thus, this library was made to help AssemblyScript/JavaScript users build awesom
 
 ## Performance
 
-**TL;DR** This library should be fast, but depending on your project you may want some more careful consideration.
+**TL;DR** This library should be fast, but depending on your project you may want some more careful consideration. 🤔
 
 as-bind does all of it's data passing at runtime. Meaning this will be slower than a code generated bindings generator, such as something like [wasm-bindgen](https://github.com/rustwasm/wasm-bindgen). This is because, as-bind needs to cycle through every supported type on every paremeter or return value for each function, whenever the function is called. However, this is mitigated due to the Speculative execution that the library implements. Which. in this case it means, that the library by default will assume the type of value being passed to, or returned by a function will not change, and will only have to cycle through the params once, and then after that, it would be as fast as a code generated solution (in theory). This speculative execution can be turned off as specified in the Reference API.
 
@@ -224,12 +224,14 @@ Eventually for the most performant option, we would want to do some JavaScript c
 
 - The as-bind example is a Markdown Parser, in which as-bind takes in a string, passes it to a rough markdown parser / compiler written in AssemblyScript, and returns a string. [(Live Demo)](https://torch2424.github.io/as-bind/), [(Source Code)](https://github.com/torch2424/as-bind/tree/master/examples/markdown-parser)
 
+_If you're project is using as-bind, and you would like to be featured here. Please open a README with links to your project, and if appropriate, explaining how as-bind is being used._ 😊
+
 ## Contributing
 
-Contributions are definitely welcome! Feel free to open a PR for small fixes such as typos and things. Larger fixes, or new features should start out as an issue for discussion, in which then a PR should be made.
+Contributions are definitely welcome! Feel free to open a PR for small fixes such as typos and things. Larger fixes, or new features should start out as an issue for discussion, in which then a PR should be made. 🥳
 
 This project will also adhere to the [AssemblyScript Code of Conduct](https://github.com/AssemblyScript/assemblyscript/blob/master/CODE_OF_CONDUCT.md).
 
 ## License
 
-[MIT](https://oss.ninja/mit/torch2424).
+[MIT](https://oss.ninja/mit/torch2424). 📝
