@@ -10,7 +10,35 @@
 
 Isomorphic library to handle passing high-level data structures between AssemblyScript and JavaScript. 🤝🚀
 
+[Markdown Parser Demo](https://torch2424.github.io/as-bind/)
+
 ![Asbind Markdown Parser Demo Gif](./assets/asbind.gif)
+
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Motivation](#motivation)
+- [Supported Data Types](#supported-data-types)
+- [Supported AssemblyScript Runtime Variants](#supported-assemblyscript-runtime-variants)
+- [Performance](#performance)
+- [Reference API](#reference-api)
+- [AsBind](#asbind)
+  - [Class Properties](#class-properties)
+    - [version](#version)
+    - [instantiate](#instantiate)
+  - [Instance Properties](#instance-properties)
+    - [exports](#exports)
+    - [unboundExports](#unboundexports)
+  - [importObject](#importobject)
+    - [enableExportFunctionTypeCaching](#enableexportfunctiontypecaching)
+    - [disableExportFunctionTypeCaching](#disableexportfunctiontypecaching)
+    - [enableImportFunctionTypeCaching](#enableimportfunctiontypecaching)
+    - [disableExportFunctionTypeCaching](#disableexportfunctiontypecaching-1)
+- [Projects using as-bind](#projects-using-as-bind)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Features
 
@@ -203,6 +231,16 @@ This will (re-)enable type caching (speculative execution) for ALL importObject 
 ##### disableExportFunctionTypeCaching
 
 This will disable type caching (speculative execution) for ALL importObject functions on the AsBindInstance.
+
+## Projects using as-bind
+
+- The as-bind example is a Markdown Parser, in which as-bind takes in a string, passes it to a rough markdown parser / compiler written in AssemblyScript, and returns a string. [(Live Demo)](https://torch2424.github.io/as-bind/), [(Source Code)](https://github.com/torch2424/as-bind/tree/master/examples/markdown-parser)
+
+## Contributing
+
+Contributions are definitely welcome! Feel free to open a PR for small fixes such as typos and things. Larger fixes, or new features should start out as an issue for discussion, in which then a PR should be made.
+
+This project will also adhere to the [AssemblyScript Code of Conduct](https://github.com/AssemblyScript/assemblyscript/blob/master/CODE_OF_CONDUCT.md).
 
 ## License
 
