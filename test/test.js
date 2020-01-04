@@ -150,7 +150,7 @@ describe("asbind", () => {
 
     before(async () => {
       const importObjectFunction = value => {
-        testImportCalledWith = [value];
+        testImportCalledWith = [value].slice();
       };
 
       const wrappedBaseImportObject = {
@@ -204,7 +204,7 @@ describe("asbind", () => {
       "Float64Array"
     ].forEach(typedArrayKey => {
       it(`should handle ${typedArrayKey} being passed to the import object`, () => {
-        const randomValue = Math.floor(Math.random() * 10);
+        const randomValue = Math.floor(Math.random() * 10) + 1;
         const array = global[typedArrayKey].from([randomValue]);
         const arrayMapResponse = asbindInstance.exports[
           "callTestImport" + typedArrayKey
