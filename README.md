@@ -32,12 +32,12 @@ Isomorphic library to handle passing high-level data structures between Assembly
 
 - The library is Isomorphic. Meaning it supports both the Browser, and Node! And has ESM, CommonJS, and IIFE bundles! 🌐
 - Wraps around the [AssemblyScript Loader](https://github.com/AssemblyScript/assemblyscript/tree/master/lib/loader). The loader handles all the heavy-lifting of passing data into WebAssembly linear memory. 💪
-- Wraps around imported JavaScript functions, and exported AssemblyScript functions of the AssemblyScript Wasm Module. This allows high-level data types to be passed to AssemblyScript functions, without having to touch Wasm memory! 🤯
-- The library works at runtime, so no generated code that you have to maintain and try to get to work in your environment. 🏃
+- Wraps around imported JavaScript functions, and exported AssemblyScript functions of the AssemblyScript Wasm Module. This allows high-level data types to be passed directly to exported AssemblyScript functions! 🤯
+- The library works at runtime, so no generated code that you have to maintain and make it play nicely in your environment. 🏃
 - Maintains great performance (relative to generating the corresponding JavaScript code), by using [Speculative Execution](https://en.wikipedia.org/wiki/Speculative_execution), and caching types passed between functions. 🤔
 - Installable from package managers (npm), with a modern JavaScript API syntax. 📦
 - The library is [< 5KB (minified and gzip'd)](https://bundlephobia.com/result?p=as-bind) and tree-shakeable! 🌲
-- This library is currently the [wasm-bindgen](https://github.com/rustwasm/wasm-bindgen) in the Rust/Wasm ecosystem, for AssemblyScript. 😀
+- This library is currently (as of January, 2020) the [wasm-bindgen](https://github.com/rustwasm/wasm-bindgen) in the Rust/Wasm ecosystem, for AssemblyScript. 😀
 
 ## Installation
 
