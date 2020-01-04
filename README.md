@@ -174,15 +174,35 @@ An AsBindInstance is vaugley similar to a [WebAssembly instance](https://develop
 
 ##### exports
 
+Similar to to [WebAssembly.Instance.prototype.exports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Instance/exports), this is an object containing all of the exported fields from the WebAssembly module. However, **exported functions** are bound / wrapped in which they will handle passing the supported high-level data types to the exported AssemblyScript function.
+
+Each **exported function** has the property: `shouldCacheTypes`. If you would like to disable type caching (speculative execution) for a particular function, you can do: `asBindInstance.exports.myFunction.shouldCacheTypes = false;`. Or set to true, to re-enable type caching.
+
 ##### unboundExports
+
+This is essentially the same as the [WebAssembly.Instance.prototype.exports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Instance/exports), this is an object containing all of the exported fields from the WebAssembly module. These are not bound / wrapped, so you can access the original exported functions.
+
+#### importObject
+
+Similar to to [WebAssembly.instantiateStreaming() importObject](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/instantiateStreaming), This is the original passed importObject on instantiation, after the **importObject functions** are bound / wrapped by as-bind.
+
+Each wrapped **importObject function** has the property: `shouldCacheTypes`. If you would like to disable type caching (speculative execution) for a particular function, you can do: `asBindInstance.importObject.myFunction.shouldCacheTypes = false;`. Or set to true, to re-enable type caching.
 
 ##### enableExportFunctionTypeCaching
 
+This will (re-)enable type caching (speculative execution) for ALL exported functions on the AsBindInstance.
+
 ##### disableExportFunctionTypeCaching
+
+This will disable type caching (speculative execution) for ALL exported functions on the AsBindInstance.
 
 ##### enableImportFunctionTypeCaching
 
+This will (re-)enable type caching (speculative execution) for ALL importObject functions on the AsBindInstance.
+
 ##### disableExportFunctionTypeCaching
+
+This will disable type caching (speculative execution) for ALL importObject functions on the AsBindInstance.
 
 ## License
 
