@@ -1,6 +1,6 @@
 const fs = require("fs");
 const assert = require("assert");
-const asbind = require("../dist/asbind.cjs");
+const { AsBind } = require("../dist/asbind.cjs");
 
 const wasmBytes = new Uint8Array(fs.readFileSync("./test/assembly/test.wasm"));
 
@@ -26,7 +26,7 @@ describe("asbind", () => {
   describe("instantiation", () => {
     it("should instantiate WebAssembly.Module", async () => {
       const wasmModule = await WebAssembly.compile(wasmBytes);
-      asbindInstance = await asbind.instantiate(wasmModule, baseImportObject);
+      asbindInstance = await AsBind.instantiate(wasmModule, baseImportObject);
 
       assert(asbindInstance.exports !== undefined, true);
       assert(asbindInstance.exports.helloWorld !== undefined, true);
@@ -35,7 +35,7 @@ describe("asbind", () => {
     });
 
     it("should instantiate Uint8Array", async () => {
-      asbindInstance = await asbind.instantiate(wasmBytes, baseImportObject);
+      asbindInstance = await AsBind.instantiate(wasmBytes, baseImportObject);
 
       assert(asbindInstance.exports !== undefined, true);
       assert(asbindInstance.exports.helloWorld !== undefined, true);
@@ -56,7 +56,7 @@ describe("asbind", () => {
         });
       };
 
-      asbindInstance = await asbind.instantiate(
+      asbindInstance = await AsBind.instantiate(
         Promise.resolve({
           bytes: wasmBytes
         }),
@@ -74,7 +74,7 @@ describe("asbind", () => {
     let asbindInstance;
 
     before(async () => {
-      asbindInstance = await asbind.instantiate(wasmBytes, baseImportObject);
+      asbindInstance = await AsBind.instantiate(wasmBytes, baseImportObject);
     });
 
     it("should allow passing high level types to asbind instance exports", () => {
@@ -171,7 +171,7 @@ describe("asbind", () => {
         }
       };
 
-      asbindInstance = await asbind.instantiate(
+      asbindInstance = await AsBind.instantiate(
         wasmBytes,
         wrappedBaseImportObject
       );
@@ -245,7 +245,7 @@ describe("asbind", () => {
         }
       };
 
-      asbindInstance = await asbind.instantiate(
+      asbindInstance = await AsBind.instantiate(
         wasmBytes,
         wrappedBaseImportObject
       );

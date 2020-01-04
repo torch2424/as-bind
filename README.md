@@ -73,7 +73,7 @@ asyncTask();
 Or we can also use Node:
 
 ```javascript
-const AsBind = require("as-bind");
+const { AsBind } = require("as-bind");
 const fs = require("fs");
 
 const wasm = fs.readFileSync("./path-to-my-wasm.wasm");
