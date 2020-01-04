@@ -1,5 +1,13 @@
 # as-bind
 
+<!-- Badges -->
+
+[![Build Status](https://travis-ci.org/torch2424/as-bind.svg?branch=master)](https://travis-ci.org/torch2424/as-bind)
+![npm bundle size (minified)](https://img.shields.io/bundlephobia/min/as-bind.svg)
+![npm](https://img.shields.io/npm/dt/as-bind.svg)
+![npm version](https://img.shields.io/npm/v/as-bind.svg)
+![GitHub](https://img.shields.io/github/license/torch2424/as-bind.svg)
+
 Isomorphic library to handle passing high-level data structures between AssemblyScript and JavaScript. 🤝🚀
 
 ![Asbind Markdown Parser Demo Gif](./assets/asbind.gif)
