@@ -19,7 +19,8 @@ Isomorphic library to handle passing high-level data structures between Assembly
 - Wraps around imported JavaScript functions, and exported AssemblyScript functions of the AssemblyScript Wasm Module. This allows high-level data types to be passed to AssemblyScript functions, without having to touch Wasm memory! 🤯
 - The library works at runtime, so no generated code that you have to maintain and try to get to work in your environment. 🏃
 - Maintains great performance (relative to generating the corresponding JavaScript code), by using [Speculative Execution](https://en.wikipedia.org/wiki/Speculative_execution), and caching types passed between functions. 🤔
-- The library is [< 5KB (minified and gzip'd)](https://bundlephobia.com/result?p=as-bind) and tree-shakeable! 📦🌲
+- Installable from package managers (npm), with a modern JavaScript API syntax. 📦
+- The library is [< 5KB (minified and gzip'd)](https://bundlephobia.com/result?p=as-bind) and tree-shakeable! 🌲
 - This library is currently the [wasm-bindgen](https://github.com/rustwasm/wasm-bindgen) in the Rust/Wasm ecosystem, for AssemblyScript. 😀
 
 ## Installation
