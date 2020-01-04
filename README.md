@@ -35,9 +35,9 @@ export * from '../node_modules/as-bind/lib/assembly/asbind.ts'
 
 After this, let's export an example function we can try:
 
-```
+```typescript
 export function myExportedFunctionThatTakesAString(value: string): string {
-  return 'AsBind: ' + value;
+  return "AsBind: " + value;
 }
 ```
 
@@ -45,36 +45,40 @@ export function myExportedFunctionThatTakesAString(value: string): string {
 
 In the browser using ESM Syntax:
 
-```
-import {AsBind} from 'as-bind';
+```javascript
+import { AsBind } from "as-bind";
 
-const wasm = fetch('./path-to-my-wasm.wasm');
+const wasm = fetch("./path-to-my-wasm.wasm");
 
 const asyncTask = async () => {
   const asBindInstance = await AsBind.instantiate(wasm);
 
   // You can now use your wasm / asbind instance!
-  const response = asBindInstance.exports.myExportedFunctionThatTakesAString('Hello World!');
+  const response = asBindInstance.exports.myExportedFunctionThatTakesAString(
+    "Hello World!"
+  );
   console.log(response); // AsBind: Hello World!
-}
+};
 asyncTask();
 ```
 
 Or we can also use Node:
 
-```
-const AsBind = require('as-bind');
-const fs = require('fs');
+```javascript
+const AsBind = require("as-bind");
+const fs = require("fs");
 
-const wasm = fs.readFileSync('./path-to-my-wasm.wasm');
+const wasm = fs.readFileSync("./path-to-my-wasm.wasm");
 
 const asyncTask = async () => {
   const asBindInstance = await AsBind.instantiate(wasm);
 
   // You can now use your wasm / asbind instance!
-  const response = asBindInstance.exports.myExportedFunctionThatTakesAString('Hello World!');
+  const response = asBindInstance.exports.myExportedFunctionThatTakesAString(
+    "Hello World!"
+  );
   console.log(response); // AsBind: Hello World!
-}
+};
 asyncTask();
 ```
 
