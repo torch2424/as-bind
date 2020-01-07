@@ -1,11 +1,11 @@
 import { h, render, Component } from "preact";
-import asbind from "../../dist/asbind.esm";
+import asbind from "../../dist/as-bind.esm";
 
 // Import our TypeScript equivalent
-import { convertMarkdownToHTML } from "../../dist/examples/markdown-parser/assembly/index";
+import { convertMarkdownToHTML } from "../../dist/ts/index";
 import "./index.css";
 
-let testMarkdown = `# __asbind__ ~~convert~~ **markdown** to     html
+let testMarkdown = `# __as-bind__ ~~convert~~ **markdown** to     html
 
       * Item 1
       * Item 2
@@ -15,7 +15,7 @@ let testMarkdown = `# __asbind__ ~~convert~~ **markdown** to     html
 
       ## And now we are back!
 
-      Here is a [link to the source code](https://github.com/torch2424/asbind)
+      Here is a [link to the source code](https://github.com/torch2424/as-bind)
 
       And an image of the author!
 
@@ -35,7 +35,7 @@ let testMarkdown = `# __asbind__ ~~convert~~ **markdown** to     html
 
       > WebAssembly is cool - Torch2424, 2019
 
-      \`npm install asbind\`
+      \`npm install as-bind\`
 
       \`\`\`
         const someCode = "hello world!";
@@ -91,7 +91,7 @@ ${markdown}
 
 ------
 
-asbind response:
+as-bind response:
 
 ${html}
 `);

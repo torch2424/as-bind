@@ -1,6 +1,6 @@
 const fs = require("fs");
 const assert = require("assert");
-const { AsBind } = require("../dist/asbind.cjs");
+const { AsBind } = require("../dist/as-bind.cjs");
 
 const wasmBytes = new Uint8Array(fs.readFileSync("./test/assembly/test.wasm"));
 
