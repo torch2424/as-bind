@@ -47,18 +47,13 @@ You can install as-bind in your project by running the following:
 
 ## Quick Start
 
-**1. In your Assemblyscript**
+**1. Compiling your Assemblyscript**
 
-Export everything from the asbind assemblyscript library:
+To enable as-bind for your AssemblyScript Wasm modules, add the as-bind entrypoint when compiling your module:
 
-```typescript
-// This should be in your entry point file for your Assemblyscript project
+`asc ./node_modules/as-bind/lib/assembly/as-bind.ts your-entryfile.ts [...other cli options...]`
 
-// '../node_modules/as-bind/*' should be the relative path to this directory in your project
-export * from "../node_modules/as-bind/lib/assembly/asbind.ts";
-```
-
-After this, let's export an example function we can try:
+For **optional testing purposes** , let's export an example function we can try in `your-entryfile.ts`:
 
 ```typescript
 export function myExportedFunctionThatTakesAString(value: string): string {
@@ -78,7 +73,7 @@ const wasm = fetch("./path-to-my-wasm.wasm");
 const asyncTask = async () => {
   const asBindInstance = await AsBind.instantiate(wasm);
 
-  // You can now use your wasm / asbind instance!
+  // You can now use your wasm / as-bind instance!
   const response = asBindInstance.exports.myExportedFunctionThatTakesAString(
     "Hello World!"
   );
@@ -98,7 +93,7 @@ const wasm = fs.readFileSync("./path-to-my-wasm.wasm");
 const asyncTask = async () => {
   const asBindInstance = await AsBind.instantiate(wasm);
 
-  // You can now use your wasm / asbind instance!
+  // You can now use your wasm / as-bind instance!
   const response = asBindInstance.exports.myExportedFunctionThatTakesAString(
     "Hello World!"
   );

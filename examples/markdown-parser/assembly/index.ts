@@ -1,8 +1,5 @@
 // Wasm module to do a basic markdown to HTML
 
-// Export asbind
-export * from "../../../dist/asbind";
-
 import { log } from "./util";
 
 import { Token } from "./tokenizer/token";

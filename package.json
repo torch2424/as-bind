@@ -2,9 +2,9 @@
   "name": "as-bind",
   "description": "Isomorphic library to handle passing high-level data structures between AssemblyScript and JavaScript 🤝🚀",
   "version": "0.1.1",
-  "main": "dist/asbind.cjs.js",
-  "module": "dist/asbind.esm.js",
-  "browser": "dist/asbind.iife.js",
+  "main": "dist/as-bind.cjs.js",
+  "module": "dist/as-bind.esm.js",
+  "browser": "dist/as-bind.iife.js",
   "scripts": {
     "build": "run-s lib:wasm:build lib:js:build",
     "dev": "run-p lib:watch lib:test:watch",
@@ -15,8 +15,8 @@
     "lib:watch": "chokidar --initial \"lib/**/*\" -c \"run-s lib:wasm:build lib:js:build:dev test\"",
     "lib:test:watch": "chokidar \"test/**/*.js\" \"test/**/*.ts\" -c \"run-s lib:test:build test\"",
     "lib:wasm:build": "run-s lib:wasm:build:debug lib:wasm:build:optimized lib:wasm:build:cp",
-    "lib:wasm:build:debug": "asc lib/assembly/asbind.ts -b dist/asbind.debug.wasm -t dist/asbind.debug.wat --sourceMap --validate --debug --runtime full",
-    "lib:wasm:build:optimized": "asc lib/assembly/asbind.ts -b dist/asbind.wasm --sourceMap dist/asbind.wasm.map -t dist/asbind.wat --validate --runtime full -O3",
+    "lib:wasm:build:debug": "asc lib/assembly/as-bind.ts -b dist/as-bind.debug.wasm -t dist/as-bind.debug.wat --sourceMap --validate --debug --runtime full",
+    "lib:wasm:build:optimized": "asc lib/assembly/as-bind.ts -b dist/as-bind.wasm --sourceMap dist/as-bind.wasm.map -t dist/as-bind.wat --validate --runtime full -O3",
     "lib:wasm:build:cp": "cpy 'lib/assembly/**/*' dist",
     "lib:js:build": "rollup -c --environment LIB,PROD",
     "lib:js:build:dev": "rollup -c --environment LIB,DEV",
@@ -26,7 +26,7 @@
     "md:dev": "run-p lib:watch md:wasm:watch md:js:watch serve",
     "md:wasm:watch": "chokidar --initial \"examples/markdown-parser/assembly/**/*\" -c \"run-s md:wasm:build\"",
     "md:js:watch": "chokidar --initial \"examples/markdown-parser/**/*\" -c \"rollup -c --environment MD,DEV\"",
-    "md:wasm:build": "asc examples/markdown-parser/assembly/index.ts -b dist/examples/markdown-parser/index.wasm -t dist/examples/markdown-parser/index.wat --sourceMap dist/examples/markdown-parser/index.wasm.map --validate --runtime full",
+    "md:wasm:build": "asc lib/assembly/as-bind.ts examples/markdown-parser/assembly/index.ts -b dist/examples/markdown-parser/index.wasm -t dist/examples/markdown-parser/index.wat --sourceMap dist/examples/markdown-parser/index.wasm.map --validate --runtime full",
     "md:ts:build": "tsc --project examples/markdown-parser/assembly/ --outDir dist/ --module \"es2015\"",
     "md:js:build": "rollup -c --environment MD,PROD",
     "md:deploy": "run-s build md:build md:deploy:gh-pages",
@@ -75,7 +75,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/torch2424/asbind.git"
+    "url": "git+https://github.com/torch2424/as-bind.git"
   },
   "keywords": [
     "assemblyscript",
@@ -95,8 +95,8 @@
   "author": "Aaron Turner",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/torch2424/asbind/issues"
+    "url": "https://github.com/torch2424/as-bind/issues"
   },
-  "homepage": "https://github.com/torch2424/asbind#readme",
+  "homepage": "https://github.com/torch2424/as-bind#readme",
   "dependencies": {}
 }
