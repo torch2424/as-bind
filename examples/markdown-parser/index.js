@@ -3,6 +3,11 @@ import asbind from "../../dist/as-bind.esm";
 
 // Import our TypeScript equivalent
 import { convertMarkdownToHTML } from "../../dist/ts/index";
+
+// Import our Rust/Wasm Psuedo similar package
+import { format } from "pulldown-cmark-wasm";
+
+// Import our css
 import "./index.css";
 
 let testMarkdown = `# __as-bind__ ~~convert~~ **markdown** to     html
@@ -102,6 +107,11 @@ ${html}
     });
   }
 
+  async runBenchmark() {
+    // Get all of our instances
+    const asbindInstance = await asbindInstancePromise;
+  }
+
   render() {
     return (
       <div class="app">
@@ -122,6 +132,11 @@ ${html}
             <a href="https://github.com/torch2424/as-bind">
               Source Code (Github)
             </a>
+          </div>
+          <div>
+            <button onClick={() => this.runBenchmark()}>
+              Benchmark (See JS Console)
+            </button>
           </div>
         </nav>
         <div class="editor-container">
