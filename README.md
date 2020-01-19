@@ -19,6 +19,7 @@ Isomorphic library to handle passing high-level data structures between Assembly
 - [Features](#features)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
+- [Additional Examples](#additional-examples)
 - [Supported Data Types](#supported-data-types)
 - [Supported AssemblyScript Runtime Variants](#supported-assemblyscript-runtime-variants)
 - [Reference API](#reference-api)
@@ -98,6 +99,51 @@ const asyncTask = async () => {
     "Hello World!"
   );
   console.log(response); // AsBind: Hello World!
+};
+asyncTask();
+```
+
+## Additional Examples
+
+## Passing a high-level type to a an exported function, and returning a high-level type
+
+[See the Quick Start](#quick-start)
+
+## Passing a high-level type to an imported function
+
+In this example, we will implement a `console.log` that we can call from AssemblyScript!
+
+**AssemblyScript**
+
+Inside of `myWasmFileName.ts`:
+
+```
+declare function consoleLog(message: string): void;
+
+export function myExportedFunctionThatWillCallConsoleLog(): void {
+  consoleLog("Hello from AS!");
+}
+```
+
+**JavaScript**
+
+```
+import { AsBind } from "as-bind";
+
+const wasm = fetch("./path-to-my-wasm.wasm");
+
+const asyncTask = async () => {
+  // Instantiate the wasm file, and pass in our importObject
+  const asBindInstance = await AsBind.instantiate(wasm, {
+    myWasmFileName: {
+      consoleLog: message => {
+        console.log(message);
+      }
+    }
+  });
+
+  // Should call consoleLog, and log: "Hello from AS!"
+  asBindInstance.exports.myExportedFunctionThatWillCallConsoleLog(); 
 };
 asyncTask();
 ```
