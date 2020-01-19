@@ -9,6 +9,7 @@ describe("asbind", () => {
     test: {
       testImportString: () => {},
       testImportTwoStrings: () => {},
+      testImportReturnNumber: () => -1,
       testImportInt8Array: () => {},
       testImportUint8Array: () => {},
       testImportInt16Array: () => {},
@@ -160,6 +161,7 @@ describe("asbind", () => {
           testImportTwoStrings: (value1, value2) => {
             testImportCalledWith = [value1, value2];
           },
+          testImportReturnNumber: () => -1,
           testImportInt8Array: importObjectFunction,
           testImportUint8Array: importObjectFunction,
           testImportInt16Array: importObjectFunction,
@@ -190,6 +192,11 @@ describe("asbind", () => {
       asbindInstance.exports.callTestImportTwoStrings("asbind", "asbind2");
       assert.equal(testImportCalledWith[0], "asbind");
       assert.equal(testImportCalledWith[1], "asbind2");
+    });
+
+    it("should allow numbers to be returned from the importObject", () => {
+      const response = asbindInstance.exports.callTestImportReturnNumber();
+      assert.equal(response, -1);
     });
 
     // TypedArrays
@@ -234,6 +241,7 @@ describe("asbind", () => {
           testImportTwoStrings: (value1, value2) => {
             testImportCalledWith = [value1, value2];
           },
+          testImportReturnNumber: () => -1,
           testImportInt8Array: importObjectFunction,
           testImportUint8Array: importObjectFunction,
           testImportInt16Array: importObjectFunction,

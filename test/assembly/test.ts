@@ -52,7 +52,6 @@ export function mapFloat64Array(array: Float64Array): Float64Array {
   return array.map((value: f64) => value * 2);
 }
 
-// NOTE: Asbind does not support return types on import object functions
 declare function testImportString(value: string): void;
 export function callTestImportString(value: string): void {
   testImportString(value);
@@ -64,6 +63,12 @@ export function callTestImportTwoStrings(
   valueTwo: string
 ): void {
   testImportTwoStrings(valueOne, valueTwo);
+}
+
+declare function testImportReturnNumber(): i32;
+export function callTestImportReturnNumber(): i32 {
+  let response: i32 = testImportReturnNumber();
+  return response;
 }
 
 declare function testImportInt8Array(value: Int8Array): void;
