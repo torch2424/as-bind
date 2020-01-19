@@ -5,7 +5,8 @@ import asbind from "../../dist/as-bind.esm";
 import { convertMarkdownToHTML } from "../../dist/ts/index";
 
 // Import our Rust/Wasm Psuedo similar package
-import { format } from "pulldown-cmark-wasm";
+import cmarkInit, { format } from "pulldown-cmark-wasm";
+import cmarkWasmUrl from "../../node_modules/pulldown-cmark-wasm/pkg/pulldown_cmark_wasm_bg.wasm";
 
 // Import our css
 import "./index.css";
@@ -108,8 +109,49 @@ ${html}
   }
 
   async runBenchmark() {
-    // Get all of our instances
+    // Get all of our wasm instances
+    await cmarkInit(cmarkWasmUrl);
     const asbindInstance = await asbindInstancePromise;
+
+    // Create all of our test functions
+    const testFunctions = {
+      "pulldown-cmark": format,
+      "as-bind MD Assemblyscript": asbindInstance.exports.convertMarkdownToHTML,
+      "as-bind MD Typescript": convertMarkdownToHTML
+    };
+
+    // Create all of our markdown number of copies
+    const numberToCopyForLargeMarkdown = [1, 5, 25, 50, 100];
+
+    // Iterate through our test functions and their number of copies
+    Object.keys(testFunctions).forEach(testFunctionKey => {
+      numberToCopyForLargeMarkdown.forEach(numberToCopy => {
+        try {
+          // Create our large markdown
+          let largeMarkdown = "";
+          for (let i = 0; i < numberToCopy; i++) {
+            largeMarkdown += testMarkdown;
+          }
+
+          // Get our start time
+          let startTime = performance.now();
+
+          // Run our function
+          testFunctions[testFunctionKey](largeMarkdown);
+
+          // Record our end time
+          let endTime = performance.now();
+
+          // Log our result
+          console.log(
+            `[${testFunctionKey}, ${numberToCopy}]: ${endTime - startTime}`
+          );
+        } catch (error) {
+          // Log our result
+          console.log(`[${testFunctionKey}, ${numberToCopy}]: Errored`);
+        }
+      });
+    });
   }
 
   render() {

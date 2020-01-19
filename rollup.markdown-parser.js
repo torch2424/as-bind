@@ -9,6 +9,7 @@ import hash from "rollup-plugin-hash";
 import postcss from "rollup-plugin-postcss";
 import postcssImport from "postcss-import";
 import del from "rollup-plugin-delete";
+import url from "@rollup/plugin-url";
 import pkg from "./package.json";
 
 const fs = require("fs");
@@ -46,6 +47,9 @@ let plugins = [
   postcss({
     extensions: [".css"],
     plugins: [postcssImport()]
+  }),
+  url({
+    include: ["**/*.wasm"]
   }),
   resolve(),
   babel(babelPluginConfig),
