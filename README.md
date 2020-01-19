@@ -26,6 +26,7 @@ Isomorphic library to handle passing high-level data structures between Assembly
 - [Motivation](#motivation)
 - [Performance](#performance)
 - [Projects using as-bind](#projects-using-as-bind)
+- [FAQ and Common Issues](#faq-and-common-issues)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -102,6 +103,8 @@ const asyncTask = async () => {
 };
 asyncTask();
 ```
+
+*Did the quick start not work for you, or you are noticing some weird behavior? Please see the [FAQ and Common Issues](#faq-and-common-issues)*
 
 ## Additional Examples
 
@@ -270,6 +273,14 @@ In the future, these types of high-level data passing tools will not be needed f
 - The as-bind example is a Markdown Parser, in which as-bind takes in a string, passes it to a rough markdown parser / compiler written in AssemblyScript, and returns a string. [(Live Demo)](https://torch2424.github.io/as-bind/), [(Source Code)](https://github.com/torch2424/as-bind/tree/master/examples/markdown-parser)
 
 _If you're project is using as-bind, and you would like to be featured here. Please open a README with links to your project, and if appropriate, explaining how as-bind is being used._ 😊
+
+## FAQ and Common Issues
+
+> I am calling my exports, but it is not returning the types that I am returning? It seems to be returning pointers?
+
+This is probably because you are not adding the as-bind entry file. Please see the [Quick Start](#quick-start) on how to compile your AssemblyScript module with this entry file. If this still does not work, please take a look at the [Supported Types](#supported-types) to ensure what type you are trying to pass will work.
+
+*Didn't find a solution to your problem? Feel free to open an issue!*
 
 ## Contributing
 
