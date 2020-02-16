@@ -35,8 +35,27 @@ describe("asbind", () => {
       assert(asbindInstance.exports.__release !== undefined, true);
     });
 
+    it("should instantiateSync WebAssembly.Module", async () => {
+      const wasmModule = await WebAssembly.compile(wasmBytes);
+      asbindInstance = AsBind.instantiateSync(wasmModule, baseImportObject);
+
+      assert(asbindInstance.exports !== undefined, true);
+      assert(asbindInstance.exports.helloWorld !== undefined, true);
+      assert(asbindInstance.exports.__alloc !== undefined, true);
+      assert(asbindInstance.exports.__release !== undefined, true);
+    });
+
     it("should instantiate Uint8Array", async () => {
       asbindInstance = await AsBind.instantiate(wasmBytes, baseImportObject);
+
+      assert(asbindInstance.exports !== undefined, true);
+      assert(asbindInstance.exports.helloWorld !== undefined, true);
+      assert(asbindInstance.exports.__alloc !== undefined, true);
+      assert(asbindInstance.exports.__release !== undefined, true);
+    });
+
+    it("should instantiateSync Uint8Array", async () => {
+      asbindInstance = AsBind.instantiateSync(wasmBytes, baseImportObject);
 
       assert(asbindInstance.exports !== undefined, true);
       assert(asbindInstance.exports.helloWorld !== undefined, true);
