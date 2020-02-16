@@ -104,7 +104,7 @@ const asyncTask = async () => {
 asyncTask();
 ```
 
-*Did the quick start not work for you, or you are noticing some weird behavior? Please see the [FAQ and Common Issues](#faq-and-common-issues)*
+_Did the quick start not work for you, or you are noticing some weird behavior? Please see the [FAQ and Common Issues](#faq-and-common-issues)_
 
 ## Additional Examples
 
@@ -146,7 +146,7 @@ const asyncTask = async () => {
   });
 
   // Should call consoleLog, and log: "Hello from AS!"
-  asBindInstance.exports.myExportedFunctionThatWillCallConsoleLog(); 
+  asBindInstance.exports.myExportedFunctionThatWillCallConsoleLog();
 };
 asyncTask();
 ```
@@ -207,6 +207,20 @@ This function is the equivalent to the [AssemblyScript Loader instantiate](https
 - Any type of object that can be (resolved) and instantied into a WebAssembly instance. Which in our case would be an AsBindInstance.
 
 - A [WebAssembly importObject](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/WebAssembly/instantiateStreaming), which would have all of your imported functions that can be called from within your AssemblyScript module.
+
+##### instantiateSync
+
+```typescript
+AsBind.instantiate: (
+  moduleOrBuffer: (
+    WebAssembly.Module |
+    BufferSource
+  ),
+  imports?: WasmImports
+) => AsBindInstance`
+```
+
+This is a synchronous version of `AsBind.instantiate`. This does not accept a promise-like as it's module, and returns an AsBindInstance instead of a Promise that resolves an AsBindInstance. **This is only reccomended for use in testing or development**. Please see the Documentation sections for `AsBind.instantiate` for more information.
 
 #### Instance Properties
 
@@ -280,7 +294,7 @@ _If you're project is using as-bind, and you would like to be featured here. Ple
 
 This is probably because you are not adding the as-bind entry file. Please see the [Quick Start](#quick-start) on how to compile your AssemblyScript module with this entry file. If this still does not work, please take a look at the [Supported Types](#supported-types) to ensure what type you are trying to pass will work.
 
-*Didn't find a solution to your problem? Feel free to open an issue!*
+_Didn't find a solution to your problem? Feel free to open an issue!_
 
 ## Contributing
 
