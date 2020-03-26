@@ -211,7 +211,7 @@ This function is the equivalent to the [AssemblyScript Loader instantiate](https
 ##### instantiateSync
 
 ```typescript
-AsBind.instantiate: (
+AsBind.instantiateSync: (
   moduleOrBuffer: (
     WebAssembly.Module |
     BufferSource
