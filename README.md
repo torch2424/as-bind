@@ -120,7 +120,7 @@ In this example, we will implement a `console.log` that we can call from Assembl
 
 Inside of `myWasmFileName.ts`:
 
-```
+```typescript
 declare function consoleLog(message: string): void;
 
 export function myExportedFunctionThatWillCallConsoleLog(): void {
@@ -130,7 +130,7 @@ export function myExportedFunctionThatWillCallConsoleLog(): void {
 
 **JavaScript**
 
-```
+```javascript
 import { AsBind } from "as-bind";
 
 const wasm = fetch("./path-to-my-wasm.wasm");
@@ -211,7 +211,7 @@ This function is the equivalent to the [AssemblyScript Loader instantiate](https
 ##### instantiateSync
 
 ```typescript
-AsBind.instantiate: (
+AsBind.instantiateSync: (
   moduleOrBuffer: (
     WebAssembly.Module |
     BufferSource
