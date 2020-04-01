@@ -1,5 +1,18 @@
 // The entry file of your WebAssembly module.
 
+// User submitted issues
+
+// Learned from this, you must use a TypedArray, and not something like: Array<f64>
+export function issue28(arr: Float64Array): f64 {
+  let sum: f64 = 2.0;
+  for (let i = 0; i < 3; ++i) {
+    sum += arr[i];
+  }
+  return arr.length;
+}
+
+// Basic value Passing
+
 export function helloWorld(world: string): string {
   return "Hello " + world + "!";
 }
@@ -18,6 +31,18 @@ export function numberAndRefArgsReturnsRef(num: i32, ref: string): string {
 
 export function numberAndRefArgsReturnsNumber(num: i32, ref: string): i32 {
   return ref.length + num;
+}
+
+export function Int32Support(value: i32): i32 {
+  return value + 1;
+}
+
+export function Float32Support(value: f32): f32 {
+  return value + 1.0;
+}
+
+export function Float64Support(value: f64): f64 {
+  return value + 1.0;
 }
 
 export function mapInt8Array(array: Int8Array): Int8Array {

@@ -24,6 +24,17 @@ describe("asbind", () => {
     }
   };
 
+  describe("Issues", () => {
+    it("#28", async () => {
+      const wasmModule = await WebAssembly.compile(wasmBytes);
+      asbindInstance = await AsBind.instantiate(wasmModule, baseImportObject);
+
+      const arr = Float64Array.from([1, 2, 3]);
+      const response = asbindInstance.exports.issue28(arr);
+      assert(response, 4);
+    });
+  });
+
   describe("instantiation", () => {
     it("should instantiate WebAssembly.Module", async () => {
       const wasmModule = await WebAssembly.compile(wasmBytes);
@@ -93,7 +104,7 @@ describe("asbind", () => {
   describe("exported functions", () => {
     let asbindInstance;
 
-    before(async () => {
+    beforeEach(async () => {
       asbindInstance = await AsBind.instantiate(wasmBytes, baseImportObject);
     });
 
@@ -125,16 +136,35 @@ describe("asbind", () => {
     });
 
     it("should allow passing in a number and a ref, and return a number", () => {
+      // TODO: The response here can be detected as a string?
+      // If the first param is 24, this will give an expected response of 30.
+      // In this case, the response is 30, but the original export returns 30?
       const response = asbindInstance.exports.numberAndRefArgsReturnsNumber(
-        24,
+        30,
         "asbind"
       );
-      assert.equal(response, 30);
+      assert.equal(response, 36);
     });
 
     it("should handle Strings", () => {
       const response = asbindInstance.exports.helloWorld("asbind");
       assert.equal(response, "Hello asbind!");
+    });
+
+    // Number Types
+    [
+      "Int32",
+      // "Int64" - BigInt not supported in Wasm Currently: WebAssembly/JS-BigInt-integration
+      "Float32",
+      "Float64"
+    ].forEach(numberKey => {
+      it(`should support passing and returning ${numberKey}`, () => {
+        const randomValue = Math.floor(Math.random() * 10);
+        const response = asbindInstance.exports[numberKey + "Support"](
+          randomValue
+        );
+        assert.equal(response, randomValue + 1);
+      });
     });
 
     // TypedArrays
@@ -150,7 +180,11 @@ describe("asbind", () => {
     ].forEach(typedArrayKey => {
       it(`should handle ${typedArrayKey}`, () => {
         const randomValue = Math.floor(Math.random() * 10);
-        const array = global[typedArrayKey].from([randomValue]);
+        const array = global[typedArrayKey].from([
+          randomValue,
+          randomValue,
+          randomValue
+        ]);
         const arrayMapResponse = asbindInstance.exports["map" + typedArrayKey](
           array
         );

@@ -153,16 +153,18 @@ asyncTask();
 
 ## Supported Data Types
 
-**TL;DR:** Currently Numbers, Strings, and Typed Arrays are supported. Returning a high-level data type from an imported JavaScript function, and passing AssemblyScript Classes will be coming later.
+**TL;DR:** Currently Numbers, Strings, and Typed Arrays are supported. Returning a high-level data type from an imported JavaScript function, [BigInt](https://github.com/WebAssembly/JS-BigInt-integration), and passing AssemblyScript Classes will be coming later.
+
+**Note:** As discovered in #28, [`Array<NumberType>`](https://docs.assemblyscript.org/standard-library/array#api) is **NOT** the same as [`TypedArray`](https://docs.assemblyscript.org/standard-library/typedarray#api), and may not work for your use case. You want to use [`TypedArray`](https://docs.assemblyscript.org/standard-library/typedarray#api) where possible.
 
 <!-- Generated from: https://www.tablesgenerator.com/markdown_tables# -->
 
-| Function & Direction                        | Number (Integers and Floats) | Strings | Int8Array | Uint8Array | Int16Array | UInt16Array | Int32Array | Uint32Array | Float32Array | Float64Array | AssemblyScript Classes |
-| ------------------------------------------- | ---------------------------- | ------- | --------- | ---------- | ---------- | ----------- | ---------- | ----------- | ------------ | ------------ | ---------------------- |
-| Exported AssemblyScript Function Parameters | ✔️                           | ✔️      | ✔️        | ✔️         | ✔️         | ✔️          | ✔️         | ✔️          | ✔️           | ✔️           | ❌                     |
-| Exported AssemblyScript Function Return     | ✔️                           | ✔️      | ✔️        | ✔️         | ✔️         | ✔️          | ✔️         | ✔️          | ✔️           | ✔️           | ❌                     |
-| Imported JavaScript Function Paramters      | ✔️                           | ✔️      | ✔️        | ✔️         | ✔️         | ✔️          | ✔️         | ✔️          | ✔️           | ✔️           | ❌                     |
-| Imported JavaScript Function Return         | ✔️                           | ❌      | ❌        | ❌         | ❌         | ❌          | ❌         | ❌          | ❌           | ❌           | ❌                     |
+| Function & Direction                        | Number (32-bit Integers and 32-bit / 64-bit Floats) | Strings | Int8Array | Uint8Array | Int16Array | UInt16Array | Int32Array | Uint32Array | Float32Array | Float64Array | AssemblyScript Classes |
+| ------------------------------------------- | --------------------------------------------------- | ------- | --------- | ---------- | ---------- | ----------- | ---------- | ----------- | ------------ | ------------ | ---------------------- |
+| Exported AssemblyScript Function Parameters | ✔️                                                  | ✔️      | ✔️        | ✔️         | ✔️         | ✔️          | ✔️         | ✔️          | ✔️           | ✔️           | ❌                     |
+| Exported AssemblyScript Function Return     | ✔️                                                  | ✔️      | ✔️        | ✔️         | ✔️         | ✔️          | ✔️         | ✔️          | ✔️           | ✔️           | ❌                     |
+| Imported JavaScript Function Paramters      | ✔️                                                  | ✔️      | ✔️        | ✔️         | ✔️         | ✔️          | ✔️         | ✔️          | ✔️           | ✔️           | ❌                     |
+| Imported JavaScript Function Return         | ✔️                                                  | ❌      | ❌        | ❌         | ❌         | ❌          | ❌         | ❌          | ❌           | ❌           | ❌                     |
 
 ## Supported AssemblyScript Runtime Variants
 
