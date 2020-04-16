@@ -1,37 +1,27 @@
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import babel from 'rollup-plugin-babel';
-import json from 'rollup-plugin-json';
-import compiler from '@ampproject/rollup-plugin-closure-compiler';
-import bundleSize from 'rollup-plugin-bundle-size';
-import pkg from './package.json';
+import resolve from "rollup-plugin-node-resolve";
+import commonjs from "rollup-plugin-commonjs";
+import babel from "rollup-plugin-babel";
+import json from "rollup-plugin-json";
+import compiler from "@ampproject/rollup-plugin-closure-compiler";
+import bundleSize from "rollup-plugin-bundle-size";
+import pkg from "./package.json";
 
 const sourcemapOption = process.env.PROD ? undefined : "inline";
 
 const babelPluginConfig = {
   // so Rollup can convert unsupported es6 code to es5
-  exclude: ['node_modules/**'],
+  exclude: ["node_modules/**"],
   plugins: [
-    ['@babel/plugin-proposal-class-properties'],
-    ['@babel/plugin-proposal-object-rest-spread'],
+    ["@babel/plugin-proposal-class-properties"],
+    ["@babel/plugin-proposal-object-rest-spread"]
   ]
 };
 
-let plugins = [
-  resolve(),
-  commonjs(),
-  json(),
-  babel(babelPluginConfig)
-]
+let plugins = [resolve(), commonjs(), json(), babel(babelPluginConfig)];
 
 if (process.env.PROD) {
-  plugins = [
-    ...plugins,
-    compiler(),
-    bundleSize()
-  ]
+  plugins = [...plugins, compiler(), bundleSize()];
 }
-
 
 const libBundles = [
   {
@@ -64,7 +54,7 @@ const libBundles = [
       file: pkg.browser,
       format: "iife",
       sourcemap: sourcemapOption,
-      name: "asbuild"
+      name: "AsBindIIFE"
     },
     watch: {
       clearScreen: false
