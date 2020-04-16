@@ -65,10 +65,15 @@ export function myExportedFunctionThatTakesAString(value: string): string {
 
 **2. In your Javascript**
 
-In the browser using ESM Syntax:
+For **browser** JavaScript. We can do the following:
 
 ```javascript
+// If you are using a Javascript bundler, use the ESM bundle with import syntax
 import { AsBind } from "as-bind";
+
+// If you are not using a bundler add a <script> tag to your HTML
+// Where the `src` points to the iife bundle (as-bind.iife.js), for example: https://unpkg.com/as-bind
+// Then, INSTEAD of using the import syntax, do: `const { AsBind } = AsBindIIFE;`
 
 const wasm = fetch("./path-to-my-wasm.wasm");
 
@@ -84,7 +89,7 @@ const asyncTask = async () => {
 asyncTask();
 ```
 
-Or we can also use Node:
+For **Node** JavaScript, we would use the CommonJS bundle by do the following:
 
 ```javascript
 const { AsBind } = require("as-bind");
