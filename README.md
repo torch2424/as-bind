@@ -209,7 +209,7 @@ AsBind.instantiate: (
 ) => Promise<AsBindInstance>`
 ```
 
-This function is the equivalent to the [AssemblyScript Loader instantiate](https://github.com/AssemblyScript/assemblyscript/tree/master/lib/loader#api) function, which is similar to the [WebAssembly.instantiateStreaming](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/WebAssembly/instantiateStreaming) function. It essentially takes as it's parameters:
+This function is the equivalent to the [AssemblyScript Loader instantiate](https://github.com/AssemblyScript/assemblyscript/tree/master/lib/loader#api) function, which is similar to the [WebAssembly.instantiateStreaming](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/WebAssembly/instantiateStreaming) function. It essentially takes as its parameters:
 
 - Any type of object that can be (resolved) and instantied into a WebAssembly instance. Which in our case would be an AsBindInstance.
 
@@ -227,7 +227,7 @@ AsBind.instantiateSync: (
 ) => AsBindInstance`
 ```
 
-This is a synchronous version of `AsBind.instantiate`. This does not accept a promise-like as it's module, and returns an AsBindInstance instead of a Promise that resolves an AsBindInstance. **This is only reccomended for use in testing or development**. Please see the Documentation sections for `AsBind.instantiate` for more information.
+This is a synchronous version of `AsBind.instantiate`. This does not accept a promise-like as its module, and returns an AsBindInstance instead of a Promise that resolves an AsBindInstance. **This is only reccomended for use in testing or development**. Please see the Documentation sections for `AsBind.instantiate` for more information.
 
 #### Instance Properties
 
@@ -269,7 +269,7 @@ This will disable type caching (speculative execution) for ALL importObject func
 
 This library was inspired by several chats I had with some awesome buddies of mine in the WebAssembly Communitty:
 
-- [Till Schneidereit](https://twitter.com/tschneidereit) and I had a chat about [WasmBoy](https://github.com/torch2424/wasmboy), and about how I had a really good experience writing the emulator, even though I had to do my own memory management. But they helped me realize, building something low level isn't that bad with manual memory management, but building something like a markdown parser would be very tedious since you have to manually write the string back and forth. Which then inspired this library, and it's [markdown parser demo](https://torch2424.github.io/as-bind/).
+- [Till Schneidereit](https://twitter.com/tschneidereit) and I had a chat about [WasmBoy](https://github.com/torch2424/wasmboy), and about how I had a really good experience writing the emulator, even though I had to do my own memory management. But they helped me realize, building something low level isn't that bad with manual memory management, but building something like a markdown parser would be very tedious since you have to manually write the string back and forth. Which then inspired this library, and its [markdown parser demo](https://torch2424.github.io/as-bind/).
 
 - While I was building [WasmByExample](https://wasmbyexample.dev/?programmingLanguage=assemblyscript) I wanted to start building the "High Level Data Structures" section. I then realized how much work it would be to maintain code for passing data between WebAssembly Linear memory would be for each data type, and how much work it would be to created each individual example. Then, my buddy [Ashley Williams](https://twitter.com/ag_dubs) helped me realize, if your docs are becoming too complex, it may be a good idea to write a tool. That way you have less docs to write, and users will have an easier time using your stuff!
 
@@ -279,11 +279,11 @@ Thus, this library was made to help AssemblyScript/JavaScript users build awesom
 
 **TL;DR** This library should be fast, but depending on your project you may want some more careful consideration. 🤔
 
-as-bind does all of it's data passing at runtime. Meaning this will be slower than a code generated bindings generator, such as something like [wasm-bindgen](https://github.com/rustwasm/wasm-bindgen). This is because, as-bind needs to cycle through every supported type on every paremeter or return value for each function, whenever the function is called. However, this is mitigated due to the Speculative execution that the library implements.
+as-bind does all of its data passing at runtime. Meaning this will be slower than a code generated bindings generator, such as something like [wasm-bindgen](https://github.com/rustwasm/wasm-bindgen). This is because, as-bind needs to cycle through every supported type on every paremeter or return value for each function, whenever the function is called. However, this is mitigated due to the Speculative execution that the library implements.
 
 Which in this case means, the library by default will assume the type of value being passed to, or returned by a function will not change. Thus, the library will only have to cycle through the params once, cache the types, and then for calls to the functions after this it would be as fast as a code generated solution (in theory). This speculative execution can be turned off as specified in the Reference API.
 
-If your project is doing one-off processing using a high level data type, this project should have a very small impact on performance of your project. However, if you project is doing it's processing in a very time constrained loop (such as a game running at 60fps), you may want to be more considerate when choosing this library. The speculative execution should greatly help in the amount of time to pass high level data types, but if your game is already not running as fast as you would like, you may want to avoid this library, or even not using high level data types, for passing memory to your WebAssembly module. However, the library also exposes all original exports under the `AsBindInstance.unboundExports` as covered in the Reference API, so you could, in theory, still access the non-bound exports without any of the performance overhead if you don't require any of the binding / wrapping that AsBind does for you.
+If your project is doing one-off processing using a high level data type, this project should have a very small impact on performance of your project. However, if you project is doing its processing in a very time constrained loop (such as a game running at 60fps), you may want to be more considerate when choosing this library. The speculative execution should greatly help in the amount of time to pass high level data types, but if your game is already not running as fast as you would like, you may want to avoid this library, or even not using high level data types, for passing memory to your WebAssembly module. However, the library also exposes all original exports under the `AsBindInstance.unboundExports` as covered in the Reference API, so you could, in theory, still access the non-bound exports without any of the performance overhead if you don't require any of the binding / wrapping that AsBind does for you.
 
 Eventually for the most performant option, we would want to do some JavaScript code generation in the AssemblyScript compiler itself, as part of an `as-bindgen` project for the most performant data passing.
 
