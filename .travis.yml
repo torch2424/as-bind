@@ -10,4 +10,6 @@ script:
   - npm run lint:ci
   - npm run build
   - npm run test
+    # Commenting for now due to small AS/TS Compiler difference
+    # Opening a PR as I write this to fix it haha!
     # - npm run md:build
