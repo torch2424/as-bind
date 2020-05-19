@@ -51,7 +51,7 @@ const libBundles = [
   {
     input: "lib/lib.js",
     output: {
-      file: pkg.browser,
+      file: pkg.iife,
       format: "iife",
       sourcemap: sourcemapOption,
       name: "AsBindIIFE"
