@@ -21,7 +21,7 @@
     "lib:js:build": "rollup -c --environment LIB,PROD",
     "lib:js:build:dev": "rollup -c --environment LIB,DEV",
     "lib:test:build": "asc lib/assembly/as-bind.ts test/assembly/test.ts -b test/assembly/test.wasm --runtime full --debug",
-    "lib:deploy": "np",
+    "lib:deploy": "npm run build && np",
     "md:build": "run-s md:wasm:build md:ts:build md:js:build",
     "premd:dev": "npm run md:build",
     "md:dev": "run-p lib:watch md:wasm:watch md:ts:watch md:js:watch serve",
