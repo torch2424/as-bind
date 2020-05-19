@@ -4,7 +4,7 @@
   "version": "0.3.2",
   "main": "dist/as-bind.cjs.js",
   "module": "dist/as-bind.esm.js",
-  "browser": "dist/as-bind.iife.js",
+  "iife": "dist/as-bind.iife.js",
   "scripts": {
     "build": "run-s lib:wasm:build lib:js:build",
     "dev": "run-p lib:watch lib:test:watch",
