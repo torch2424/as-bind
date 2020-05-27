@@ -201,9 +201,7 @@ AsBind.instantiate: (
     WebAssembly.Module |
     BufferSource |
     Response |
-    PromiseLike<WebAssembly.Module> |
-    BufferSource |
-    Response
+    PromiseLike<WebAssembly.Module>
   ),
   imports?: WasmImports
 ) => Promise<AsBindInstance>`
@@ -243,7 +241,7 @@ Each **exported function** has the property: `shouldCacheTypes`. If you would li
 
 This is essentially the same as the [WebAssembly.Instance.prototype.exports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Instance/exports), this is an object containing all of the exported fields from the WebAssembly module. These are not bound / wrapped, so you can access the original exported functions.
 
-#### importObject
+##### importObject
 
 Similar to to [WebAssembly.instantiateStreaming() importObject](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/instantiateStreaming), This is the original passed importObject on instantiation, after the **importObject functions** are bound / wrapped by as-bind.
 
@@ -251,23 +249,23 @@ Each wrapped **importObject function** has the property: `shouldCacheTypes`. If 
 
 ##### enableExportFunctionTypeCaching
 
-This will (re-)enable type caching (speculative execution) for ALL exported functions on the AsBindInstance.
+Calling this method will (re-)enable type caching (speculative execution) for ALL exported functions on the AsBindInstance.
 
 ##### disableExportFunctionTypeCaching
 
-This will disable type caching (speculative execution) for ALL exported functions on the AsBindInstance.
+Calling this method will disable type caching (speculative execution) for ALL exported functions on the AsBindInstance.
 
 ##### enableImportFunctionTypeCaching
 
-This will (re-)enable type caching (speculative execution) for ALL importObject functions on the AsBindInstance.
+Calling this method will (re-)enable type caching (speculative execution) for ALL importObject functions on the AsBindInstance.
 
-##### disableExportFunctionTypeCaching
+##### disableImportFunctionTypeCaching
 
-This will disable type caching (speculative execution) for ALL importObject functions on the AsBindInstance.
+Calling this method will disable type caching (speculative execution) for ALL importObject functions on the AsBindInstance.
 
 ## Motivation
 
-This library was inspired by several chats I had with some awesome buddies of mine in the WebAssembly Communitty:
+This library was inspired by several chats I had with some awesome buddies of mine in the WebAssembly Community:
 
 - [Till Schneidereit](https://twitter.com/tschneidereit) and I had a chat about [WasmBoy](https://github.com/torch2424/wasmboy), and about how I had a really good experience writing the emulator, even though I had to do my own memory management. But they helped me realize, building something low level isn't that bad with manual memory management, but building something like a markdown parser would be very tedious since you have to manually write the string back and forth. Which then inspired this library, and its [markdown parser demo](https://torch2424.github.io/as-bind/).
 
