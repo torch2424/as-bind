@@ -11,6 +11,10 @@ export function issue28(arr: Float64Array): f64 {
   return arr.length;
 }
 
+export function issue43(value: string): string {
+  return "AsBind: " + value;
+}
+
 // Basic value Passing
 
 export function helloWorld(world: string): string {

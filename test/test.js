@@ -33,6 +33,14 @@ describe("asbind", () => {
       const response = asbindInstance.exports.issue28(arr);
       assert(response, 4);
     });
+
+    it("#43", async () => {
+      const wasmModule = await WebAssembly.compile(wasmBytes);
+      asbindInstance = await AsBind.instantiate(wasmModule, baseImportObject);
+
+      const response = asbindInstance.exports.issue43("Hello World!");
+      assert(response, "AsBind: Hello World!");
+    });
   });
 
   describe("instantiation", () => {
