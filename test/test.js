@@ -3,6 +3,9 @@ const assert = require("assert");
 const { AsBind } = require("../dist/as-bind.cjs");
 
 const wasmBytes = new Uint8Array(fs.readFileSync("./test/assembly/test.wasm"));
+const wasmBytesNoEntry = new Uint8Array(
+  fs.readFileSync("./test/assembly/test-no-entry.wasm")
+);
 
 describe("asbind", () => {
   const baseImportObject = {
@@ -36,6 +39,36 @@ describe("asbind", () => {
   });
 
   describe("instantiation", () => {
+    it("should error when instantiating a module that does not include the as-bind entryfile", async () => {
+      const wasmModule = await WebAssembly.compile(wasmBytesNoEntry);
+
+      let didInstantiate = false;
+      try {
+        await AsBind.instantiate(wasmModule, baseImportObject);
+        didInstantiate = true;
+      } catch (err) {
+        // Hooray! We caught the base instantiation
+        console.log("Expected Test Error: ", err.message);
+      }
+      if (didInstantiate) {
+        throw new Error("Was able to instantiate the incorrectly built test");
+      }
+
+      let didInstantiateSync = false;
+      try {
+        AsBind.instantiateSync(wasmModule, baseImportObject);
+        didInstantiateSync = true;
+      } catch (err) {
+        // Hooray! We caught the base instantiation
+        console.log("Expected Test Error: ", err.message);
+      }
+      if (didInstantiateSync) {
+        throw new Error(
+          "Was able to instantiateSync the incorrectly built test"
+        );
+      }
+    });
+
     it("should instantiate WebAssembly.Module", async () => {
       const wasmModule = await WebAssembly.compile(wasmBytes);
       asbindInstance = await AsBind.instantiate(wasmModule, baseImportObject);
