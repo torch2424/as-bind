@@ -1,5 +1,8 @@
 // Neccessary bootstrapping for asbind
 
+// Flag for the entryfile check
+export const __asbind_entryfile_flag = 1;
+
 // Strings
 export const __asbind_String_ID = idof<String>();
 
