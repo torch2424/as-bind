@@ -658,6 +658,12 @@ describe("asbind", () => {
       );
     });
 
+    it("should not break strings", () => {
+      asbindInstance.exports.helloWorld.unsafeReturnValue = true;
+      const response = asbindInstance.exports.helloWorld("asbind");
+      assert.equal(response, "Hello asbind!");
+    });
+
     // TypedArrays
     [
       "Int8Array",
