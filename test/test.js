@@ -674,19 +674,29 @@ describe("asbind", () => {
 
         assert.equal(
           asbindInstance.exports[exportName].unsafeReturnValue,
-          undefined
+          false
         );
+
+        let randomValue;
+        let array;
+        let arrayMapResponse;
+
+        randomValue = Math.floor(Math.random() * 10) + 1;
+        array = global[typedArrayKey].from([randomValue]);
+        arrayMapResponse = asbindInstance.exports[exportName](array);
+
+        // Check to make sure it returns an arrary
+        assert(arrayMapResponse.length > 0);
 
         asbindInstance.exports[exportName].unsafeReturnValue = true;
 
-        const randomValue = Math.floor(Math.random() * 10) + 1;
-        const array = global[typedArrayKey].from([randomValue]);
-        const arrayMapResponse = asbindInstance.exports[exportName](array);
+        randomValue = Math.floor(Math.random() * 10) + 1;
+        array = global[typedArrayKey].from([randomValue]);
+        arrayMapResponse = asbindInstance.exports[exportName](array);
 
-        console.log(arrayMapResponse);
-
-        // Ensure it has the correct values
-        assert.equal(testImportCalledWith[0][0], randomValue);
+        // Assert it now returns a pointer and a value
+        assert(arrayMapResponse.ptr !== undefined);
+        assert(arrayMapResponse.value !== undefined);
       });
     });
   });
