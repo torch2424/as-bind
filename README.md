@@ -235,7 +235,13 @@ An AsBindInstance is vaugley similar to a [WebAssembly instance](https://develop
 
 Similar to to [WebAssembly.Instance.prototype.exports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Instance/exports), this is an object containing all of the exported fields from the WebAssembly module. However, **exported functions** are bound / wrapped in which they will handle passing the supported high-level data types to the exported AssemblyScript function.
 
-Each **exported function** has the property: `shouldCacheTypes`. If you would like to disable type caching (speculative execution) for a particular function, you can do: `asBindInstance.exports.myFunction.shouldCacheTypes = false;`. Or set to true, to re-enable type caching.
+Each **exported function** has the properties:
+
+- `shouldCacheTypes`
+  - If you would like to disable type caching (speculative execution) for a particular function, you can do: `asBindInstance.exports.myFunction.shouldCacheTypes = false;`. Or set to true, to re-enable type caching.
+- `unsafeReturnValue`
+  - By default, all values (in particular [TypedArrays](https://www.assemblyscript.org/stdlib/typedarray.html#typedarray)) will be copied out of Wasm Memory, instead of giving direct read/write access. If you would like to use a view of the returned memory, you can do: `asBindInstance.exports.myFunction.unsafeReturnValue = true;`. For More context, please see the [AssemblyScript loader documentation](https://www.assemblyscript.org/loader.html#module-instance-utility) on array views.
+  - After settings this flag on a function, it will then return it's values wrapped in an object, like so: `{ptr: /* The pointer or index in wasm memory the view is reffering to */, value: /* The returned value (TypedArray) that is backed directly by Wasm Memory */}`
 
 ##### unboundExports
 
@@ -254,6 +260,14 @@ Calling this method will (re-)enable type caching (speculative execution) for AL
 ##### disableExportFunctionTypeCaching
 
 Calling this method will disable type caching (speculative execution) for ALL exported functions on the AsBindInstance.
+
+##### enableExportFunctionUnsafeReturnValue
+
+Calling this method will (re-)enable unsafe return types for ALL exported functions on the AsBindInstance.
+
+##### disableExportFunctionUnsafeReturnValue
+
+Calling this method will disable unsafe return types for ALL exported functions on the AsBindInstance.
 
 ##### enableImportFunctionTypeCaching
 

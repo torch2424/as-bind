@@ -313,7 +313,6 @@ describe("asbind", () => {
   describe("type caching", () => {
     let asbindInstance;
     let testImportCalledWith = [];
-    let weappedBaseImportObject = {};
 
     beforeEach(async () => {
       const importObjectFunction = value => {
@@ -622,6 +621,89 @@ describe("asbind", () => {
         wrappedBaseImportObject.test.testImportTwoStrings.cachedArgTypes.length,
         2
       );
+    });
+  });
+
+  describe("Unsafe Return Value", () => {
+    let asbindInstance;
+    let testImportCalledWith = [];
+
+    beforeEach(async () => {
+      const importObjectFunction = value => {
+        testImportCalledWith = [value];
+      };
+
+      wrappedBaseImportObject = {
+        ...baseImportObject,
+        test: {
+          testImportString: importObjectFunction,
+          testImportTwoStrings: (value1, value2) => {
+            testImportCalledWith = [value1, value2];
+          },
+          testImportReturnNumber: () => -1,
+          testImportInt8Array: importObjectFunction,
+          testImportUint8Array: importObjectFunction,
+          testImportInt16Array: importObjectFunction,
+          testImportUint16Array: importObjectFunction,
+          testImportInt32Array: importObjectFunction,
+          testImportUint32Array: importObjectFunction,
+          testImportFloat32Array: importObjectFunction,
+          testImportFloat64Array: importObjectFunction
+        }
+      };
+
+      asbindInstance = await AsBind.instantiate(
+        wasmBytes,
+        wrappedBaseImportObject
+      );
+    });
+
+    it("should not break strings", () => {
+      asbindInstance.exports.helloWorld.unsafeReturnValue = true;
+      const response = asbindInstance.exports.helloWorld("asbind");
+      assert.equal(response, "Hello asbind!");
+    });
+
+    // TypedArrays
+    [
+      "Int8Array",
+      "Uint8Array",
+      "Int16Array",
+      "Uint16Array",
+      "Int32Array",
+      "Uint32Array",
+      "Float32Array",
+      "Float64Array"
+    ].forEach(typedArrayKey => {
+      it(`should handle ${typedArrayKey} being returned unsafe`, () => {
+        const exportName = `map${typedArrayKey}`;
+
+        assert.equal(
+          asbindInstance.exports[exportName].unsafeReturnValue,
+          false
+        );
+
+        let randomValue;
+        let array;
+        let arrayMapResponse;
+
+        randomValue = Math.floor(Math.random() * 10) + 1;
+        array = global[typedArrayKey].from([randomValue]);
+        arrayMapResponse = asbindInstance.exports[exportName](array);
+
+        // Check to make sure it returns an arrary
+        assert(arrayMapResponse.length > 0);
+
+        asbindInstance.exports[exportName].unsafeReturnValue = true;
+
+        randomValue = Math.floor(Math.random() * 10) + 1;
+        array = global[typedArrayKey].from([randomValue]);
+        arrayMapResponse = asbindInstance.exports[exportName](array);
+
+        // Assert it now returns a pointer and a value
+        assert(arrayMapResponse.ptr !== undefined);
+        assert(arrayMapResponse.value !== undefined);
+      });
     });
   });
 });
