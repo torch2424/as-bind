@@ -5,6 +5,7 @@
   "main": "dist/as-bind.cjs.js",
   "module": "dist/as-bind.esm.js",
   "iife": "dist/as-bind.iife.js",
+  "types": "dist/as-bind.d.ts",
   "scripts": {
     "build": "run-s lib:wasm:build lib:js:build",
     "dev": "run-p lib:watch lib:test:watch",
