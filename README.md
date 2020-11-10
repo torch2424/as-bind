@@ -199,7 +199,21 @@ Value that is the current version of your imported AsBind.
 
 `AsBind.RETURN_TYPES`
 
-Constants represented as JSON, for forcing the return type on [bound export functions](#exports).
+Constants (represented as JSON) of the supported return types on bound export functions. This is useful for forcing the return type on [bound export functions](#exports).
+
+For example, this could be used like:
+
+```typescript
+// Force our return type to our expected string
+asBindInstance.exports.myExportedFunctionThatReturnsAString.returnType =
+  AsBind.RETURN_TYPES.STRING;
+const myString = asBindInstance.exports.myExportedFunctionThatReturnsAString();
+
+// Force our return type to return a number (The pointer to the string)
+asBindInstance.exports.myExportedFunctionThatReturnsAString.returnType =
+  AsBind.RETURN_TYPES.NUMBER;
+const myNumber = asBindInstance.exports.myExportedFunctionThatReturnsAString();
+```
 
 ##### instantiate
 
@@ -247,8 +261,8 @@ Each **exported function** has the properties:
 
 - `shouldCacheTypes`
   - If you would like to disable type caching (speculative execution) for a particular function, you can do: `asBindInstance.exports.myFunction.shouldCacheTypes = false;`. Or set to true, to re-enable type caching.
-  - (Reccomended for production usage) Set this value on a bound export function, to force it's return type. This should be set to a constant found on: [`AsBind.RETURN_TYPES`](#return_types). Defaults to `null`.
 - `returnType`
+  - (Reccomended for production usage) Set this value on a bound export function, to force it's return type. This should be set to a constant found on: [`AsBind.RETURN_TYPES`](#return_types). Defaults to `null`.
 - `unsafeReturnValue`
   - By default, all values (in particular [TypedArrays](https://www.assemblyscript.org/stdlib/typedarray.html#typedarray)) will be copied out of Wasm Memory, instead of giving direct read/write access. If you would like to use a view of the returned memory, you can do: `asBindInstance.exports.myFunction.unsafeReturnValue = true;`. For More context, please see the [AssemblyScript loader documentation](https://www.assemblyscript.org/loader.html#module-instance-utility) on array views.
   - After settings this flag on a function, it will then return it's values wrapped in an object, like so: `{ptr: /* The pointer or index in wasm memory the view is reffering to */, value: /* The returned value (TypedArray) that is backed directly by Wasm Memory */}`
