@@ -111,6 +111,8 @@ asyncTask();
 
 _Did the quick start not work for you, or you are noticing some weird behavior? Please see the [FAQ and Common Issues](#faq-and-common-issues)_
 
+_Want to use `as-bind` in production? Please see the [Production section in the FAQ and Common Issues](#production)_
+
 ## Additional Examples
 
 ## Passing a high-level type to a an exported function, and returning a high-level type
@@ -193,6 +195,12 @@ The `AsBind` class is meant to vaugely act as the [WebAssembly](https://develope
 
 Value that is the current version of your imported AsBind.
 
+##### RETURN_TYPES
+
+`AsBind.RETURN_TYPES`
+
+Constants represented as JSON, for forcing the return type on [bound export functions](#exports).
+
 ##### instantiate
 
 ```typescript
@@ -239,6 +247,8 @@ Each **exported function** has the properties:
 
 - `shouldCacheTypes`
   - If you would like to disable type caching (speculative execution) for a particular function, you can do: `asBindInstance.exports.myFunction.shouldCacheTypes = false;`. Or set to true, to re-enable type caching.
+  - (Reccomended for production usage) Set this value on a bound export function, to force it's return type. This should be set to a constant found on: [`AsBind.RETURN_TYPES`](#return_types). Defaults to `null`.
+- `returnType`
 - `unsafeReturnValue`
   - By default, all values (in particular [TypedArrays](https://www.assemblyscript.org/stdlib/typedarray.html#typedarray)) will be copied out of Wasm Memory, instead of giving direct read/write access. If you would like to use a view of the returned memory, you can do: `asBindInstance.exports.myFunction.unsafeReturnValue = true;`. For More context, please see the [AssemblyScript loader documentation](https://www.assemblyscript.org/loader.html#module-instance-utility) on array views.
   - After settings this flag on a function, it will then return it's values wrapped in an object, like so: `{ptr: /* The pointer or index in wasm memory the view is reffering to */, value: /* The returned value (TypedArray) that is backed directly by Wasm Memory */}`
@@ -300,6 +310,12 @@ If your project is doing one-off processing using a high level data type, this p
 Eventually for the most performant option, we would want to do some JavaScript code generation in the AssemblyScript compiler itself, as part of an `as-bindgen` project for the most performant data passing.
 
 In the future, these types of high-level data passing tools will not be needed for WebAssembly toolchains, once the [WebAssembly Inteface Types proposal](https://github.com/WebAssembly/interface-types/blob/master/proposals/interface-types/Explainer.md) lands, and this functionality is handled by the runtime / toolchain.
+
+## Production
+
+`as-bind` works by abstracting away using the [AssemblyScript Loader](https://www.assemblyscript.org/loader.html). For passing values into your AssemblyScript, it uses the Loader on your half to allocate memory, and then passes the pointer to the allocated memory. However, to pass a value back from AssemblyScript to JavaScript, AsBind will iterate through all the supported types until it finds a match (or doesn't in which case it just returns the number). However, returning a value _can sometimes_ conflict with something in AssemblyScript memory, as discovered in [#50](https://github.com/torch2424/as-bind/issues/50).
+
+Thus, for production usage we highly reccomend that you set the [`returnType` property on your bound export functions](#exports) to ensure that this conflict does not happen. 😄
 
 ## Projects using as-bind
 
