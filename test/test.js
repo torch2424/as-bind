@@ -75,7 +75,7 @@ describe("asbind", () => {
 
       assert(asbindInstance.exports !== undefined, true);
       assert(asbindInstance.exports.helloWorld !== undefined, true);
-      assert(asbindInstance.exports.__alloc !== undefined, true);
+      assert(asbindInstance.exports.__new !== undefined, true);
       assert(asbindInstance.exports.__release !== undefined, true);
     });
 
@@ -85,7 +85,7 @@ describe("asbind", () => {
 
       assert(asbindInstance.exports !== undefined, true);
       assert(asbindInstance.exports.helloWorld !== undefined, true);
-      assert(asbindInstance.exports.__alloc !== undefined, true);
+      assert(asbindInstance.exports.__new !== undefined, true);
       assert(asbindInstance.exports.__release !== undefined, true);
     });
 
@@ -94,7 +94,7 @@ describe("asbind", () => {
 
       assert(asbindInstance.exports !== undefined, true);
       assert(asbindInstance.exports.helloWorld !== undefined, true);
-      assert(asbindInstance.exports.__alloc !== undefined, true);
+      assert(asbindInstance.exports.__new !== undefined, true);
       assert(asbindInstance.exports.__release !== undefined, true);
     });
 
@@ -103,7 +103,7 @@ describe("asbind", () => {
 
       assert(asbindInstance.exports !== undefined, true);
       assert(asbindInstance.exports.helloWorld !== undefined, true);
-      assert(asbindInstance.exports.__alloc !== undefined, true);
+      assert(asbindInstance.exports.__new !== undefined, true);
       assert(asbindInstance.exports.__release !== undefined, true);
     });
 
@@ -129,7 +129,7 @@ describe("asbind", () => {
 
       assert(asbindInstance.exports !== undefined, true);
       assert(asbindInstance.exports.helloWorld !== undefined, true);
-      assert(asbindInstance.exports.__alloc !== undefined, true);
+      assert(asbindInstance.exports.__new !== undefined, true);
       assert(asbindInstance.exports.__release !== undefined, true);
     });
   });
