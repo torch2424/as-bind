@@ -626,36 +626,9 @@ describe("asbind", () => {
 
   describe("Unsafe Return Value", () => {
     let asbindInstance;
-    let testImportCalledWith = [];
 
     beforeEach(async () => {
-      const importObjectFunction = value => {
-        testImportCalledWith = [value];
-      };
-
-      wrappedBaseImportObject = {
-        ...baseImportObject,
-        test: {
-          testImportString: importObjectFunction,
-          testImportTwoStrings: (value1, value2) => {
-            testImportCalledWith = [value1, value2];
-          },
-          testImportReturnNumber: () => -1,
-          testImportInt8Array: importObjectFunction,
-          testImportUint8Array: importObjectFunction,
-          testImportInt16Array: importObjectFunction,
-          testImportUint16Array: importObjectFunction,
-          testImportInt32Array: importObjectFunction,
-          testImportUint32Array: importObjectFunction,
-          testImportFloat32Array: importObjectFunction,
-          testImportFloat64Array: importObjectFunction
-        }
-      };
-
-      asbindInstance = await AsBind.instantiate(
-        wasmBytes,
-        wrappedBaseImportObject
-      );
+      asbindInstance = await AsBind.instantiate(wasmBytes, baseImportObject);
     });
 
     it("should not break strings", () => {
@@ -706,4 +679,45 @@ describe("asbind", () => {
       });
     });
   });
+
+  describe("Forcing Return Types", () => {
+    let asbindInstance;
+
+    beforeEach(async () => {
+      asbindInstance = await AsBind.instantiate(wasmBytes, baseImportObject);
+    });
+
+    it("should allow setting the returnType on a bound export function", () => {
+      // Make sure the return type is null
+      assert.equal(asbindInstance.exports.helloWorld.returnType, null);
+
+      // Call the export
+      const defaultResponse = asbindInstance.exports.helloWorld("returnType");
+      assert.equal(typeof defaultResponse, "string");
+
+      // Set the return type to a number
+      asbindInstance.exports.helloWorld.returnType = AsBind.RETURN_TYPES.NUMBER;
+
+      // Call the export
+      const numberResponse = asbindInstance.exports.helloWorld("returnType");
+      assert.equal(typeof numberResponse, "number");
+
+      // Set the return type to a string
+      asbindInstance.exports.helloWorld.returnType = AsBind.RETURN_TYPES.STRING;
+
+      // Call the export
+      const stringResponse = asbindInstance.exports.helloWorld("returnType");
+      assert.equal(typeof stringResponse, "string");
+
+      // Remove the returnType
+      asbindInstance.exports.helloWorld.returnType = null;
+
+      // Call the export
+      const nullReturnTypeResponse = asbindInstance.exports.helloWorld(
+        "returnType"
+      );
+      assert.equal(typeof nullReturnTypeResponse, "string");
+    });
+  });
+  // Done!
 });
