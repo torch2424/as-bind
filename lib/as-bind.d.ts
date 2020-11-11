@@ -1,13 +1,2 @@
-import { instantiate, instantiateSync } from "@assemblyscript/loader";
-
-export interface AsBind {
-  // General asbind versionn
-  version: number;
-
-  // Our APIs
-  instantiate: typeof instantiate;
-
-  instantiateSync: typeof instantiateSync;
-}
-
-export type AsBindLib = AsBind;
+// We plan to port AsBind to TypeScript: https://github.com/torch2424/as-bind/issues/56
+export var AsBind: any;
