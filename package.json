@@ -1,7 +1,7 @@
 {
   "name": "as-bind",
   "description": "Isomorphic library to handle passing high-level data structures between AssemblyScript and JavaScript 🤝🚀",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "main": "dist/as-bind.cjs.js",
   "module": "dist/as-bind.esm.js",
   "iife": "dist/as-bind.iife.js",
@@ -14,16 +14,16 @@
     "lint": "prettier --write **/*.js **/*.ts **/*.json !build/**/* !dist/**/*",
     "lint:ci": "prettier --check **/*.js **/*.ts **/*.json !build/**/* !dist/**/*",
     "lib:watch": "chokidar --initial \"lib/**/*\" -c \"run-s lib:wasm:build lib:js:build:dev test\"",
-    "lib:test:watch": "chokidar \"test/**/*.js\" \"test/**/*.ts\" -c \"run-s lib:test:build lib:test:build test\"",
+    "lib:test:watch": "chokidar \"test/**/*.js\" \"test/**/*.ts\" -c \"run-s lib:wasm:build lib:test:build test\"",
     "lib:wasm:build": "run-s lib:wasm:build:debug lib:wasm:build:optimized lib:wasm:build:cp",
-    "lib:wasm:build:debug": "asc lib/assembly/as-bind.ts -b dist/as-bind.debug.wasm -t dist/as-bind.debug.wat --sourceMap --debug --runtime full",
-    "lib:wasm:build:optimized": "asc lib/assembly/as-bind.ts -b dist/as-bind.wasm --sourceMap dist/as-bind.wasm.map -t dist/as-bind.wat --runtime full -O3",
+    "lib:wasm:build:debug": "asc lib/assembly/as-bind.ts -b dist/as-bind.debug.wasm -t dist/as-bind.debug.wat --sourceMap --debug --exportRuntime",
+    "lib:wasm:build:optimized": "asc lib/assembly/as-bind.ts -b dist/as-bind.wasm --sourceMap dist/as-bind.wasm.map -t dist/as-bind.wat  -O3 --exportRuntime",
     "lib:wasm:build:cp": "cpy 'lib/assembly/**/*' dist",
     "lib:js:build": "rollup -c --environment LIB,PROD && cpy 'lib/as-bind.d.ts' dist",
     "lib:js:build:dev": "rollup -c --environment LIB,DEV",
     "lib:test:build": "run-s lib:test:build:entry lib:test:build:no-entry",
-    "lib:test:build:entry": "asc lib/assembly/as-bind.ts test/assembly/test.ts -b test/assembly/test.wasm --runtime full --debug",
-    "lib:test:build:no-entry": "asc test/assembly/test.ts -b test/assembly/test-no-entry.wasm --runtime full --debug",
+    "lib:test:build:entry": "asc lib/assembly/as-bind.ts test/assembly/test.ts -b test/assembly/test.wasm --debug --runtime incremental --exportRuntime",
+    "lib:test:build:no-entry": "asc test/assembly/test.ts -b test/assembly/test-no-entry.wasm --debug --runtime incremental --exportRuntime",
     "lib:deploy": "npm run build && np",
     "md:build": "run-s md:wasm:build md:ts:build md:js:build",
     "premd:dev": "npm run md:build",
@@ -31,7 +31,7 @@
     "md:wasm:watch": "chokidar --initial \"examples/markdown-parser/assembly/**/*\" -c \"run-s md:wasm:build\"",
     "md:ts:watch": "chokidar --initial \"examples/markdown-parser/assembly/**/*\" -c \"run-s md:ts:build\"",
     "md:js:watch": "chokidar --initial \"examples/markdown-parser/**/*\" -c \"rollup -c --environment MD,DEV\"",
-    "md:wasm:build": "asc lib/assembly/as-bind.ts examples/markdown-parser/assembly/index.ts -b dist/examples/markdown-parser/index.wasm -t dist/examples/markdown-parser/index.wat --sourceMap dist/examples/markdown-parser/index.wasm.map --runtime full",
+    "md:wasm:build": "asc lib/assembly/as-bind.ts examples/markdown-parser/assembly/index.ts -b dist/examples/markdown-parser/index.wasm -t dist/examples/markdown-parser/index.wat --sourceMap dist/examples/markdown-parser/index.wasm.map --runtime incremental --exportRuntime",
     "md:ts:build": "tsc --project examples/markdown-parser/assembly/ --outDir dist/ts/ --module \"es2015\"",
     "md:js:build": "rollup -c --environment MD,PROD",
     "md:deploy": "run-s build md:build md:deploy:gh-pages",
@@ -103,7 +103,11 @@
   },
   "homepage": "https://github.com/torch2424/as-bind#readme",
   "dependencies": {
-    "@assemblyscript/loader": "^0.17.2",
-    "assemblyscript": "^0.17.2"
+    "@assemblyscript/loader": "~0.18.7",
+    "assemblyscript": "~0.18.7"
+  },
+  "peerDependencies": {
+    "@assemblyscript/loader": "0.18.x",
+    "assemblyscript": "0.18.x"
   }
 }
