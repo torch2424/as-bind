@@ -76,7 +76,8 @@ describe("asbind", () => {
       assert(asbindInstance.exports !== undefined, true);
       assert(asbindInstance.exports.helloWorld !== undefined, true);
       assert(asbindInstance.exports.__new !== undefined, true);
-      assert(asbindInstance.exports.__release !== undefined, true);
+      assert(asbindInstance.exports.__pin !== undefined, true);
+      assert(asbindInstance.exports.__unpin !== undefined, true);
     });
 
     it("should instantiateSync WebAssembly.Module", async () => {
@@ -86,7 +87,8 @@ describe("asbind", () => {
       assert(asbindInstance.exports !== undefined, true);
       assert(asbindInstance.exports.helloWorld !== undefined, true);
       assert(asbindInstance.exports.__new !== undefined, true);
-      assert(asbindInstance.exports.__release !== undefined, true);
+      assert(asbindInstance.exports.__pin !== undefined, true);
+      assert(asbindInstance.exports.__unpin !== undefined, true);
     });
 
     it("should instantiate Uint8Array", async () => {
@@ -95,7 +97,8 @@ describe("asbind", () => {
       assert(asbindInstance.exports !== undefined, true);
       assert(asbindInstance.exports.helloWorld !== undefined, true);
       assert(asbindInstance.exports.__new !== undefined, true);
-      assert(asbindInstance.exports.__release !== undefined, true);
+      assert(asbindInstance.exports.__pin !== undefined, true);
+      assert(asbindInstance.exports.__unpin !== undefined, true);
     });
 
     it("should instantiateSync Uint8Array", async () => {
@@ -104,7 +107,8 @@ describe("asbind", () => {
       assert(asbindInstance.exports !== undefined, true);
       assert(asbindInstance.exports.helloWorld !== undefined, true);
       assert(asbindInstance.exports.__new !== undefined, true);
-      assert(asbindInstance.exports.__release !== undefined, true);
+      assert(asbindInstance.exports.__pin !== undefined, true);
+      assert(asbindInstance.exports.__unpin !== undefined, true);
     });
 
     it("should instantiate Promise/Response", async () => {
@@ -130,7 +134,8 @@ describe("asbind", () => {
       assert(asbindInstance.exports !== undefined, true);
       assert(asbindInstance.exports.helloWorld !== undefined, true);
       assert(asbindInstance.exports.__new !== undefined, true);
-      assert(asbindInstance.exports.__release !== undefined, true);
+      assert(asbindInstance.exports.__pin !== undefined, true);
+      assert(asbindInstance.exports.__unpin !== undefined, true);
     });
   });
 
