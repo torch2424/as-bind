@@ -31,7 +31,7 @@
     "md:wasm:watch": "chokidar --initial \"examples/markdown-parser/assembly/**/*\" -c \"run-s md:wasm:build\"",
     "md:ts:watch": "chokidar --initial \"examples/markdown-parser/assembly/**/*\" -c \"run-s md:ts:build\"",
     "md:js:watch": "chokidar --initial \"examples/markdown-parser/**/*\" -c \"rollup -c --environment MD,DEV\"",
-    "md:wasm:build": "asc lib/assembly/as-bind.ts examples/markdown-parser/assembly/index.ts -b dist/examples/markdown-parser/index.wasm -t dist/examples/markdown-parser/index.wat --sourceMap dist/examples/markdown-parser/index.wasm.map --exportRuntime",
+    "md:wasm:build": "asc lib/assembly/as-bind.ts examples/markdown-parser/assembly/index.ts -b dist/examples/markdown-parser/index.wasm -t dist/examples/markdown-parser/index.wat --sourceMap dist/examples/markdown-parser/index.wasm.map --runtime incremental --exportRuntime",
     "md:ts:build": "tsc --project examples/markdown-parser/assembly/ --outDir dist/ts/ --module \"es2015\"",
     "md:js:build": "rollup -c --environment MD,PROD",
     "md:deploy": "run-s build md:build md:deploy:gh-pages",
