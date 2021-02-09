@@ -58,7 +58,7 @@ To enable as-bind for your AssemblyScript Wasm modules, add the as-bind entrypoi
 The two things to note are:
 
 - `./node_modules/as-bind/lib/assembly/as-bind.ts` - This is the as-bind entryfile, used for exporting IDs of AssemblyScript classes so we can use them for instantiating new classes
-- `--runtime incremental` - This specifies that we are using the incremental runtime / garbage collection option (The AssemblyScript default).
+- `--runtime incremental` - This specifies that we are using the incremental runtime / garbage collection option (The AssemblyScript default). However, [all the runtime options](https://www.assemblyscript.org/garbage-collection.html) are supported (incremental, minimal, and stub).
 - `--exportRuntime` - This allows us to use the [AssemblyScript Garbage Collection functions added in 0.18.x](https://www.assemblyscript.org/garbage-collection.html)
 
 For **optional testing purposes** , let's export an example function we can try in `your-entryfile.ts`:
