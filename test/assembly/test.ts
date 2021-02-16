@@ -77,6 +77,46 @@ export function mapFloat64Array(array: Float64Array): Float64Array {
   return array.map((value: f64) => value * 2);
 }
 
+export function mapBigInt64Array(array: Int64Array): Int64Array {
+  return array.map((value: i64) => value * 2);
+}
+
+export function mapBigUint64Array(array: Uint64Array): Uint64Array {
+  return array.map((value: u64) => value * 2);
+}
+
+export function mapI32Array(array: Array<i32>): Array<i32> {
+  return array.map<i32>((value: i32) => value * 2);
+}
+
+export function mapI64Array(array: Array<i64>): Array<i64> {
+  return array.map<i64>((value: i64) => value * 2);
+}
+
+export function mapStringArray(array: Array<String>): Array<String> {
+  return array.map<String>((value: String) => "#" + value);
+}
+
+export function mapI32ArrayArray(array: Array<Array<i32>>): Array<Array<i32>> {
+  return array.map<Array<i32>>((value: Array<i32>) =>
+    value.map<i32>((v: i32) => v * 2)
+  );
+}
+
+export function mapI64ArrayArray(array: Array<Array<i64>>): Array<Array<i64>> {
+  return array.map<Array<i64>>((value: Array<i64>) =>
+    value.map<i64>((v: i64) => v * 2)
+  );
+}
+
+export function mapStringArrayArray(
+  array: Array<Array<String>>
+): Array<Array<String>> {
+  return array.map<Array<String>>((value: Array<String>) =>
+    value.map<String>((v: String) => "#" + v)
+  );
+}
+
 declare function testImportString(value: string): void;
 export function callTestImportString(value: string): void {
   testImportString(value);
