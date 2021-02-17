@@ -234,6 +234,123 @@ describe("asbind", () => {
         assert.equal(arrayMapResponse[0], randomValue * 2);
       });
     });
+
+    ["BigInt64Array", "BigUint64Array"].forEach(typedArrayKey => {
+      it(`should handle ${typedArrayKey}`, () => {
+        const randomValue = Math.floor(Math.random() * 10);
+        const array = global[typedArrayKey].from([
+          BigInt(randomValue),
+          BigInt(randomValue),
+          BigInt(randomValue)
+        ]);
+        const arrayMapResponse = asbindInstance.exports["map" + typedArrayKey](
+          array
+        );
+
+        // Ensure it is a type array
+        assert.equal(arrayMapResponse.byteLength !== undefined, true);
+
+        // Ensure it has the correct values
+        assert.equal(arrayMapResponse[0], BigInt(randomValue * 2));
+      });
+    });
+
+    // Arrays
+    it(`should handle array of i32`, () => {
+      const array = [1, 2, 3];
+      const arrayMapResponse = asbindInstance.exports["mapI32Array"](array);
+
+      // Ensure it is a type array
+      assert.equal(Array.isArray(arrayMapResponse), true);
+
+      // Ensure it has the correct values
+      assert.equal(arrayMapResponse[0], 2);
+    });
+
+    it(`should handle array of i64`, () => {
+      const array = [BigInt(1), BigInt(2), BigInt(3)];
+      const arrayMapResponse = asbindInstance.exports["mapI64Array"](array);
+
+      // Ensure it is a type array
+      assert.equal(Array.isArray(arrayMapResponse), true);
+
+      // Ensure it has the correct values
+      assert.equal(arrayMapResponse[0], BigInt(2));
+    });
+
+    it(`should handle array of string`, () => {
+      const array = ["a", "b", "c"];
+      const arrayMapResponse = asbindInstance.exports["mapStringArray"](array);
+
+      // Ensure it is a type array
+      assert.equal(Array.isArray(arrayMapResponse), true);
+
+      // Ensure it has the correct values
+      assert.equal(arrayMapResponse[0], "#a");
+    });
+
+    it(`should handle array of bool`, () => {
+      const array = [true, false, true];
+      const arrayMapResponse = asbindInstance.exports["mapBoolArray"](array);
+
+      // Ensure it is a type array
+      assert.equal(Array.isArray(arrayMapResponse), true);
+
+      // Ensure it has the correct values
+      assert.equal(arrayMapResponse[0], false);
+    });
+
+    it(`should handle array of array of i32`, () => {
+      const array = [[1], [2, 3], [4]];
+      const arrayMapResponse = asbindInstance.exports["mapI32ArrayArray"](
+        array
+      );
+
+      // Ensure it is a type array
+      assert.equal(Array.isArray(arrayMapResponse), true);
+
+      // Ensure it has the correct values
+      assert.equal(arrayMapResponse[1][0], 4);
+    });
+
+    it(`should handle array of array of i64`, () => {
+      const array = [[BigInt(1)], [BigInt(2), BigInt(3)], [BigInt(4)]];
+      const arrayMapResponse = asbindInstance.exports["mapI64ArrayArray"](
+        array
+      );
+
+      // Ensure it is a type array
+      assert.equal(Array.isArray(arrayMapResponse), true);
+
+      // Ensure it has the correct values
+      assert.equal(arrayMapResponse[1][0], BigInt(4));
+    });
+
+    it(`should handle array of array of string`, () => {
+      const array = [["a"], ["b", "c"], ["d"]];
+      const arrayMapResponse = asbindInstance.exports["mapStringArrayArray"](
+        array
+      );
+
+      // Ensure it is a type array
+      assert.equal(Array.isArray(arrayMapResponse), true);
+
+      // Ensure it has the correct values
+      assert.equal(arrayMapResponse[1][0], "#b");
+    });
+
+    it(`should handle array of array of bool`, () => {
+      const array = [[true], [false, true], [false]];
+      const arrayMapResponse = asbindInstance.exports["mapBoolArrayArray"](
+        array
+      );
+
+      // Ensure it is a type array
+      assert.equal(Array.isArray(arrayMapResponse), true);
+
+      // Ensure it has the correct values
+      assert.equal(arrayMapResponse[1][0], true);
+    });
   });
 
   describe("importObject functions", () => {
@@ -675,6 +792,38 @@ describe("asbind", () => {
         asbindInstance.exports[exportName].unsafeReturnValue = true;
 
         randomValue = Math.floor(Math.random() * 10) + 1;
+        array = global[typedArrayKey].from([randomValue]);
+        arrayMapResponse = asbindInstance.exports[exportName](array);
+
+        // Assert it now returns a pointer and a value
+        assert(arrayMapResponse.ptr !== undefined);
+        assert(arrayMapResponse.value !== undefined);
+      });
+    });
+
+    ["BigInt64Array", "BigUint64Array"].forEach(typedArrayKey => {
+      it(`should handle ${typedArrayKey} being returned unsafe`, () => {
+        const exportName = `map${typedArrayKey}`;
+
+        assert.equal(
+          asbindInstance.exports[exportName].unsafeReturnValue,
+          false
+        );
+
+        let randomValue;
+        let array;
+        let arrayMapResponse;
+
+        randomValue = BigInt(Math.floor(Math.random() * 10) + 1);
+        array = global[typedArrayKey].from([randomValue]);
+        arrayMapResponse = asbindInstance.exports[exportName](array);
+
+        // Check to make sure it returns an arrary
+        assert(arrayMapResponse.length > 0);
+
+        asbindInstance.exports[exportName].unsafeReturnValue = true;
+
+        randomValue = BigInt(Math.floor(Math.random() * 10) + 1);
         array = global[typedArrayKey].from([randomValue]);
         arrayMapResponse = asbindInstance.exports[exportName](array);
 
