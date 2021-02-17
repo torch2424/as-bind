@@ -278,7 +278,7 @@ describe("asbind", () => {
       assert.equal(arrayMapResponse[0], BigInt(2));
     });
 
-    it(`should handle array of String`, () => {
+    it(`should handle array of string`, () => {
       const array = ["a", "b", "c"];
       const arrayMapResponse = asbindInstance.exports["mapStringArray"](array);
 
@@ -287,6 +287,17 @@ describe("asbind", () => {
 
       // Ensure it has the correct values
       assert.equal(arrayMapResponse[0], "#a");
+    });
+
+    it(`should handle array of bool`, () => {
+      const array = [true, false, true];
+      const arrayMapResponse = asbindInstance.exports["mapBoolArray"](array);
+
+      // Ensure it is a type array
+      assert.equal(Array.isArray(arrayMapResponse), true);
+
+      // Ensure it has the correct values
+      assert.equal(arrayMapResponse[0], false);
     });
 
     it(`should handle array of array of i32`, () => {
@@ -315,7 +326,7 @@ describe("asbind", () => {
       assert.equal(arrayMapResponse[1][0], BigInt(4));
     });
 
-    it(`should handle array of array of String`, () => {
+    it(`should handle array of array of string`, () => {
       const array = [["a"], ["b", "c"], ["d"]];
       const arrayMapResponse = asbindInstance.exports["mapStringArrayArray"](
         array
@@ -326,6 +337,19 @@ describe("asbind", () => {
 
       // Ensure it has the correct values
       assert.equal(arrayMapResponse[1][0], "#b");
+    });
+
+    it(`should handle array of array of bool`, () => {
+      const array = [[true], [false, true], [false]];
+      const arrayMapResponse = asbindInstance.exports["mapBoolArrayArray"](
+        array
+      );
+
+      // Ensure it is a type array
+      assert.equal(Array.isArray(arrayMapResponse), true);
+
+      // Ensure it has the correct values
+      assert.equal(arrayMapResponse[1][0], true);
     });
   });
 

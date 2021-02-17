@@ -93,8 +93,12 @@ export function mapI64Array(array: Array<i64>): Array<i64> {
   return array.map<i64>((value: i64) => value * 2);
 }
 
-export function mapStringArray(array: Array<String>): Array<String> {
-  return array.map<String>((value: String) => "#" + value);
+export function mapStringArray(array: Array<string>): Array<string> {
+  return array.map<string>((value: string) => "#" + value);
+}
+
+export function mapBoolArray(array: Array<bool>): Array<bool> {
+  return array.map<bool>((value: bool) => !value);
 }
 
 export function mapI32ArrayArray(array: Array<Array<i32>>): Array<Array<i32>> {
@@ -110,10 +114,18 @@ export function mapI64ArrayArray(array: Array<Array<i64>>): Array<Array<i64>> {
 }
 
 export function mapStringArrayArray(
-  array: Array<Array<String>>
-): Array<Array<String>> {
-  return array.map<Array<String>>((value: Array<String>) =>
-    value.map<String>((v: String) => "#" + v)
+  array: Array<Array<string>>
+): Array<Array<string>> {
+  return array.map<Array<string>>((value: Array<string>) =>
+    value.map<string>((v: string) => "#" + v)
+  );
+}
+
+export function mapBoolArrayArray(
+  array: Array<Array<bool>>
+): Array<Array<bool>> {
+  return array.map<Array<bool>>((value: Array<bool>) =>
+    value.map<bool>((v: bool) => !v)
   );
 }
 
