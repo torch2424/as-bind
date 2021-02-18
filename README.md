@@ -25,6 +25,7 @@ Isomorphic library to handle passing high-level data structures between Assembly
 - [Reference API](#reference-api)
 - [Motivation](#motivation)
 - [Performance](#performance)
+- [Production](#production)
 - [Projects using as-bind](#projects-using-as-bind)
 - [FAQ and Common Issues](#faq-and-common-issues)
 - [Contributing](#contributing)
@@ -166,18 +167,16 @@ asyncTask();
 
 ## Supported Data Types
 
-**TL;DR:** Currently Numbers, Strings, and Typed Arrays are supported. Returning a high-level data type from an imported JavaScript function, [BigInt](https://github.com/WebAssembly/JS-BigInt-integration), and passing AssemblyScript Classes will be coming later.
-
-**Note:** As discovered in #28, [`Array<NumberType>`](https://docs.assemblyscript.org/standard-library/array#api) is **NOT** the same as [`TypedArray`](https://docs.assemblyscript.org/standard-library/typedarray#api), and may not work for your use case. You want to use [`TypedArray`](https://docs.assemblyscript.org/standard-library/typedarray#api) where possible.
+**TL;DR:** Currently Numbers, Strings, Typed Arrays, and common Array<T> types are supported. Returning a high-level data type from an imported JavaScript function, and better AssemblyScript Class support will be coming later. For more detailed type support information, please see the [`lib/asbind-instance/supported-ref-types.js`](./lib/asbind-instance/supported-ref-types.js) and [`test/assembly/test.ts`](./test/assembly/test.ts).
 
 <!-- Generated from: https://www.tablesgenerator.com/markdown_tables# -->
 
-| Function & Direction                        | Number (32-bit Integers and 32-bit / 64-bit Floats) | Strings | Int8Array | Uint8Array | Int16Array | UInt16Array | Int32Array | Uint32Array | Float32Array | Float64Array | AssemblyScript Classes |
-| ------------------------------------------- | --------------------------------------------------- | ------- | --------- | ---------- | ---------- | ----------- | ---------- | ----------- | ------------ | ------------ | ---------------------- |
-| Exported AssemblyScript Function Parameters | ✔️                                                  | ✔️      | ✔️        | ✔️         | ✔️         | ✔️          | ✔️         | ✔️          | ✔️           | ✔️           | ❌                     |
-| Exported AssemblyScript Function Return     | ✔️                                                  | ✔️      | ✔️        | ✔️         | ✔️         | ✔️          | ✔️         | ✔️          | ✔️           | ✔️           | ❌                     |
-| Imported JavaScript Function Paramters      | ✔️                                                  | ✔️      | ✔️        | ✔️         | ✔️         | ✔️          | ✔️         | ✔️          | ✔️           | ✔️           | ❌                     |
-| Imported JavaScript Function Return         | ✔️                                                  | ❌      | ❌        | ❌         | ❌         | ❌          | ❌         | ❌          | ❌           | ❌           | ❌                     |
+| Function Direction & AssemblyScript Type                                                                | Exported AssemblyScript Function Parameters | Exported AssemblyScript Function Return | Imported JavaScript Function Paramters | Imported JavaScript Function Return |
+| ------------------------------------------------------------------------------------------------------- | ------------------------------------------- | --------------------------------------- | -------------------------------------- | ----------------------------------- |
+| [Number (32-bit Integers and 32-bit / 64-bit Floats)](https://www.assemblyscript.org/types.html#types)  | ✔️                                          | ✔️                                      | ✔️                                     | ✔️                                  |
+| [Strings](https://www.assemblyscript.org/stdlib/string.html#string)                                     | ✔️                                          | ✔️                                      | ✔️                                     | ❌                                  |
+| [TypedArray](https://www.assemblyscript.org/stdlib/typedarray.html#typedarray)                          | ✔️                                          | ✔️                                      | ✔️                                     | ❌                                  |
+| [Array<T> (Numbers, strings, booleans, etc...)](https://www.assemblyscript.org/stdlib/array.html#array) | ✔️                                          | ✔️                                      | ✔️                                     | ❌                                  |
 
 ## Supported AssemblyScript Runtime Variants
 
