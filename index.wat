@@ -117,7 +117,7 @@
  (data (i32.const 5404) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00<\00h\00r\00 \00/\00>\00")
  (data (i32.const 5436) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00*\00\00\00O\00b\00j\00e\00c\00t\00 \00a\00l\00r\00e\00a\00d\00y\00 \00p\00i\00n\00n\00e\00d\00\00\00")
  (data (i32.const 5500) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00O\00b\00j\00e\00c\00t\00 \00i\00s\00 \00n\00o\00t\00 \00p\00i\00n\00n\00e\00d\00\00\00\00\00")
- (data (i32.const 5568) "\0f\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00A\08\00\00\02\00\00\00A\00\00\00\02\00\00\00\81\08\00\00\02\00\00\00\81\00\00\00\02\00\00\00\01\t\00\00\02\00\00\00\01\01\00\00\02\00\00\00\01\19\00\00\02\00\00\00\01\1a\00\00\02\00\00\00\00\00\00\00\00\00\00\00\02A\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02A\00\00\00\00\00\00")
+ (data (i32.const 5568) "\19\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00A\08\00\00\02\00\00\00A\00\00\00\02\00\00\00\81\08\00\00\02\00\00\00\81\00\00\00\02\00\00\00\01\t\00\00\02\00\00\00\01\01\00\00\02\00\00\00\01\19\00\00\02\00\00\00\01\1a\00\00\02\00\00\00\01\n\00\00\02\00\00\00\01\02\00\00\02\00\00\00\02\t\00\00\00\00\00\00\02\n\00\00\00\00\00\00\02A\00\00\00\00\00\00B\00\00\00\00\00\00\00\02A\00\00\00\00\00\00\02A\00\00\00\00\00\00\02A\00\00\00\00\00\00\02A\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02A\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02A\00\00\00\00\00\00")
  (table $0 1 funcref)
  (global $lib/assembly/as-bind/__asbind_entryfile_flag i32 (i32.const 1))
  (global $lib/assembly/as-bind/__asbind_String_ID i32 (i32.const 1))
@@ -131,6 +131,16 @@
  (global $lib/assembly/as-bind/__asbind_Uint32Array_ID i32 (i32.const 8))
  (global $lib/assembly/as-bind/__asbind_Float32Array_ID i32 (i32.const 9))
  (global $lib/assembly/as-bind/__asbind_Float64Array_ID i32 (i32.const 10))
+ (global $lib/assembly/as-bind/__asbind_Int64Array_ID i32 (i32.const 11))
+ (global $lib/assembly/as-bind/__asbind_Uint64Array_ID i32 (i32.const 12))
+ (global $lib/assembly/as-bind/__asbind_I32Array_ID i32 (i32.const 13))
+ (global $lib/assembly/as-bind/__asbind_I64Array_ID i32 (i32.const 14))
+ (global $lib/assembly/as-bind/__asbind_StringArray_ID i32 (i32.const 15))
+ (global $lib/assembly/as-bind/__asbind_BoolArray_ID i32 (i32.const 16))
+ (global $lib/assembly/as-bind/__asbind_I32ArrayArray_ID i32 (i32.const 17))
+ (global $lib/assembly/as-bind/__asbind_I64ArrayArray_ID i32 (i32.const 18))
+ (global $lib/assembly/as-bind/__asbind_StringArrayArray_ID i32 (i32.const 19))
+ (global $lib/assembly/as-bind/__asbind_BoolArrayArray_ID i32 (i32.const 20))
  (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.NEWLINE i32 (i32.const 32))
  (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.WHITESPACE i32 (i32.const 80))
  (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.HEADER i32 (i32.const 128))
@@ -179,9 +189,9 @@
  (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.HORIZONTAL_LINE i32 (i32.const 800))
  (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.CHARACTER i32 (i32.const 848))
  (global $~lib/rt/__rtti_base i32 (i32.const 5568))
- (global $~lib/memory/__data_end i32 (i32.const 5692))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 22076))
- (global $~lib/memory/__heap_base i32 (i32.const 22076))
+ (global $~lib/memory/__data_end i32 (i32.const 5772))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 22156))
+ (global $~lib/memory/__heap_base i32 (i32.const 22156))
  (export "__asbind_entryfile_flag" (global $lib/assembly/as-bind/__asbind_entryfile_flag))
  (export "__asbind_String_ID" (global $lib/assembly/as-bind/__asbind_String_ID))
  (export "__asbind_ArrayBuffer_ID" (global $lib/assembly/as-bind/__asbind_ArrayBuffer_ID))
@@ -194,6 +204,16 @@
  (export "__asbind_Uint32Array_ID" (global $lib/assembly/as-bind/__asbind_Uint32Array_ID))
  (export "__asbind_Float32Array_ID" (global $lib/assembly/as-bind/__asbind_Float32Array_ID))
  (export "__asbind_Float64Array_ID" (global $lib/assembly/as-bind/__asbind_Float64Array_ID))
+ (export "__asbind_Int64Array_ID" (global $lib/assembly/as-bind/__asbind_Int64Array_ID))
+ (export "__asbind_Uint64Array_ID" (global $lib/assembly/as-bind/__asbind_Uint64Array_ID))
+ (export "__asbind_I32Array_ID" (global $lib/assembly/as-bind/__asbind_I32Array_ID))
+ (export "__asbind_I64Array_ID" (global $lib/assembly/as-bind/__asbind_I64Array_ID))
+ (export "__asbind_StringArray_ID" (global $lib/assembly/as-bind/__asbind_StringArray_ID))
+ (export "__asbind_BoolArray_ID" (global $lib/assembly/as-bind/__asbind_BoolArray_ID))
+ (export "__asbind_I32ArrayArray_ID" (global $lib/assembly/as-bind/__asbind_I32ArrayArray_ID))
+ (export "__asbind_I64ArrayArray_ID" (global $lib/assembly/as-bind/__asbind_I64ArrayArray_ID))
+ (export "__asbind_StringArrayArray_ID" (global $lib/assembly/as-bind/__asbind_StringArrayArray_ID))
+ (export "__asbind_BoolArrayArray_ID" (global $lib/assembly/as-bind/__asbind_BoolArrayArray_ID))
  (export "__new" (func $~lib/rt/itcms/__new))
  (export "__pin" (func $~lib/rt/itcms/__pin))
  (export "__unpin" (func $~lib/rt/itcms/__unpin))
@@ -5119,6 +5139,305 @@
   local.get $1
   call $~lib/arraybuffer/ArrayBufferView~visit
  )
+ (func $~lib/typedarray/Int64Array~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/arraybuffer/ArrayBufferView~visit
+ )
+ (func $~lib/typedarray/Uint64Array~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/arraybuffer/ArrayBufferView~visit
+ )
+ (func $~lib/array/Array<i32>#__visit (param $0 i32) (param $1 i32)
+  i32.const 0
+  drop
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/array/Array<i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<i32>#__visit
+ )
+ (func $~lib/array/Array<i64>#__visit (param $0 i32) (param $1 i32)
+  i32.const 0
+  drop
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/array/Array<i64>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<i64>#__visit
+ )
+ (func $~lib/array/Array<~lib/string/String>#__visit (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 1
+  drop
+  local.get $0
+  i32.load offset=4
+  local.set $2
+  local.get $2
+  local.get $0
+  i32.load offset=12
+  i32.const 2
+  i32.shl
+  i32.add
+  local.set $3
+  loop $while-continue|0
+   local.get $2
+   local.get $3
+   i32.lt_u
+   local.set $4
+   local.get $4
+   if
+    local.get $2
+    i32.load
+    local.set $5
+    local.get $5
+    if
+     local.get $5
+     local.get $1
+     call $~lib/rt/itcms/__visit
+    end
+    local.get $2
+    i32.const 4
+    i32.add
+    local.set $2
+    br $while-continue|0
+   end
+  end
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/array/Array<~lib/string/String>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<~lib/string/String>#__visit
+ )
+ (func $~lib/array/Array<bool>#__visit (param $0 i32) (param $1 i32)
+  i32.const 0
+  drop
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/array/Array<bool>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<bool>#__visit
+ )
+ (func $~lib/array/Array<~lib/array/Array<i32>>#__visit (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 1
+  drop
+  local.get $0
+  i32.load offset=4
+  local.set $2
+  local.get $2
+  local.get $0
+  i32.load offset=12
+  i32.const 2
+  i32.shl
+  i32.add
+  local.set $3
+  loop $while-continue|0
+   local.get $2
+   local.get $3
+   i32.lt_u
+   local.set $4
+   local.get $4
+   if
+    local.get $2
+    i32.load
+    local.set $5
+    local.get $5
+    if
+     local.get $5
+     local.get $1
+     call $~lib/rt/itcms/__visit
+    end
+    local.get $2
+    i32.const 4
+    i32.add
+    local.set $2
+    br $while-continue|0
+   end
+  end
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/array/Array<~lib/array/Array<i32>>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<~lib/array/Array<i32>>#__visit
+ )
+ (func $~lib/array/Array<~lib/array/Array<i64>>#__visit (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 1
+  drop
+  local.get $0
+  i32.load offset=4
+  local.set $2
+  local.get $2
+  local.get $0
+  i32.load offset=12
+  i32.const 2
+  i32.shl
+  i32.add
+  local.set $3
+  loop $while-continue|0
+   local.get $2
+   local.get $3
+   i32.lt_u
+   local.set $4
+   local.get $4
+   if
+    local.get $2
+    i32.load
+    local.set $5
+    local.get $5
+    if
+     local.get $5
+     local.get $1
+     call $~lib/rt/itcms/__visit
+    end
+    local.get $2
+    i32.const 4
+    i32.add
+    local.set $2
+    br $while-continue|0
+   end
+  end
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/array/Array<~lib/array/Array<i64>>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<~lib/array/Array<i64>>#__visit
+ )
+ (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__visit (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 1
+  drop
+  local.get $0
+  i32.load offset=4
+  local.set $2
+  local.get $2
+  local.get $0
+  i32.load offset=12
+  i32.const 2
+  i32.shl
+  i32.add
+  local.set $3
+  loop $while-continue|0
+   local.get $2
+   local.get $3
+   i32.lt_u
+   local.set $4
+   local.get $4
+   if
+    local.get $2
+    i32.load
+    local.set $5
+    local.get $5
+    if
+     local.get $5
+     local.get $1
+     call $~lib/rt/itcms/__visit
+    end
+    local.get $2
+    i32.const 4
+    i32.add
+    local.set $2
+    br $while-continue|0
+   end
+  end
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__visit
+ )
+ (func $~lib/array/Array<~lib/array/Array<bool>>#__visit (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 1
+  drop
+  local.get $0
+  i32.load offset=4
+  local.set $2
+  local.get $2
+  local.get $0
+  i32.load offset=12
+  i32.const 2
+  i32.shl
+  i32.add
+  local.set $3
+  loop $while-continue|0
+   local.get $2
+   local.get $3
+   i32.lt_u
+   local.set $4
+   local.get $4
+   if
+    local.get $2
+    i32.load
+    local.set $5
+    local.get $5
+    if
+     local.get $5
+     local.get $1
+     call $~lib/rt/itcms/__visit
+    end
+    local.get $2
+    i32.const 4
+    i32.add
+    local.set $2
+    br $while-continue|0
+   end
+  end
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/array/Array<~lib/array/Array<bool>>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<~lib/array/Array<bool>>#__visit
+ )
  (func $examples/markdown-parser/assembly/tokenizer/token/Token~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
@@ -5271,70 +5590,130 @@
     block $examples/markdown-parser/assembly/parser/ast/AstNode
      block $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>
       block $examples/markdown-parser/assembly/tokenizer/token/Token
-       block $~lib/typedarray/Float64Array
-        block $~lib/typedarray/Float32Array
-         block $~lib/typedarray/Uint32Array
-          block $~lib/typedarray/Int32Array
-           block $~lib/typedarray/Uint16Array
-            block $~lib/typedarray/Int16Array
-             block $~lib/typedarray/Uint8Array
-              block $~lib/typedarray/Int8Array
-               block $~lib/arraybuffer/ArrayBufferView
-                block $~lib/string/String
-                 block $~lib/arraybuffer/ArrayBuffer
+       block $~lib/array/Array<~lib/array/Array<bool>>
+        block $~lib/array/Array<~lib/array/Array<~lib/string/String>>
+         block $~lib/array/Array<~lib/array/Array<i64>>
+          block $~lib/array/Array<~lib/array/Array<i32>>
+           block $~lib/array/Array<bool>
+            block $~lib/array/Array<~lib/string/String>
+             block $~lib/array/Array<i64>
+              block $~lib/array/Array<i32>
+               block $~lib/typedarray/Uint64Array
+                block $~lib/typedarray/Int64Array
+                 block $~lib/typedarray/Float64Array
+                  block $~lib/typedarray/Float32Array
+                   block $~lib/typedarray/Uint32Array
+                    block $~lib/typedarray/Int32Array
+                     block $~lib/typedarray/Uint16Array
+                      block $~lib/typedarray/Int16Array
+                       block $~lib/typedarray/Uint8Array
+                        block $~lib/typedarray/Int8Array
+                         block $~lib/arraybuffer/ArrayBufferView
+                          block $~lib/string/String
+                           block $~lib/arraybuffer/ArrayBuffer
+                            local.get $0
+                            i32.const 8
+                            i32.sub
+                            i32.load
+                            br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/typedarray/Int8Array $~lib/typedarray/Uint8Array $~lib/typedarray/Int16Array $~lib/typedarray/Uint16Array $~lib/typedarray/Int32Array $~lib/typedarray/Uint32Array $~lib/typedarray/Float32Array $~lib/typedarray/Float64Array $~lib/typedarray/Int64Array $~lib/typedarray/Uint64Array $~lib/array/Array<i32> $~lib/array/Array<i64> $~lib/array/Array<~lib/string/String> $~lib/array/Array<bool> $~lib/array/Array<~lib/array/Array<i32>> $~lib/array/Array<~lib/array/Array<i64>> $~lib/array/Array<~lib/array/Array<~lib/string/String>> $~lib/array/Array<~lib/array/Array<bool>> $examples/markdown-parser/assembly/tokenizer/token/Token $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token> $examples/markdown-parser/assembly/parser/ast/AstNode $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode> $invalid
+                           end
+                           return
+                          end
+                          return
+                         end
+                         local.get $0
+                         local.get $1
+                         call $~lib/arraybuffer/ArrayBufferView~visit
+                         return
+                        end
+                        local.get $0
+                        local.get $1
+                        call $~lib/typedarray/Int8Array~visit
+                        return
+                       end
+                       local.get $0
+                       local.get $1
+                       call $~lib/typedarray/Uint8Array~visit
+                       return
+                      end
+                      local.get $0
+                      local.get $1
+                      call $~lib/typedarray/Int16Array~visit
+                      return
+                     end
+                     local.get $0
+                     local.get $1
+                     call $~lib/typedarray/Uint16Array~visit
+                     return
+                    end
+                    local.get $0
+                    local.get $1
+                    call $~lib/typedarray/Int32Array~visit
+                    return
+                   end
+                   local.get $0
+                   local.get $1
+                   call $~lib/typedarray/Uint32Array~visit
+                   return
+                  end
                   local.get $0
-                  i32.const 8
-                  i32.sub
-                  i32.load
-                  br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/typedarray/Int8Array $~lib/typedarray/Uint8Array $~lib/typedarray/Int16Array $~lib/typedarray/Uint16Array $~lib/typedarray/Int32Array $~lib/typedarray/Uint32Array $~lib/typedarray/Float32Array $~lib/typedarray/Float64Array $examples/markdown-parser/assembly/tokenizer/token/Token $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token> $examples/markdown-parser/assembly/parser/ast/AstNode $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode> $invalid
+                  local.get $1
+                  call $~lib/typedarray/Float32Array~visit
+                  return
                  end
+                 local.get $0
+                 local.get $1
+                 call $~lib/typedarray/Float64Array~visit
                  return
                 end
+                local.get $0
+                local.get $1
+                call $~lib/typedarray/Int64Array~visit
                 return
                end
                local.get $0
                local.get $1
-               call $~lib/arraybuffer/ArrayBufferView~visit
+               call $~lib/typedarray/Uint64Array~visit
                return
               end
               local.get $0
               local.get $1
-              call $~lib/typedarray/Int8Array~visit
+              call $~lib/array/Array<i32>~visit
               return
              end
              local.get $0
              local.get $1
-             call $~lib/typedarray/Uint8Array~visit
+             call $~lib/array/Array<i64>~visit
              return
             end
             local.get $0
             local.get $1
-            call $~lib/typedarray/Int16Array~visit
+            call $~lib/array/Array<~lib/string/String>~visit
             return
            end
            local.get $0
            local.get $1
-           call $~lib/typedarray/Uint16Array~visit
+           call $~lib/array/Array<bool>~visit
            return
           end
           local.get $0
           local.get $1
-          call $~lib/typedarray/Int32Array~visit
+          call $~lib/array/Array<~lib/array/Array<i32>>~visit
           return
          end
          local.get $0
          local.get $1
-         call $~lib/typedarray/Uint32Array~visit
+         call $~lib/array/Array<~lib/array/Array<i64>>~visit
          return
         end
         local.get $0
         local.get $1
-        call $~lib/typedarray/Float32Array~visit
+        call $~lib/array/Array<~lib/array/Array<~lib/string/String>>~visit
         return
        end
        local.get $0
        local.get $1
-       call $~lib/typedarray/Float64Array~visit
+       call $~lib/array/Array<~lib/array/Array<bool>>~visit
        return
       end
       local.get $0
@@ -5367,8 +5746,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 22096
-   i32.const 22144
+   i32.const 22176
+   i32.const 22224
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -10448,7 +10827,7 @@
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 16
-   i32.const 12
+   i32.const 22
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store
@@ -10527,7 +10906,7 @@
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 12
-   i32.const 11
+   i32.const 21
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store
@@ -10622,7 +11001,7 @@
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 16
-   i32.const 14
+   i32.const 24
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store
@@ -10701,7 +11080,7 @@
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 12
-   i32.const 13
+   i32.const 23
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store
