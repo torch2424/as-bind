@@ -32,6 +32,3 @@ export const __asbind_I32ArrayArray_ID = idof<Array<Array<i32>>>();
 export const __asbind_I64ArrayArray_ID = idof<Array<Array<i64>>>();
 export const __asbind_StringArrayArray_ID = idof<Array<Array<string>>>();
 export const __asbind_BoolArrayArray_ID = idof<Array<Array<bool>>>();
-
-// As-Bind type data
-export const __asbind_type_data: string = "";

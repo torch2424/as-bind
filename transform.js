@@ -65,14 +65,12 @@ class AsBindTransform extends Transform {
         ])
       )
     };
-    const typeDataExport = [...program.elementsByDeclaration.values()].find(
-      v => v.name === MARKER
-    );
-    if (!typeDataExport) {
-      throw Error("Could not find type data export");
-    }
-    typeDataExport.declaration.initializer = new assemblyscript.StringLiteralExpression(
-      JSON.stringify(typeData)
+    this.typeData = JSON.stringify(typeData);
+  }
+  afterCompile(module) {
+    module.addCustomSection(
+      "bindings",
+      new TextEncoder("utf8").encode(this.typeData)
     );
   }
 }
