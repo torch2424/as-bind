@@ -14,7 +14,6 @@ function typeName(type) {
   return type.name.text ?? type.name.identifier.text;
 }
 
-const MARKER = "__asbind_type_data";
 const AS_BIND_SRC = "lib/assembly/as-bind.ts";
 
 class AsBindTransform extends Transform {
