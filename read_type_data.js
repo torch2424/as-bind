@@ -1,23 +1,5 @@
 const fs = require("fs/promises");
 
-function justSatisfyAllImportsLol() {
-  return new Proxy(
-    {},
-    {
-      get(_, name) {
-        return new Proxy(
-          {},
-          {
-            get(_, name) {
-              return () => {};
-            }
-          }
-        );
-      }
-    }
-  );
-}
-
 async function main() {
   const b = await fs.readFile(process.argv[2]);
   const module = await WebAssembly.compile(b);
