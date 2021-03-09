@@ -1,10 +1,29 @@
 const fs = require("fs/promises");
 
+function justSatisfyAllImportsLol() {
+  return new Proxy(
+    {},
+    {
+      get(_, name) {
+        return new Proxy(
+          {},
+          {
+            get(_, name) {
+              return () => {};
+            }
+          }
+        );
+      }
+    }
+  );
+}
+
 async function main() {
   const b = await fs.readFile(process.argv[2]);
-  const { instance } = await WebAssembly.instantiate(b, {
-    env: { abort() {} }
-  });
+  const { instance } = await WebAssembly.instantiate(
+    b,
+    justSatisfyAllImportsLol()
+  );
   const ptr = instance.exports.__asbind_type_data.value;
   const dv = new DataView(instance.exports.memory.buffer);
   const strLen = dv.getUint32(ptr - 4, true);
