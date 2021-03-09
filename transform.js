@@ -1,3 +1,4 @@
+const fs = require("fs");
 const { Transform } = require("assemblyscript/cli/transform");
 const assemblyscript = require("assemblyscript");
 
@@ -13,9 +14,17 @@ function typeName(type) {
   return type.name.text ?? type.name.identifier.text;
 }
 
-const marker = "__asbind_type_data";
+const MARKER = "__asbind_type_data";
+const AS_BIND_SRC = "lib/assembly/as-bind.ts";
 
 class AsBindTransform extends Transform {
+  afterParse(parser) {
+    const bindSrc = fs.readFileSync(
+      require.resolve("./" + AS_BIND_SRC),
+      "utf8"
+    );
+    parser.parseFile(bindSrc, "~as-bind/" + AS_BIND_SRC, true);
+  }
   afterInitialize(program) {
     const exportedFunctions = [...program.elementsByDeclaration.values()]
       .filter(el =>
@@ -57,7 +66,7 @@ class AsBindTransform extends Transform {
       )
     };
     const typeDataExport = [...program.elementsByDeclaration.values()].find(
-      v => v.name === marker
+      v => v.name === MARKER
     );
     if (!typeDataExport) {
       throw Error("Could not find type data export");
