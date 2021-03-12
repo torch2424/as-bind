@@ -1,26 +1,39 @@
-import resolve from "rollup-plugin-node-resolve";
-import commonjs from "rollup-plugin-commonjs";
-import babel from "rollup-plugin-babel";
-import json from "rollup-plugin-json";
-import compiler from "@ampproject/rollup-plugin-closure-compiler";
+import resolve from "@rollup/plugin-node-resolve";
+import json from "@rollup/plugin-json";
+import babel from "@rollup/plugin-babel";
+import { terser } from "rollup-plugin-terser";
 import bundleSize from "rollup-plugin-bundle-size";
 import pkg from "./package.json";
 
 const sourcemapOption = process.env.PROD ? undefined : "inline";
 
-const babelPluginConfig = {
-  // so Rollup can convert unsupported es6 code to es5
-  exclude: ["node_modules/**"],
-  plugins: [
-    ["@babel/plugin-proposal-class-properties"],
-    ["@babel/plugin-proposal-object-rest-spread"]
+const babelConfig = {
+  babelHelpers: "bundled",
+  presets: [
+    [
+      "@babel/preset-env",
+      {
+        targets: [
+          "last 2 chrome versions",
+          "last 2 firefox versions",
+          "last 2 safari versions",
+          "last 2 ios versions",
+          "node 14",
+          "node 15"
+        ]
+      }
+    ]
   ]
 };
 
-let plugins = [resolve(), commonjs(), json(), babel(babelPluginConfig)];
+let plugins = [resolve(), json(), babel(babelConfig)];
 
 if (process.env.PROD) {
-  plugins = [...plugins, compiler(), bundleSize()];
+  plugins = [
+    ...plugins,
+    terser({ mangle: true, compress: true }),
+    bundleSize()
+  ];
 }
 
 const libBundles = [

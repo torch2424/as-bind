@@ -14,7 +14,26 @@ function typeName(type) {
   return type.name.text ?? type.name.identifier.text;
 }
 
+function containingModule(func) {
+  let container = func.parent;
+  // Only a module is it’s own parent
+  while (container !== container.parent) {
+    container = container.parent;
+  }
+  return container;
+}
+
+function functionTypeDescriptor(func) {
+  return {
+    returnType: typeName(func.declaration.signature.returnType),
+    parameters: func.declaration.signature.parameters.map(parameter =>
+      typeName(parameter.type)
+    )
+  };
+}
+
 const AS_BIND_SRC = "lib/assembly/as-bind.ts";
+const SECTION_NAME = "as-bind_bindings";
 
 class AsBindTransform extends Transform {
   afterParse(parser) {
@@ -25,7 +44,7 @@ class AsBindTransform extends Transform {
     parser.parseFile(bindSrc, "~as-bind/" + AS_BIND_SRC, true);
   }
   afterInitialize(program) {
-    const exportedFunctions = [...program.elementsByDeclaration.values()]
+    const flatExportedFunctions = [...program.elementsByDeclaration.values()]
       .filter(el =>
         elementHasFlag(el, assemblyscript.CommonFlags.MODULE_EXPORT)
       )
@@ -34,41 +53,33 @@ class AsBindTransform extends Transform {
         el =>
           el.declaration.kind === assemblyscript.NodeKind.FUNCTIONDECLARATION
       );
-    const importedFunctions = [...program.elementsByDeclaration.values()]
+    const flatImportedFunctions = [...program.elementsByDeclaration.values()]
       .filter(el => elementHasFlag(el, assemblyscript.CommonFlags.DECLARE))
       .filter(el => !isInternalElement(el))
       .filter(
         v => v.declaration.kind === assemblyscript.NodeKind.FUNCTIONDECLARATION
       );
-    const typeData = {
-      importedFunction: Object.fromEntries(
-        importedFunctions.map(func => [
-          func.name,
-          {
-            returnType: typeName(func.declaration.signature.returnType),
-            parameters: func.declaration.signature.parameters.map(parameter =>
-              typeName(parameter.type)
-            )
-          }
-        ])
-      ),
-      exportedFunctions: Object.fromEntries(
-        exportedFunctions.map(func => [
-          func.name,
-          {
-            returnType: typeName(func.declaration.signature.returnType),
-            parameters: func.declaration.signature.parameters.map(parameter =>
-              typeName(parameter.type)
-            )
-          }
-        ])
-      )
-    };
-    this.typeData = JSON.stringify(typeData);
+    const importedFunctions = {};
+    for (const importedFunction of flatImportedFunctions) {
+      const moduleName = containingModule(importedFunction).internalName;
+      if (!importedFunctions.hasOwnProperty(moduleName)) {
+        importedFunctions[moduleName] = {};
+      }
+      importedFunctions[moduleName][
+        importedFunction.name
+      ] = functionTypeDescriptor(importedFunction);
+    }
+    const exportedFunctions = {};
+    for (const exportedFunction of flatExportedFunctions) {
+      exportedFunctions[exportedFunction.name] = functionTypeDescriptor(
+        exportedFunction
+      );
+    }
+    this.typeData = JSON.stringify({ importedFunctions, exportedFunctions });
   }
   afterCompile(module) {
     module.addCustomSection(
-      "bindings",
+      SECTION_NAME,
       new TextEncoder("utf8").encode(this.typeData)
     );
   }
