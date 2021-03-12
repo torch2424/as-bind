@@ -9,21 +9,7 @@ const sourcemapOption = process.env.PROD ? undefined : "inline";
 
 const babelConfig = {
   babelHelpers: "bundled",
-  presets: [
-    [
-      "@babel/preset-env",
-      {
-        targets: [
-          "last 2 chrome versions",
-          "last 2 firefox versions",
-          "last 2 safari versions",
-          "last 2 ios versions",
-          "node 14",
-          "node 15"
-        ]
-      }
-    ]
-  ]
+  presets: ["@babel/preset-env"]
 };
 
 let plugins = [resolve(), json(), babel(babelConfig)];
