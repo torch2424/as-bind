@@ -8,7 +8,7 @@ export function issue28(arr: Float64Array): f64 {
   for (let i = 0; i < 3; ++i) {
     sum += arr[i];
   }
-  return arr.length;
+  return sum;
 }
 
 // Basic value Passing
