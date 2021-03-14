@@ -7,6 +7,6 @@ describe("as-bind", function() {
         }
       }
     });
-    assert.strictEqual(instance.exports.exported("a", "b"), "!ba!");
+    assert(instance.exports.exported("a", "b") === "!ba!");
   });
 });

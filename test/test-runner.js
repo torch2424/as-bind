@@ -3,7 +3,6 @@ const fs = require("fs/promises");
 
 const Express = require("express");
 const Mocha = require("mocha");
-const assert = require("assert");
 const glob = promisify(require("glob"));
 const pptr = require("puppeteer");
 
@@ -15,16 +14,15 @@ globalThis.AsBind = require("../dist/as-bind.cjs.js");
 const html = String.raw;
 
 async function main() {
+  process.chdir(__dirname);
   await asc.ready;
 
   await compileAllAsc();
 
-  const [nodeFailures, browserFailures] = await Promise.all([
-    runTestsInNode(),
-    runTestsInPuppeteer()
-  ]);
-  if (nodeFailures !== 0 || browserFailures !== 0) {
-    console.log({ nodeFailures, browserFailures });
+  if ((await runTestsInNode()) > 0) {
+    process.exit(1);
+  }
+  if ((await runTestsInPuppeteer()) > 0) {
     process.exit(1);
   }
   console.log("Passed node and browser tests");
@@ -56,10 +54,6 @@ async function runTestsInNode() {
     mocha.addFile(testFile);
   }
 
-  mocha.globalSetup(() => {
-    this.assert = assert;
-  });
-
   mocha.rootHooks({
     async beforeEach() {
       const { file } = this.currentTest;
@@ -74,41 +68,77 @@ async function runTestsInNode() {
 
 async function runMochaAsync(mocha) {
   await mocha.loadFilesAsync();
-  return new Promise(resolve => {
-    const runner = mocha.run(resolve);
-  });
+  return new Promise(resolve => mocha.run(resolve));
+}
+
+async function extractMochaStatDump(msg) {
+  if (msg.args().length == 1 && msg.text().startsWith("{")) {
+    const arg = await msg.args()[0].jsonValue();
+    let obj;
+    try {
+      obj = JSON.parse(arg);
+    } catch (e) {
+      return;
+    }
+    if (obj.hasOwnProperty("stats")) {
+      return obj;
+    }
+  }
 }
 
 const PORT = 50123;
+const OPEN_DEVTOOLS = false;
 async function runTestsInPuppeteer() {
   const testFiles = await glob("./tests/**/test.js");
   const browser = await pptr.launch({
-    headless: false
+    devtools: OPEN_DEVTOOLS
   });
   const page = await browser.newPage();
-  page.on("console", async msg =>
-    console[msg._type](
-      "Browser log:",
-      ...(await Promise.all(msg.args().map(v => v.jsonValue())))
-    )
-  );
+  let result;
+  page.on("console", async msg => {
+    const maybeResult = await extractMochaStatDump(msg);
+    if (maybeResult) {
+      result = maybeResult;
+      return;
+    }
+    // Otherwise you can forward the log while debugging
+    // console.log("Browser log:", msg.text());
+  });
 
+  if (OPEN_DEVTOOLS) {
+    // If we want DevTools open, wait for a second here so it can load
+    // and `debugger` statements are effective.
+    await new Promise(resolve => setTimeout(resolve, 1000));
+  }
   const app = Express();
   app.use("/", Express.static("../"));
   const server = app.listen(PORT);
   await page.goto(`http://localhost:${PORT}/test/test-runner.html`);
-  await page.setContent(html`
-    <!DOCTYPE html>
-    <script src="/dist/as-bind.iife.js"></script>
-    <script>
-      self.AsBind = AsBindIIFE;
-    </script>
-  `);
-
+  const numFailures = await page.evaluate(async testFiles => {
+    for (const testFile of testFiles) {
+      await runScript(`/test/${testFile}`);
+      runInlineScript(`
+        suitePaths.push(${JSON.stringify(testFile)});
+      `);
+    }
+    const script = document.createElement("script");
+    script.innerHTML = `
+      self.mochaRun = new Promise(resolve => mocha.run(resolve));`;
+    document.body.append(script);
+    return self.mochaRun;
+  }, testFiles);
   await page.close();
   await browser.close();
-  // Just to make sure all the logs come out. There’s probably a better solution.
-  await new Promise(resolve => setTimeout(resolve, 1000));
   server.close();
-  return 0;
+
+  console.log("\n\n=== Browser results");
+  for (const test of result.passes) {
+    console.log(`✓ ${test.fullTitle}`);
+  }
+  console.log("\n\n");
+  for (const test of result.failures) {
+    console.log(`X ${test.fullTitle}`);
+    console.log(`  ${test.err.message}`);
+  }
+  return numFailures;
 }

@@ -10,11 +10,10 @@ describe("as-bind", function() {
         }
       }
     });
-    assert.strictEqual(
+    assert(
       instance.exports
         .exported(new Uint8Array([1, 2, 3]), new Uint8Array([10, 11, 12]))
-        .join(","),
-      new Uint8Array([255, 10, 11, 12, 1, 2, 3, 255]).join(",")
+        .join(",") === new Uint8Array([255, 10, 11, 12, 1, 2, 3, 255]).join(",")
     );
   });
 });
