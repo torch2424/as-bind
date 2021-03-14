@@ -70,21 +70,6 @@ async function runMochaAsync(mocha) {
   return new Promise(resolve => mocha.run(resolve));
 }
 
-async function maybeExtractMochaStatsDump(msg) {
-  if (msg.args().length == 1 && msg.text().startsWith("{")) {
-    const arg = await msg.args()[0].jsonValue();
-    let obj;
-    try {
-      obj = JSON.parse(arg);
-    } catch (e) {
-      return;
-    }
-    if (obj.hasOwnProperty("stats")) {
-      return obj;
-    }
-  }
-}
-
 const PORT = process.env.PORT ?? 50123;
 const OPEN_DEVTOOLS = !!process.env.OPEN_DEVTOOLS;
 
@@ -107,11 +92,12 @@ async function getNumFailingTestsInPuppeteer() {
     }
   });
 
+  // If we want DevTools open, wait for a second here so DevTools can load.
+  // Otherwise we might run past `debugger` statements.
   if (OPEN_DEVTOOLS) {
-    // If we want DevTools open, wait for a second here so DevTools can load.
-    // Otherwise we might run past `debugger` statements.
     await new Promise(resolve => setTimeout(resolve, 1000));
   }
+
   const app = Express();
   app.use("/", Express.static("../"));
   const server = app.listen(PORT);
@@ -125,9 +111,10 @@ async function getNumFailingTestsInPuppeteer() {
         suitePaths.push(${JSON.stringify(testFile)});
       `);
     }
-    const script = document.createElement("script");
+
     // Create a promise that resolves once mocha is done running.
     // This way we can block this `evaluate` call until mocha is done.
+    const script = document.createElement("script");
     script.innerHTML = `
       self.mochaRun = new Promise(resolve => mocha.run(resolve));`;
     document.body.append(script);
@@ -147,4 +134,19 @@ async function getNumFailingTestsInPuppeteer() {
     console.log(`  ${test.err.message}`);
   }
   return numFailures;
+}
+
+async function maybeExtractMochaStatsDump(msg) {
+  if (msg.args().length == 1 && msg.text().startsWith("{")) {
+    const arg = await msg.args()[0].jsonValue();
+    let obj;
+    try {
+      obj = JSON.parse(arg);
+    } catch (e) {
+      return;
+    }
+    if (obj.hasOwnProperty("stats")) {
+      return obj;
+    }
+  }
 }
