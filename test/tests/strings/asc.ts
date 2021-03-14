@@ -1,5 +1,5 @@
-export function exported(a: string, b: string): string {
-  return "!" + imported(a, b) + "!";
+export function swapAndPad(a: string, b: string): string {
+  return "!" + swappedConcat(a, b) + "!";
 }
 
-declare function imported(a: string, b: string): string;
+declare function swappedConcat(a: string, b: string): string;

@@ -10,19 +10,16 @@ const asc = require("assemblyscript/cli/asc");
 
 globalThis.AsBind = require("../dist/as-bind.cjs.js");
 
-// Just used for syntax highlighting
-const html = String.raw;
-
 async function main() {
   process.chdir(__dirname);
   await asc.ready;
 
   await compileAllAsc();
 
-  if ((await runTestsInNode()) > 0) {
+  if ((await getNumFailingTestsInNode()) > 0) {
     process.exit(1);
   }
-  if ((await runTestsInPuppeteer()) > 0) {
+  if ((await getNumFailingTestsInPuppeteer()) > 0) {
     process.exit(1);
   }
   console.log("Passed node and browser tests");
@@ -36,6 +33,8 @@ async function compileAllAsc() {
   for (const ascFile of ascFiles) {
     console.log(`Compiling ${ascFile}...`);
     await asc.main([
+      "--runtime",
+      "stub",
       "--exportRuntime",
       "--transform",
       transformFile,
@@ -46,7 +45,7 @@ async function compileAllAsc() {
   }
 }
 
-async function runTestsInNode() {
+async function getNumFailingTestsInNode() {
   const mocha = new Mocha();
 
   const testFiles = await glob("./tests/**/test.js");
@@ -71,7 +70,7 @@ async function runMochaAsync(mocha) {
   return new Promise(resolve => mocha.run(resolve));
 }
 
-async function extractMochaStatDump(msg) {
+async function maybeExtractMochaStatsDump(msg) {
   if (msg.args().length == 1 && msg.text().startsWith("{")) {
     const arg = await msg.args()[0].jsonValue();
     let obj;
@@ -86,28 +85,31 @@ async function extractMochaStatDump(msg) {
   }
 }
 
-const PORT = 50123;
-const OPEN_DEVTOOLS = false;
-async function runTestsInPuppeteer() {
+const PORT = process.env.PORT ?? 50123;
+const OPEN_DEVTOOLS = !!process.env.OPEN_DEVTOOLS;
+
+async function getNumFailingTestsInPuppeteer() {
   const testFiles = await glob("./tests/**/test.js");
   const browser = await pptr.launch({
     devtools: OPEN_DEVTOOLS
   });
   const page = await browser.newPage();
+
+  // Mocha’s JSON reporter doesn’t really give you access to the JSON report,
+  // ironically. So I have to intercept console.log()s and detect which
+  // one is the JSON resport string. `result` will contain the parsed JSON.
   let result;
   page.on("console", async msg => {
-    const maybeResult = await extractMochaStatDump(msg);
+    const maybeResult = await maybeExtractMochaStatsDump(msg);
     if (maybeResult) {
       result = maybeResult;
       return;
     }
-    // Otherwise you can forward the log while debugging
-    // console.log("Browser log:", msg.text());
   });
 
   if (OPEN_DEVTOOLS) {
-    // If we want DevTools open, wait for a second here so it can load
-    // and `debugger` statements are effective.
+    // If we want DevTools open, wait for a second here so DevTools can load.
+    // Otherwise we might run past `debugger` statements.
     await new Promise(resolve => setTimeout(resolve, 1000));
   }
   const app = Express();
@@ -116,12 +118,16 @@ async function runTestsInPuppeteer() {
   await page.goto(`http://localhost:${PORT}/test/test-runner.html`);
   const numFailures = await page.evaluate(async testFiles => {
     for (const testFile of testFiles) {
+      // Register the test
       await runScript(`/test/${testFile}`);
+      // Save the test’s path. See `test-runner.html` for an explanation.
       runInlineScript(`
         suitePaths.push(${JSON.stringify(testFile)});
       `);
     }
     const script = document.createElement("script");
+    // Create a promise that resolves once mocha is done running.
+    // This way we can block this `evaluate` call until mocha is done.
     script.innerHTML = `
       self.mochaRun = new Promise(resolve => mocha.run(resolve));`;
     document.body.append(script);
