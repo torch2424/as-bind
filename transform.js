@@ -23,7 +23,9 @@ function containingModule(func) {
   return container;
 }
 
-function functionTypeDescriptor(func) {
+function getFunctionTypeDescriptor(func) {
+  // TODO: Generics?
+  func = func.instances.get("");
   return {
     returnType: typeName(func.declaration.signature.returnType),
     parameters: func.declaration.signature.parameters.map(parameter =>
@@ -32,19 +34,29 @@ function functionTypeDescriptor(func) {
   };
 }
 
-const AS_BIND_SRC = "lib/assembly/as-bind.ts";
+function extractTypeMap(func) {
+  // TODO: Generics?
+  func = func.instances.get("");
+  const result = {
+    [typeName(
+      func.declaration.signature.returnType
+    )]: func.signature.returnType?.getClass?.()?.id
+  };
+  func.declaration.signature.parameters.forEach((parameter, i) => {
+    result[typeName(parameter.type)] = func.signature.parameterTypes[
+      i
+    ].getClass?.()?.id;
+  });
+  return result;
+}
+
 const SECTION_NAME = "as-bind_bindings";
 
 class AsBindTransform extends Transform {
-  afterParse(parser) {
-    const bindSrc = fs.readFileSync(
-      require.resolve("./" + AS_BIND_SRC),
-      "utf8"
-    );
-    parser.parseFile(bindSrc, "~as-bind/" + AS_BIND_SRC, true);
-  }
-  afterInitialize(program) {
-    const flatExportedFunctions = [...program.elementsByDeclaration.values()]
+  afterCompile(module) {
+    const flatExportedFunctions = [
+      ...this.program.elementsByDeclaration.values()
+    ]
       .filter(el =>
         elementHasFlag(el, assemblyscript.CommonFlags.MODULE_EXPORT)
       )
@@ -53,13 +65,18 @@ class AsBindTransform extends Transform {
         el =>
           el.declaration.kind === assemblyscript.NodeKind.FUNCTIONDECLARATION
       );
-    const flatImportedFunctions = [...program.elementsByDeclaration.values()]
+    const flatImportedFunctions = [
+      ...this.program.elementsByDeclaration.values()
+    ]
       .filter(el => elementHasFlag(el, assemblyscript.CommonFlags.DECLARE))
       .filter(el => !isInternalElement(el))
       .filter(
         v => v.declaration.kind === assemblyscript.NodeKind.FUNCTIONDECLARATION
       );
+
+    const typeIds = {};
     const importedFunctions = {};
+    debugger;
     for (const importedFunction of flatImportedFunctions) {
       // To know under what module name an imported function will be expected,
       // we have to find the containing module of the given function, take the
@@ -74,17 +91,22 @@ class AsBindTransform extends Transform {
       }
       importedFunctions[moduleName][
         importedFunction.name
-      ] = functionTypeDescriptor(importedFunction);
+      ] = getFunctionTypeDescriptor(importedFunction);
+      Object.assign(typeIds, extractTypeMap(importedFunction));
     }
     const exportedFunctions = {};
     for (const exportedFunction of flatExportedFunctions) {
-      exportedFunctions[exportedFunction.name] = functionTypeDescriptor(
+      exportedFunctions[exportedFunction.name] = getFunctionTypeDescriptor(
         exportedFunction
       );
+      Object.assign(typeIds, extractTypeMap(exportedFunction));
     }
-    this.typeData = JSON.stringify({ importedFunctions, exportedFunctions });
-  }
-  afterCompile(module) {
+    this.typeData = JSON.stringify({
+      typeIds,
+      importedFunctions,
+      exportedFunctions
+    });
+
     module.addCustomSection(
       SECTION_NAME,
       new TextEncoder("utf8").encode(this.typeData)
