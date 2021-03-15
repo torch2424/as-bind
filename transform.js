@@ -86,6 +86,11 @@ class AsBindTransform extends Transform {
     const typeIds = {};
     const importedFunctions = {};
     for (let importedFunction of flatImportedFunctions) {
+      // An imported function with no instances is an unused imported function.
+      // Skip it.
+      if (!importedFunction.instances) {
+        continue;
+      }
       if (
         importedFunction.instances.size > 1 ||
         !importedFunction.instances.has("")
