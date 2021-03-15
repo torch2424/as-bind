@@ -43,6 +43,7 @@
     }
   },
   "devDependencies": {
+    "@assemblyscript/loader": "~0.18.7",
     "@babel/core": "^7.13.10",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
     "@babel/plugin-proposal-export-default-from": "^7.12.13",
@@ -53,6 +54,7 @@
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^11.2.0",
+    "assemblyscript": "~0.18.7",
     "chokidar-cli": "^2.0.0",
     "cpy-cli": "^2.0.0",
     "express": "^4.17.1",
@@ -113,10 +115,6 @@
     "node 15"
   ],
   "homepage": "https://github.com/torch2424/as-bind#readme",
-  "dependencies": {
-    "@assemblyscript/loader": "~0.18.7",
-    "assemblyscript": "~0.18.7"
-  },
   "peerDependencies": {
     "@assemblyscript/loader": "0.18.x",
     "assemblyscript": "0.18.x"
