@@ -11,7 +11,11 @@ function elementHasFlag(el, flag) {
 }
 
 function typeName(type) {
-  return type.name.text ?? type.name.identifier.text;
+  let name = type.name.text ?? type.name.identifier.text;
+  if (type.typeArguments.length > 0) {
+    name = `${name}<${type.typeArguments.map(typeName).join(",")}>`;
+  }
+  return name;
 }
 
 function containingModule(func) {
@@ -24,8 +28,6 @@ function containingModule(func) {
 }
 
 function getFunctionTypeDescriptor(func) {
-  // TODO: Generics?
-  func = func.instances.get("");
   return {
     returnType: typeName(func.declaration.signature.returnType),
     parameters: func.declaration.signature.parameters.map(parameter =>
@@ -76,7 +78,6 @@ class AsBindTransform extends Transform {
 
     const typeIds = {};
     const importedFunctions = {};
-    debugger;
     for (const importedFunction of flatImportedFunctions) {
       // To know under what module name an imported function will be expected,
       // we have to find the containing module of the given function, take the
