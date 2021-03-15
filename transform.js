@@ -11,11 +11,7 @@ function elementHasFlag(el, flag) {
 }
 
 function typeName(type) {
-  let name = type.name.text ?? type.name.identifier.text;
-  if (type.typeArguments.length > 0) {
-    name = `${name}<${type.typeArguments.map(typeName).join(",")}>`;
-  }
-  return name;
+  return type.getClass()?.internalName ?? type.toString();
 }
 
 function containingModule(func) {
@@ -29,26 +25,34 @@ function containingModule(func) {
 
 function getFunctionTypeDescriptor(func) {
   return {
-    returnType: typeName(func.declaration.signature.returnType),
-    parameters: func.declaration.signature.parameters.map(parameter =>
-      typeName(parameter.type)
+    returnType: typeName(func.signature.returnType),
+    parameters: func.signature.parameterTypes.map(parameter =>
+      typeName(parameter)
     )
   };
 }
 
-function extractTypeMap(func) {
-  // TODO: Generics?
-  func = func.instances.get("");
-  const result = {
-    [typeName(
-      func.declaration.signature.returnType
-    )]: func.signature.returnType?.getClass?.()?.id
-  };
-  func.declaration.signature.parameters.forEach((parameter, i) => {
-    result[typeName(parameter.type)] = func.signature.parameterTypes[
-      i
-    ].getClass?.()?.id;
-  });
+function extractTypeIds(type) {
+  const result = {};
+  const clazz = type.getClass?.();
+  if (!clazz) {
+    return result;
+  }
+  result[clazz.internalName] = clazz.id;
+  if (clazz.typeArguments) {
+    for (const subType of clazz.typeArguments) {
+      Object.assign(result, extractTypeIds(subType));
+    }
+  }
+  return result;
+}
+
+function extractTypeIdsFromFunction(func) {
+  const result = {};
+  Object.assign(result, extractTypeIds(func.signature.returnType));
+  func.signature.parameterTypes.forEach(paramType =>
+    Object.assign(result, extractTypeIds(paramType))
+  );
   return result;
 }
 
@@ -78,7 +82,14 @@ class AsBindTransform extends Transform {
 
     const typeIds = {};
     const importedFunctions = {};
-    for (const importedFunction of flatImportedFunctions) {
+    for (let importedFunction of flatImportedFunctions) {
+      if (
+        importedFunction.instances.size > 1 ||
+        !importedFunction.instances.has("")
+      ) {
+        throw Error(`Can’t import or export generic functions.`);
+      }
+      importedFunction = importedFunction.instances.get("");
       // To know under what module name an imported function will be expected,
       // we have to find the containing module of the given function, take the
       // internal name (which is effectively the file path without extension)
@@ -93,14 +104,21 @@ class AsBindTransform extends Transform {
       importedFunctions[moduleName][
         importedFunction.name
       ] = getFunctionTypeDescriptor(importedFunction);
-      Object.assign(typeIds, extractTypeMap(importedFunction));
+      Object.assign(typeIds, extractTypeIdsFromFunction(importedFunction));
     }
     const exportedFunctions = {};
-    for (const exportedFunction of flatExportedFunctions) {
+    for (let exportedFunction of flatExportedFunctions) {
+      if (
+        exportedFunction.instances.size > 1 ||
+        !exportedFunction.instances.has("")
+      ) {
+        throw Error(`Can’t import or export generic functions.`);
+      }
+      exportedFunction = exportedFunction.instances.get("");
       exportedFunctions[exportedFunction.name] = getFunctionTypeDescriptor(
         exportedFunction
       );
-      Object.assign(typeIds, extractTypeMap(exportedFunction));
+      Object.assign(typeIds, extractTypeIdsFromFunction(exportedFunction));
     }
     this.typeData = JSON.stringify({
       typeIds,
