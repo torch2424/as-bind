@@ -61,7 +61,14 @@ class AsBindTransform extends Transform {
       );
     const importedFunctions = {};
     for (const importedFunction of flatImportedFunctions) {
-      const moduleName = containingModule(importedFunction).internalName;
+      // To know under what module name an imported function will be expected,
+      // we have to find the containing module of the given function, take the
+      // internal name (which is effectively the file path without extension)
+      // and only take the part after the last `/`
+      // (i.e. the file name without extension).
+      const moduleName = containingModule(importedFunction)
+        .internalName.split("/")
+        .slice(-1)[0];
       if (!importedFunctions.hasOwnProperty(moduleName)) {
         importedFunctions[moduleName] = {};
       }
