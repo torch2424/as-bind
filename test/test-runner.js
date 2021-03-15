@@ -28,7 +28,7 @@ async function main() {
 main();
 
 async function compileAllAsc() {
-  const ascFiles = await glob("./tests/**/*.ts");
+  const ascFiles = await glob("./tests/**/asc.ts");
   const transformFile = require.resolve("../transform.js");
   for (const ascFile of ascFiles) {
     console.log(`Compiling ${ascFile}...`);
