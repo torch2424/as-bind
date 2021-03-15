@@ -38,7 +38,10 @@ function extractTypeIds(type) {
   if (!clazz) {
     return result;
   }
-  result[clazz.internalName] = clazz.id;
+  result[clazz.internalName] = {
+    id: clazz.id,
+    byteSize: clazz.nextMemoryOffset
+  };
   if (clazz.typeArguments) {
     for (const subType of clazz.typeArguments) {
       Object.assign(result, extractTypeIds(subType));
