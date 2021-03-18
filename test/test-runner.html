@@ -41,7 +41,7 @@
         ];
       const testPath = new URL(relativeTestPath, location.href);
       const wasmPath = new URL("./asc.wasm", testPath);
-      this.rawModule = await fetch(wasmPath);
+      this.rawModule = await fetch(wasmPath).then(r => r.arrayBuffer());
     }
   });
 </script>
