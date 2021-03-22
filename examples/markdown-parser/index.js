@@ -1,5 +1,5 @@
 import { h, render, Component } from "preact";
-import asbind from "../../dist/as-bind.esm";
+import * as asbind from "../../dist/as-bind.esm";
 
 // Import our TypeScript equivalent
 import { convertMarkdownToHTML } from "../../dist/ts/index";
