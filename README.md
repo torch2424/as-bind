@@ -342,6 +342,8 @@ Thus, for production usage we highly reccomend that you set the [`returnType` pr
 
 - [use-as-bind](https://github.com/tylervipond/use-as-bind) is a React hook for using as-bind with an as-bind enabled WASM source. It's goal is to provide a simple API for React users to add WASM to their apps. [(Live Demo)](https://tylervipond.github.io/use-as-bind/)
 
+- [as-loader](https://github.com/piotr-oles/as-loader) is a [webpack](https://webpack.js.org/) loader for AssemblyScript with built-in as-bind support.
+
 _If you're project is using as-bind, and you would like to be featured here. Please open a README with links to your project, and if appropriate, explaining how as-bind is being used._ 😊
 
 ## FAQ and Common Issues
