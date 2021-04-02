@@ -33,7 +33,7 @@ const libBundles = [
     watch: {
       clearScreen: false
     },
-    plugins: plugins
+    plugins
   },
   {
     input: "lib/lib.js",
@@ -45,7 +45,7 @@ const libBundles = [
     watch: {
       clearScreen: false
     },
-    plugins: plugins
+    plugins
   },
   {
     input: "lib/lib.js",
@@ -58,7 +58,25 @@ const libBundles = [
     watch: {
       clearScreen: false
     },
-    plugins: plugins
+    plugins
+  },
+  {
+    input: "transform.js",
+    output: {
+      file: "dist/transform.cjs.js",
+      format: "cjs"
+    },
+    external: ["assemblyscript"],
+    plugins
+  },
+  {
+    input: "transform.js",
+    output: {
+      file: "dist/transform.amd.js",
+      format: "amd"
+    },
+    external: ["assemblyscript"],
+    plugins
   }
 ];
 
