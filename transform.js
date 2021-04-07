@@ -1,6 +1,4 @@
-const fs = require("fs");
-const { Transform } = require("assemblyscript/cli/transform");
-const assemblyscript = require("assemblyscript");
+import * as assemblyscript from "assemblyscript";
 
 function isInternalElement(element) {
   return element.internalName.startsWith("~");
@@ -61,7 +59,7 @@ function extractTypeIdsFromFunction(func) {
 
 const SECTION_NAME = "as-bind_bindings";
 
-class AsBindTransform extends Transform {
+export default class AsBindTransform {
   afterCompile(module) {
     const flatExportedFunctions = [
       ...this.program.elementsByDeclaration.values()
@@ -140,4 +138,3 @@ class AsBindTransform extends Transform {
     );
   }
 }
-module.exports = AsBindTransform;

@@ -29,7 +29,7 @@ main();
 
 async function compileAllAsc() {
   const ascFiles = await glob("./tests/**/asc.ts");
-  const transformFile = require.resolve("../transform.js");
+  const transformFile = require.resolve("../dist/transform.cjs.js");
   for (const ascFile of ascFiles) {
     console.log(`Compiling ${ascFile}...`);
     await asc.main([
@@ -76,7 +76,10 @@ const OPEN_DEVTOOLS = !!process.env.OPEN_DEVTOOLS;
 async function getNumFailingTestsInPuppeteer() {
   const testFiles = await glob("./tests/**/test.js");
   const browser = await pptr.launch({
-    devtools: OPEN_DEVTOOLS
+    devtools: OPEN_DEVTOOLS,
+    ...(process.env.PUPPETEER_EXECUTABLE_PATH.length > 0
+      ? { executablePath: process.env.PUPPETEER_EXECUTABLE_PATH }
+      : {})
   });
   const page = await browser.newPage();
 
