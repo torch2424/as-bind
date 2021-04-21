@@ -2,7 +2,7 @@
   "name": "as-bind",
   "description": "Isomorphic library to handle passing high-level data structures between AssemblyScript and JavaScript 🤝🚀",
   "version": "0.6.1",
-  "main": "dist/as-bind.cjs.js",
+  "main": "dist/transform.cjs.js",
   "module": "dist/as-bind.esm.js",
   "iife": "dist/as-bind.iife.js",
   "types": "dist/as-bind.d.ts",
@@ -110,5 +110,8 @@
   "peerDependencies": {
     "@assemblyscript/loader": "0.18.x",
     "assemblyscript": "0.18.x"
+  },
+  "dependencies": {
+    "visitor-as": "^0.5.0"
   }
 }

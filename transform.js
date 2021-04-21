@@ -1,4 +1,4 @@
-import * as assemblyscript from "assemblyscript";
+const { CommonFlags, NodeKind } = require("visitor-as/as");
 
 function isInternalElement(element) {
   return element.internalName.startsWith("~");
@@ -64,22 +64,15 @@ export default class AsBindTransform {
     const flatExportedFunctions = [
       ...this.program.elementsByDeclaration.values()
     ]
-      .filter(el =>
-        elementHasFlag(el, assemblyscript.CommonFlags.MODULE_EXPORT)
-      )
+      .filter(el => elementHasFlag(el, CommonFlags.MODULE_EXPORT))
       .filter(el => !isInternalElement(el))
-      .filter(
-        el =>
-          el.declaration.kind === assemblyscript.NodeKind.FUNCTIONDECLARATION
-      );
+      .filter(el => el.declaration.kind === NodeKind.FUNCTIONDECLARATION);
     const flatImportedFunctions = [
       ...this.program.elementsByDeclaration.values()
     ]
-      .filter(el => elementHasFlag(el, assemblyscript.CommonFlags.DECLARE))
+      .filter(el => elementHasFlag(el, CommonFlags.DECLARE))
       .filter(el => !isInternalElement(el))
-      .filter(
-        v => v.declaration.kind === assemblyscript.NodeKind.FUNCTIONDECLARATION
-      );
+      .filter(v => v.declaration.kind === NodeKind.FUNCTIONDECLARATION);
 
     const typeIds = {};
     const importedFunctions = {};
