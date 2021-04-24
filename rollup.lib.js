@@ -26,7 +26,7 @@ const libBundles = [
   {
     input: "lib/lib.js",
     output: {
-      file: pkg.main,
+      file: pkg.module.replace("esm", "cjs"),
       format: "cjs",
       sourcemap: sourcemapOption
     },

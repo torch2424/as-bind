@@ -77,7 +77,7 @@ async function getNumFailingTestsInPuppeteer() {
   const testFiles = await glob("./tests/**/test.js");
   const browser = await pptr.launch({
     devtools: OPEN_DEVTOOLS,
-    ...(process.env.PUPPETEER_EXECUTABLE_PATH.length > 0
+    ...(process.env.PUPPETEER_EXECUTABLE_PATH?.length > 0
       ? { executablePath: process.env.PUPPETEER_EXECUTABLE_PATH }
       : {})
   });
