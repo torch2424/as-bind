@@ -1,4 +1,5 @@
-const { CommonFlags, NodeKind } = require("visitor-as/as");
+import * as asc from "visitor-as/as";
+const { CommonFlags, NodeKind } = asc;
 
 function isInternalElement(element) {
   return element.internalName.startsWith("~");

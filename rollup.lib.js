@@ -66,7 +66,7 @@ const libBundles = [
       file: "dist/transform.cjs.js",
       format: "cjs"
     },
-    external: ["assemblyscript"],
+    external: ["assemblyscript", "visitor-as/as"],
     plugins
   },
   {
@@ -75,7 +75,7 @@ const libBundles = [
       file: "dist/transform.amd.js",
       format: "amd"
     },
-    external: ["assemblyscript"],
+    external: ["assemblyscript", "visitor-as/as"],
     plugins
   }
 ];

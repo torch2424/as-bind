@@ -35,7 +35,7 @@
     }
   },
   "devDependencies": {
-    "@assemblyscript/loader": "~0.18.7",
+    "@assemblyscript/loader": "~0.18.27",
     "@babel/core": "^7.13.10",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
     "@babel/plugin-proposal-export-default-from": "^7.12.13",
@@ -46,7 +46,7 @@
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^11.2.0",
-    "assemblyscript": "~0.18.7",
+    "assemblyscript": "0.18.27",
     "chokidar-cli": "^2.0.0",
     "cpy-cli": "^2.0.0",
     "express": "^4.17.1",
@@ -63,6 +63,7 @@
     "prettier": "1.18.2",
     "pretty-quick": "^1.11.1",
     "puppeteer": "^8.0.0",
+    "requirejs": "^2.3.6",
     "rollup": "^2.41.2",
     "rollup-plugin-bundle-size": "^1.0.3",
     "rollup-plugin-copy": "^3.4.0",

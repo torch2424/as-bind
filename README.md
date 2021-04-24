@@ -169,6 +169,10 @@ All primitive types, ie. Numbers (`u8`, `f32`, ...) , Strings, Typed Arrays (`Ui
 
 Custom classes are currently not support, but planned.
 
+## Browser SDK
+
+as-bind works with the Browser SDK. For a fully working example, see the [`browser-sdk` example](/torch2424/as-bind/tree/master/examples/browser-sdk).
+
 ## Reference API
 
 ### AsBind

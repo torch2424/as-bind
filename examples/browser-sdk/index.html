@@ -5,38 +5,15 @@
     <title>AssemblyScript SDK Example</title>
   </head>
   <body>
+    <!-- Load as-bind runtime -->
     <script src="/dist/as-bind.iife.js"></script>
-    <script src="./require.js"></script>
+    <!-- Load requirejs to handle the AMD version of the sdk -->
+    <script src="/node_modules/requirejs/require.js"></script>
     <script>
       const SOURCE_CODE = `
         export function test(): string {
           return "ohai";
         }`;
-
-      // A symbol allows us to store something as a global without risking
-      // name clashes or pollution.
-      const asbindTransform = Symbol();
-
-      // Shimming the require() call to *synchronously*
-      // return our transform module that we expect to be on a global.
-      // Any calls unrelated to the transform
-      // are implicitly passed through to RequireJS.
-      self.require = new Proxy(self.require, {
-        apply(target, thisArg, [path, ...args]) {
-          if (path !== "/dist/transform.js") {
-            return target.call(target, path, ...args);
-          }
-          return self[asbindTransform];
-        },
-        get(target, propName) {
-          if (propName !== "resolve") {
-            return target[propName];
-          }
-          return (path, ...args) => {
-            return path;
-          };
-        }
-      });
 
       require(["/node_modules/assemblyscript/dist/sdk.js"], ({
         asc,
@@ -44,11 +21,14 @@
       }) => {
         // Register the `assemblyscript` property as a module of its own
         // as is expected by most transform modules.
-        define("assemblyscript", assemblyscript);
+        define("assemblyscript", [], assemblyscript);
+        // `visitor-as/as` is usually a facade for `assemblyscript` to avoid
+        // multiple instances of `assemblyscript` being loaded.
+        // So in this case we can take matters into our own hands and just replace
+        // it with out `assemblyscript` instance.
+        define("visitor-as/as", [], assemblyscript);
         // Load our ASBind transform...
-        require(["/dist/transform.amd.js"], transform => {
-          // ... and put it on a global
-          self[asbindTransform] = transform;
+        require(["/dist/transform.amd.js"], asbind => {
           asc.ready.then(() => {
             const stdout = asc.createMemoryStream();
             const stderr = asc.createMemoryStream();
@@ -59,12 +39,12 @@
                 "-O3",
                 "--exportRuntime",
                 "--runtime", "stub",
-                "--binaryFile", "module.wasm",
-                "--transform", "/dist/transform.js",
+                "--binaryFile", "module.wasm"
               ],
               {
                 stdout,
                 stderr,
+                transforms: [asbind],
                 readFile(name, baseDir) {
                   return name === "module.ts" ? SOURCE_CODE : null;
                 },
