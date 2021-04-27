@@ -27,7 +27,6 @@ Isomorphic library to handle passing high-level data structures between Assembly
 - [Performance](#performance)
 - [Production](#production)
 - [Projects using as-bind](#projects-using-as-bind)
-- [FAQ and Common Issues](#faq-and-common-issues)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -113,10 +112,6 @@ const asyncTask = async () => {
 };
 asyncTask();
 ```
-
-_Did the quick start not work for you, or you are noticing some weird behavior? Please see the [FAQ and Common Issues](#faq-and-common-issues)_
-
-_Want to use `as-bind` in production? Please see the [Production section in the FAQ and Common Issues](#production)_
 
 ## Additional Examples
 
@@ -248,6 +243,8 @@ This library was inspired by several chats I had with some awesome buddies of mi
 - While I was building [WasmByExample](https://wasmbyexample.dev/?programmingLanguage=assemblyscript) I wanted to start building the "High Level Data Structures" section. I then realized how much work it would be to maintain code for passing data between WebAssembly Linear memory would be for each data type, and how much work it would be to created each individual example. Then, my buddy [Ashley Williams](https://twitter.com/ag_dubs) helped me realize, if your docs are becoming too complex, it may be a good idea to write a tool. That way you have less docs to write, and users will have an easier time using your stuff!
 
 Thus, this library was made to help AssemblyScript/JavaScript users build awesome things! I also want to give a huge thanks to the [AssemblyScript team](https://github.com/AssemblyScript/meta) and community for the help they provided me. I'm super appreciative of you all! 😄🎉
+
+(Also! Huge Shoutout to @surma for doing the awesome refactor to use AssemblyScript compiler transforms! 🙏)
 
 ## Performance
 
