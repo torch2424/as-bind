@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<title>Mocha Tests</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="/node_modules/mocha/mocha.css" />
+<div id="mocha"></div>
+
+<script src="/node_modules/mocha/mocha.js"></script>
+<script src="/dist/as-bind.iife.js"></script>
+<script>
+  self.suitePaths = [];
+  function runScript(src) {
+    return new Promise(resolve => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.onload = resolve;
+      document.body.append(script);
+    });
+  }
+  function runInlineScript(src) {
+    const script = document.createElement("script");
+    script.innerHTML = src;
+    document.body.append(script);
+  }
+
+  self.AsBind = AsBindIIFE;
+  self.assert = console.assert.bind(console);
+  mocha.setup({
+    ui: "bdd",
+    reporter: "json"
+  });
+  mocha.rootHooks({
+    async beforeEach() {
+      // This is ugly. The Mocha Context (`this`) knows the `currentTest`, but not the *path*
+      // of the current test suite, which we need to load the corresponding .wasm file.
+      // So I added a bit of code that pushes the suite paths into the `suitePaths` array in the same
+      // order as they are run.
+      const relativeTestPath =
+        suitePaths[
+          this.currentTest.parent.parent.suites.indexOf(this.currentTest.parent)
+        ];
+      const testPath = new URL(relativeTestPath, location.href);
+      const wasmPath = new URL("./asc.wasm", testPath);
+      this.rawModule = await fetch(wasmPath).then(r => r.arrayBuffer());
+    }
+  });
+</script>

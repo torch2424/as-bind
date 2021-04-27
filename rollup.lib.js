@@ -1,40 +1,39 @@
-import resolve from "rollup-plugin-node-resolve";
-import commonjs from "rollup-plugin-commonjs";
-import babel from "rollup-plugin-babel";
-import json from "rollup-plugin-json";
-import compiler from "@ampproject/rollup-plugin-closure-compiler";
+import resolve from "@rollup/plugin-node-resolve";
+import json from "@rollup/plugin-json";
+import babel from "@rollup/plugin-babel";
+import { terser } from "rollup-plugin-terser";
 import bundleSize from "rollup-plugin-bundle-size";
 import pkg from "./package.json";
 
 const sourcemapOption = process.env.PROD ? undefined : "inline";
 
-const babelPluginConfig = {
-  // so Rollup can convert unsupported es6 code to es5
-  exclude: ["node_modules/**"],
-  plugins: [
-    ["@babel/plugin-proposal-class-properties"],
-    ["@babel/plugin-proposal-object-rest-spread"]
-  ]
+const babelConfig = {
+  babelHelpers: "bundled",
+  presets: ["@babel/preset-env"]
 };
 
-let plugins = [resolve(), commonjs(), json(), babel(babelPluginConfig)];
+let plugins = [resolve(), json(), babel(babelConfig)];
 
 if (process.env.PROD) {
-  plugins = [...plugins, compiler(), bundleSize()];
+  plugins = [
+    ...plugins,
+    terser({ mangle: true, compress: true }),
+    bundleSize()
+  ];
 }
 
 const libBundles = [
   {
     input: "lib/lib.js",
     output: {
-      file: pkg.main,
+      file: pkg.module.replace("esm", "cjs"),
       format: "cjs",
       sourcemap: sourcemapOption
     },
     watch: {
       clearScreen: false
     },
-    plugins: plugins
+    plugins
   },
   {
     input: "lib/lib.js",
@@ -46,7 +45,7 @@ const libBundles = [
     watch: {
       clearScreen: false
     },
-    plugins: plugins
+    plugins
   },
   {
     input: "lib/lib.js",
@@ -59,7 +58,25 @@ const libBundles = [
     watch: {
       clearScreen: false
     },
-    plugins: plugins
+    plugins
+  },
+  {
+    input: "transform.js",
+    output: {
+      file: "dist/transform.cjs.js",
+      format: "cjs"
+    },
+    external: ["assemblyscript", "visitor-as/as"],
+    plugins
+  },
+  {
+    input: "transform.js",
+    output: {
+      file: "dist/transform.amd.js",
+      format: "amd"
+    },
+    external: ["assemblyscript", "visitor-as/as"],
+    plugins
   }
 ];
 

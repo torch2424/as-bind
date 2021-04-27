@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>AssemblyScript SDK Example</title>
+  </head>
+  <body>
+    <!-- Load as-bind runtime -->
+    <script src="/dist/as-bind.iife.js"></script>
+    <!-- Load requirejs to handle the AMD version of the sdk -->
+    <script src="/node_modules/requirejs/require.js"></script>
+    <script>
+      const SOURCE_CODE = `
+        export function test(): string {
+          return "ohai";
+        }`;
+
+      require(["/node_modules/assemblyscript/dist/sdk.js"], ({
+        asc,
+        assemblyscript
+      }) => {
+        // Register the `assemblyscript` property as a module of its own
+        // as is expected by most transform modules.
+        define("assemblyscript", [], assemblyscript);
+        // `visitor-as/as` is usually a facade for `assemblyscript` to avoid
+        // multiple instances of `assemblyscript` being loaded.
+        // So in this case we can take matters into our own hands and just replace
+        // it with out `assemblyscript` instance.
+        define("visitor-as/as", [], assemblyscript);
+        // Load our ASBind transform...
+        require(["/dist/transform.amd.js"], asbind => {
+          asc.ready.then(() => {
+            const stdout = asc.createMemoryStream();
+            const stderr = asc.createMemoryStream();
+            asc.main(
+              // prettier-ignore
+              [
+                "module.ts",
+                "-O3",
+                "--exportRuntime",
+                "--runtime", "stub",
+                "--binaryFile", "module.wasm"
+              ],
+              {
+                stdout,
+                stderr,
+                transforms: [asbind],
+                readFile(name, baseDir) {
+                  return name === "module.ts" ? SOURCE_CODE : null;
+                },
+                async writeFile(name, data, baseDir) {
+                  if (name.endsWith(".wasm")) {
+                    const instance = await AsBindIIFE.instantiate(data);
+                    console.log("Output:", instance.exports.test());
+                  }
+                },
+                listFiles(dirname, baseDir) {
+                  return [];
+                }
+              },
+              err => {
+                console.log(`>>> STDOUT >>>\n${stdout.toString()}`);
+                console.log(`>>> STDERR >>>\n${stderr.toString()}`);
+                if (err) {
+                  console.log(">>> THROWN >>>");
+                  console.log(err);
+                }
+              }
+            );
+          });
+        });
+      });
+    </script>
+    <p>See the browser console!</p>
+  </body>
+</html>

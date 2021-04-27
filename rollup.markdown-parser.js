@@ -1,15 +1,14 @@
-import resolve from "rollup-plugin-node-resolve";
-import commonjs from "rollup-plugin-commonjs";
-import babel from "rollup-plugin-babel";
-import json from "rollup-plugin-json";
-import compiler from "@ampproject/rollup-plugin-closure-compiler";
+import resolve from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
+import babel from "@rollup/plugin-babel";
+import json from "@rollup/plugin-json";
+import { terser } from "rollup-plugin-terser";
 import bundleSize from "rollup-plugin-bundle-size";
 import copy from "rollup-plugin-copy";
 import hash from "rollup-plugin-hash";
 import postcss from "rollup-plugin-postcss";
 import postcssImport from "postcss-import";
 import del from "rollup-plugin-delete";
-import pkg from "./package.json";
 
 const fs = require("fs");
 const mkdirp = require("mkdirp");
@@ -34,11 +33,13 @@ const writeIndexHtmlToBuild = bundleName => {
 const sourcemapOption = process.env.PROD ? undefined : "inline";
 
 const babelPluginConfig = {
+  babelHelpers: "bundled",
+  presets: ["@babel/preset-env"],
   plugins: [
-    ["@babel/plugin-proposal-class-properties"],
-    ["@babel/plugin-proposal-object-rest-spread"],
-    ["@babel/plugin-transform-react-jsx", { pragma: "h" }],
-    ["@babel/plugin-proposal-export-default-from"]
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-proposal-object-rest-spread",
+    "@babel/plugin-proposal-export-default-from",
+    ["@babel/plugin-transform-react-jsx", { pragma: "h" }]
   ]
 };
 
@@ -63,7 +64,10 @@ if (process.env.DEV) {
 if (process.env.PROD) {
   plugins = [
     ...plugins,
-    compiler(),
+    terser({
+      mangle: true,
+      compress: true
+    }),
     bundleSize(),
     del({
       targets: ["dist/examples/markdown-parser/bundle.*.js"]
