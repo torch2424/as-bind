@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "asc your-entryfile.ts --exportRuntime --transform as-bind -b path-to-my-wasm.wasm",
-    "test": "npm run test:node && npm run test:browser",
+    "test": "npm run build && npm run test:node && npm run test:browser",
     "test:node": "node nodejs.js",
     "test:browser": "node browser-puppeteer.js"
   },
