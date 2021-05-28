@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "asc your-entryfile.ts --exportRuntime --transform as-bind -b path-to-my-wasm.wasm",
-    "test:node": "node nodjs.js",
+    "test": "npm run test:node && npm run test:browser",
+    "test:node": "node nodejs.js",
     "test:browser": "node browser-puppeteer.js"
   },
   "author": "Aaron Turner",
