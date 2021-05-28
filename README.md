@@ -73,7 +73,7 @@ For **browser** JavaScript. We can do the following:
 
 ```javascript
 // If you are using a Javascript bundler, use the ESM bundle with import syntax
-import { AsBind } from "as-bind";
+import * as AsBind from "as-bind";
 
 // If you are not using a bundler add a <script> tag to your HTML
 // Where the `src` points to the iife bundle (as-bind.iife.js), for example: https://unpkg.com/as-bind
@@ -93,10 +93,14 @@ const asyncTask = async () => {
 asyncTask();
 ```
 
-For **Node** JavaScript, we would use the CommonJS bundle by do the following:
+For **Node** JavaScript, we would use the CommonJS bundle by doing the following:
 
 ```javascript
-const { AsBind } = require("as-bind");
+// We need to import the direct as-bind.cjs.js for Node applications.
+// This is because the default "main" key in the `package.json`,
+// is the as-bind transform script
+const AsBind = require("as-bind/dist/as-bind.cjs.js");
+
 const fs = require("fs");
 
 const wasm = fs.readFileSync("./path-to-my-wasm.wasm");

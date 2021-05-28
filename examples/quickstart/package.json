@@ -1,0 +1,17 @@
+{
+  "name": "as-bind-quickstart",
+  "version": "0.0.1",
+  "description": "Project that tests the README QuickStart examples to ensure that the README works. This depends on node modules from the root package.json",
+  "main": "index.js",
+  "scripts": {
+    "build": "asc your-entryfile.ts --exportRuntime --transform as-bind -b path-to-my-wasm.wasm",
+    "test": "npm run test:node && npm run test:browser",
+    "test:node": "node nodejs.js",
+    "test:browser": "node browser-puppeteer.js"
+  },
+  "author": "Aaron Turner",
+  "license": "MIT",
+  "dependencies": {
+    "as-bind": "file:../.."
+  }
+}
