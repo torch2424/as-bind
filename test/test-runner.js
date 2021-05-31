@@ -1,5 +1,6 @@
 const { promisify } = require("util");
 const fs = require("fs/promises");
+const path = require("path");
 
 const Express = require("express");
 const Mocha = require("mocha");
@@ -32,7 +33,7 @@ async function compileAllAsc() {
   const transformFile = require.resolve("../dist/transform.cjs.js");
   for (const ascFile of ascFiles) {
     console.log(`Compiling ${ascFile}...`);
-    await asc.main([
+    const params = [
       "--runtime",
       "stub",
       "--exportRuntime",
@@ -41,7 +42,13 @@ async function compileAllAsc() {
       "--binaryFile",
       ascFile.replace(/\.ts$/, ".wasm"),
       ascFile
-    ]);
+    ];
+    try {
+      const configFile = "./" + path.join(path.dirname(ascFile), "config.js");
+      const config = require(configFile);
+      await config?.params?.(params);
+    } catch (e) {}
+    await asc.main(params);
   }
 }
 
