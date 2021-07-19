@@ -1,5 +1,6 @@
 const { promisify } = require("util");
 const fs = require("fs/promises");
+const { dirname, join } = require("path");
 
 const Express = require("express");
 const Mocha = require("mocha");
@@ -31,8 +32,17 @@ async function compileAllAsc() {
   const ascFiles = await glob("./tests/**/asc.ts");
   const transformFile = require.resolve("../dist/transform.cjs.js");
   for (const ascFile of ascFiles) {
+    const dir = dirname(ascFile);
+    let config = {
+      mangleCompilerParams() {}
+    };
+    try {
+      const configPath = require.resolve("./" + join(dir, "config.js"));
+      const m = require(configPath);
+      Object.assign(config, m);
+    } catch (e) {}
     console.log(`Compiling ${ascFile}...`);
-    await asc.main([
+    const params = [
       "--runtime",
       "stub",
       "--exportRuntime",
@@ -41,7 +51,9 @@ async function compileAllAsc() {
       "--binaryFile",
       ascFile.replace(/\.ts$/, ".wasm"),
       ascFile
-    ]);
+    ];
+    config.mangleCompilerParams(params);
+    await asc.main(params);
   }
 }
 
