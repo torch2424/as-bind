@@ -6,6 +6,12 @@
   "module": "dist/as-bind.esm.js",
   "iife": "dist/as-bind.iife.js",
   "types": "dist/as-bind.d.ts",
+  "files": [
+    "dist/",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "run-s lib:js:build",
     "dev": "run-p lib:watch lib:test:watch",
