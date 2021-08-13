@@ -1,5 +1,5 @@
 import * as asc from "visitor-as/as";
-const { CommonFlags, NodeKind } = asc;
+const { CommonFlags, NodeKind, ElementKind } = asc;
 
 function isInternalElement(element) {
   return element.internalName.startsWith("~");
@@ -62,15 +62,13 @@ const SECTION_NAME = "as-bind_bindings";
 
 export default class AsBindTransform {
   afterCompile(module) {
-    const flatExportedFunctions = [
-      ...this.program.elementsByDeclaration.values()
-    ]
+    /** @type {asc.Program} */
+    const program = this.program;
+    const flatExportedFunctions = [...program.elementsByDeclaration.values()]
       .filter(el => elementHasFlag(el, CommonFlags.MODULE_EXPORT))
       .filter(el => !isInternalElement(el))
       .filter(el => el.declaration.kind === NodeKind.FUNCTIONDECLARATION);
-    const flatImportedFunctions = [
-      ...this.program.elementsByDeclaration.values()
-    ]
+    const flatImportedFunctions = [...program.elementsByDeclaration.values()]
       .filter(el => elementHasFlag(el, CommonFlags.DECLARE))
       .filter(el => !isInternalElement(el))
       .filter(v => v.declaration.kind === NodeKind.FUNCTIONDECLARATION);
@@ -101,8 +99,16 @@ export default class AsBindTransform {
       if (!importedFunctions.hasOwnProperty(moduleName)) {
         importedFunctions[moduleName] = {};
       }
+      let importedFunctionName = importedFunction.name;
+      if (
+        importedFunction.parent &&
+        importedFunction.parent.kind === ElementKind.NAMESPACE
+      ) {
+        importedFunctionName =
+          importedFunction.parent.name + "." + importedFunction.name;
+      }
       importedFunctions[moduleName][
-        importedFunction.name
+        importedFunctionName
       ] = getFunctionTypeDescriptor(importedFunction);
       Object.assign(typeIds, extractTypeIdsFromFunction(importedFunction));
     }
