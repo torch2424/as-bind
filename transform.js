@@ -88,19 +88,43 @@ export default class AsBindTransform {
         throw Error(`Can’t import or export generic functions.`);
       }
       importedFunction = importedFunction.instances.get("");
+
+      let external_module;
+      let external_name;
+
+      let decorators = importedFunction.declaration.decorators;
+
+      if (decorators) {
+        for (let decorator of decorators) {
+          if (decorator.name.text !== "external") continue;
+          if (!decorator.args) continue; // sanity check
+
+          if (decorator.args.length > 1) {
+            external_module = decorator.args[0].value;
+            external_name = decorator.args[1].value;
+          } else {
+            external_name = decorator.args[0].value;
+          }
+        }
+      }
+
       // To know under what module name an imported function will be expected,
       // we have to find the containing module of the given function, take the
       // internal name (which is effectively the file path without extension)
       // and only take the part after the last `/`
       // (i.e. the file name without extension).
-      const moduleName = containingModule(importedFunction)
-        .internalName.split("/")
-        .slice(-1)[0];
+      const moduleName =
+        external_module ||
+        containingModule(importedFunction)
+          .internalName.split("/")
+          .slice(-1)[0];
       if (!importedFunctions.hasOwnProperty(moduleName)) {
         importedFunctions[moduleName] = {};
       }
       let importedFunctionName = importedFunction.name;
-      if (
+      if (external_name) {
+        importedFunctionName = external_name;
+      } else if (
         importedFunction.parent &&
         importedFunction.parent.kind === ElementKind.NAMESPACE
       ) {
