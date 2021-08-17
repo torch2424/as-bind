@@ -3,17 +3,68 @@
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
- (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $none_=>_none (func))
- (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_i32 (func (result i32)))
+ (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
+ (type $i64_i32_=>_i32 (func (param i64 i32) (result i32)))
  (type $i32_i64_i32_i32_=>_none (func (param i32 i64 i32 i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
- (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
- (type $i64_i32_=>_i32 (func (param i64 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.NEWLINE i32 (i32.const 32))
+ (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.WHITESPACE i32 (i32.const 80))
+ (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.HEADER i32 (i32.const 128))
+ (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.ITALICS i32 (i32.const 160))
+ (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.BOLD i32 (i32.const 208))
+ (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.STRIKETHROUGH i32 (i32.const 240))
+ (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.UNORDERED_LIST_ITEM i32 (i32.const 288))
+ (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.ORDERED_LIST_ITEM i32 (i32.const 352))
+ (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.IMAGE_START i32 (i32.const 416))
+ (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.BRACKET_START i32 (i32.const 464))
+ (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.BRACKET_END i32 (i32.const 512))
+ (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.PAREN_START i32 (i32.const 560))
+ (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.PAREN_END i32 (i32.const 608))
+ (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.BLOCK_QUOTE i32 (i32.const 656))
+ (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.CODE_BLOCK i32 (i32.const 704))
+ (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.INLINE_CODE i32 (i32.const 752))
+ (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.HORIZONTAL_LINE i32 (i32.const 800))
+ (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.CHARACTER i32 (i32.const 848))
+ (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/toSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
+ (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
+ (global $examples/markdown-parser/assembly/tokenizer/tokenizer/tokens (mut i32) (i32.const 0))
+ (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.NEWLINE i32 (i32.const 32))
+ (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.WHITESPACE i32 (i32.const 80))
+ (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.HEADER i32 (i32.const 128))
+ (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.ITALICS i32 (i32.const 160))
+ (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.BOLD i32 (i32.const 208))
+ (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.STRIKETHROUGH i32 (i32.const 240))
+ (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.UNORDERED_LIST i32 (i32.const 1392))
+ (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.ORDERED_LIST i32 (i32.const 1440))
+ (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.LIST_ITEM i32 (i32.const 1488))
+ (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.IMAGE i32 (i32.const 1536))
+ (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.LINK i32 (i32.const 1568))
+ (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.BLOCK_QUOTE i32 (i32.const 656))
+ (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.CODE_BLOCK i32 (i32.const 704))
+ (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.INLINE_CODE i32 (i32.const 752))
+ (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.HORIZONTAL_LINE i32 (i32.const 800))
+ (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.CHARACTER i32 (i32.const 848))
+ (global $~lib/rt/__rtti_base i32 (i32.const 5536))
+ (global $~lib/memory/__data_end i32 (i32.const 5596))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 21980))
+ (global $~lib/memory/__heap_base i32 (i32.const 21980))
  (memory $0 1)
  (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\00N\00e\00w\00L\00i\00n\00e\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 60) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00W\00h\00i\00t\00e\00s\00p\00a\00c\00e\00\00\00\00\00\00\00\00\00")
@@ -51,169 +102,74 @@
  (data (i32.const 1580) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 1612) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\n\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 1644) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00 \00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 1676) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00n\00u\00l\00l\00\00\00\00\00")
- (data (i32.const 1708) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00#\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 1740) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00*\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 1772) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00*\00*\00\00\00\00\00\00\00\00\00")
- (data (i32.const 1804) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00_\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 1836) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00_\00_\00\00\00\00\00\00\00\00\00")
- (data (i32.const 1868) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00~\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 1900) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00~\00~\00\00\00\00\00\00\00\00\00")
- (data (i32.const 1932) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00*\00 \00\00\00\00\00\00\00\00\00")
- (data (i32.const 1964) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\001\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 1996) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00.\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2028) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\001\00.\00 \00\00\00\00\00\00\00")
- (data (i32.const 2060) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00!\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2092) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00[\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2124) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00!\00[\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2156) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00]\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2188) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00(\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2220) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00)\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2252) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00>\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2284) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00`\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2316) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00`\00`\00`\00\00\00\00\00\00\00")
- (data (i32.const 2348) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00-\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2380) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00-\00-\00-\00\00\00\00\00\00\00")
- (data (i32.const 2412) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00=\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2444) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00=\00=\00=\00\00\00\00\00\00\00")
- (data (i32.const 2476) "|\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2604) "|\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00d\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00(\00)\00 \00r\00a\00d\00i\00x\00 \00a\00r\00g\00u\00m\00e\00n\00t\00 \00m\00u\00s\00t\00 \00b\00e\00 \00b\00e\00t\00w\00e\00e\00n\00 \002\00 \00a\00n\00d\00 \003\006\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2732) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00n\00u\00m\00b\00e\00r\00.\00t\00s\00\00\00\00\00\00\00")
- (data (i32.const 2796) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\000\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2828) "0\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\00")
- (data (i32.const 3228) "\1c\04\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\04\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\000\00a\000\00b\000\00c\000\00d\000\00e\000\00f\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\001\00a\001\00b\001\00c\001\00d\001\00e\001\00f\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\002\00a\002\00b\002\00c\002\00d\002\00e\002\00f\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\003\00a\003\00b\003\00c\003\00d\003\00e\003\00f\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\004\00a\004\00b\004\00c\004\00d\004\00e\004\00f\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\005\00a\005\00b\005\00c\005\00d\005\00e\005\00f\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\006\00a\006\00b\006\00c\006\00d\006\00e\006\00f\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\007\00a\007\00b\007\00c\007\00d\007\00e\007\00f\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\008\00a\008\00b\008\00c\008\00d\008\00e\008\00f\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\009\00a\009\00b\009\00c\009\00d\009\00e\009\00f\00a\000\00a\001\00a\002\00a\003\00a\004\00a\005\00a\006\00a\007\00a\008\00a\009\00a\00a\00a\00b\00a\00c\00a\00d\00a\00e\00a\00f\00b\000\00b\001\00b\002\00b\003\00b\004\00b\005\00b\006\00b\007\00b\008\00b\009\00b\00a\00b\00b\00b\00c\00b\00d\00b\00e\00b\00f\00c\000\00c\001\00c\002\00c\003\00c\004\00c\005\00c\006\00c\007\00c\008\00c\009\00c\00a\00c\00b\00c\00c\00c\00d\00c\00e\00c\00f\00d\000\00d\001\00d\002\00d\003\00d\004\00d\005\00d\006\00d\007\00d\008\00d\009\00d\00a\00d\00b\00d\00c\00d\00d\00d\00e\00d\00f\00e\000\00e\001\00e\002\00e\003\00e\004\00e\005\00e\006\00e\007\00e\008\00e\009\00e\00a\00e\00b\00e\00c\00e\00d\00e\00e\00e\00f\00f\000\00f\001\00f\002\00f\003\00f\004\00f\005\00f\006\00f\007\00f\008\00f\009\00f\00a\00f\00b\00f\00c\00f\00d\00f\00e\00f\00f\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 4284) "\\\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00H\00\00\000\001\002\003\004\005\006\007\008\009\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z\00\00\00\00\00")
- (data (i32.const 4380) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00A\00l\00t\00\00\00\00\00\00\00")
- (data (i32.const 4412) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\18\00\00\00L\00i\00n\00k\00 \00C\00o\00n\00t\00e\00n\00t\00\00\00\00\00")
- (data (i32.const 4460) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00<\00b\00r\00 \00/\00>\00")
- (data (i32.const 4492) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00h\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 4524) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00<\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 4556) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00<\00/\00\00\00\00\00\00\00\00\00")
- (data (i32.const 4588) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00<\00i\00>\00\00\00\00\00\00\00")
- (data (i32.const 4620) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00<\00/\00i\00>\00\00\00\00\00")
- (data (i32.const 4652) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00<\00b\00>\00\00\00\00\00\00\00")
- (data (i32.const 4684) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00<\00/\00b\00>\00\00\00\00\00")
- (data (i32.const 4716) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00<\00s\00>\00\00\00\00\00\00\00")
- (data (i32.const 4748) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00<\00/\00s\00>\00\00\00\00\00")
- (data (i32.const 4780) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00<\00u\00l\00>\00\00\00\00\00")
- (data (i32.const 4812) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00<\00/\00u\00l\00>\00\00\00")
- (data (i32.const 4844) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00<\00o\00l\00>\00\00\00\00\00")
- (data (i32.const 4876) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00<\00/\00o\00l\00>\00\00\00")
- (data (i32.const 4908) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00<\00l\00i\00>\00\00\00\00\00")
- (data (i32.const 4940) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00<\00/\00l\00i\00>\00\00\00")
- (data (i32.const 4972) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00<\00i\00m\00g\00 \00\00\00")
- (data (i32.const 5004) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00s\00r\00c\00=\00\"\00\00\00")
- (data (i32.const 5036) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\"\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 5068) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00a\00l\00t\00=\00\"\00\00\00")
- (data (i32.const 5100) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00 \00/\00>\00\00\00\00\00\00\00")
- (data (i32.const 5132) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00<\00a\00 \00\00\00\00\00\00\00")
- (data (i32.const 5164) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00h\00r\00e\00f\00=\00\"\00")
- (data (i32.const 5196) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00\"\00>\00\00\00\00\00\00\00\00\00")
- (data (i32.const 5228) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00<\00/\00a\00>\00\00\00\00\00")
- (data (i32.const 5260) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00<\00q\00>\00\00\00\00\00\00\00")
- (data (i32.const 5292) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00<\00/\00q\00>\00\00\00\00\00")
- (data (i32.const 5324) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00<\00c\00o\00d\00e\00>\00")
- (data (i32.const 5356) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\00<\00/\00c\00o\00d\00e\00>\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 5404) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00<\00h\00r\00 \00/\00>\00")
- (data (i32.const 5436) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00*\00\00\00O\00b\00j\00e\00c\00t\00 \00a\00l\00r\00e\00a\00d\00y\00 \00p\00i\00n\00n\00e\00d\00\00\00")
- (data (i32.const 5500) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00O\00b\00j\00e\00c\00t\00 \00i\00s\00 \00n\00o\00t\00 \00p\00i\00n\00n\00e\00d\00\00\00\00\00")
- (data (i32.const 5568) "\19\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00A\08\00\00\02\00\00\00A\00\00\00\02\00\00\00\81\08\00\00\02\00\00\00\81\00\00\00\02\00\00\00\01\t\00\00\02\00\00\00\01\01\00\00\02\00\00\00\01\19\00\00\02\00\00\00\01\1a\00\00\02\00\00\00\01\n\00\00\02\00\00\00\01\02\00\00\02\00\00\00\02\t\00\00\00\00\00\00\02\n\00\00\00\00\00\00\02A\00\00\00\00\00\00B\00\00\00\00\00\00\00\02A\00\00\00\00\00\00\02A\00\00\00\00\00\00\02A\00\00\00\00\00\00\02A\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02A\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02A\00\00\00\00\00\00")
+ (data (i32.const 1676) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00#\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1708) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00*\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1740) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00*\00*\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1772) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00_\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1804) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00_\00_\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1836) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00~\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1868) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00~\00~\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1900) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00*\00 \00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1932) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\001\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1964) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00.\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1996) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\001\00.\00 \00\00\00\00\00\00\00")
+ (data (i32.const 2028) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00!\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2060) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00[\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2092) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00!\00[\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2124) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00]\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2156) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00(\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2188) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00)\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2220) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00>\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2252) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00`\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2284) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00`\00`\00`\00\00\00\00\00\00\00")
+ (data (i32.const 2316) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00-\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2348) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00-\00-\00-\00\00\00\00\00\00\00")
+ (data (i32.const 2380) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00=\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2412) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00=\00=\00=\00\00\00\00\00\00\00")
+ (data (i32.const 2444) "|\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2572) "|\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00d\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00(\00)\00 \00r\00a\00d\00i\00x\00 \00a\00r\00g\00u\00m\00e\00n\00t\00 \00m\00u\00s\00t\00 \00b\00e\00 \00b\00e\00t\00w\00e\00e\00n\00 \002\00 \00a\00n\00d\00 \003\006\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2700) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00n\00u\00m\00b\00e\00r\00.\00t\00s\00\00\00\00\00\00\00")
+ (data (i32.const 2764) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\000\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2796) "0\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\00")
+ (data (i32.const 3196) "\1c\04\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\04\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\000\00a\000\00b\000\00c\000\00d\000\00e\000\00f\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\001\00a\001\00b\001\00c\001\00d\001\00e\001\00f\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\002\00a\002\00b\002\00c\002\00d\002\00e\002\00f\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\003\00a\003\00b\003\00c\003\00d\003\00e\003\00f\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\004\00a\004\00b\004\00c\004\00d\004\00e\004\00f\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\005\00a\005\00b\005\00c\005\00d\005\00e\005\00f\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\006\00a\006\00b\006\00c\006\00d\006\00e\006\00f\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\007\00a\007\00b\007\00c\007\00d\007\00e\007\00f\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\008\00a\008\00b\008\00c\008\00d\008\00e\008\00f\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\009\00a\009\00b\009\00c\009\00d\009\00e\009\00f\00a\000\00a\001\00a\002\00a\003\00a\004\00a\005\00a\006\00a\007\00a\008\00a\009\00a\00a\00a\00b\00a\00c\00a\00d\00a\00e\00a\00f\00b\000\00b\001\00b\002\00b\003\00b\004\00b\005\00b\006\00b\007\00b\008\00b\009\00b\00a\00b\00b\00b\00c\00b\00d\00b\00e\00b\00f\00c\000\00c\001\00c\002\00c\003\00c\004\00c\005\00c\006\00c\007\00c\008\00c\009\00c\00a\00c\00b\00c\00c\00c\00d\00c\00e\00c\00f\00d\000\00d\001\00d\002\00d\003\00d\004\00d\005\00d\006\00d\007\00d\008\00d\009\00d\00a\00d\00b\00d\00c\00d\00d\00d\00e\00d\00f\00e\000\00e\001\00e\002\00e\003\00e\004\00e\005\00e\006\00e\007\00e\008\00e\009\00e\00a\00e\00b\00e\00c\00e\00d\00e\00e\00e\00f\00f\000\00f\001\00f\002\00f\003\00f\004\00f\005\00f\006\00f\007\00f\008\00f\009\00f\00a\00f\00b\00f\00c\00f\00d\00f\00e\00f\00f\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 4252) "\\\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00H\00\00\000\001\002\003\004\005\006\007\008\009\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z\00\00\00\00\00")
+ (data (i32.const 4348) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00A\00l\00t\00\00\00\00\00\00\00")
+ (data (i32.const 4380) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\18\00\00\00L\00i\00n\00k\00 \00C\00o\00n\00t\00e\00n\00t\00\00\00\00\00")
+ (data (i32.const 4428) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00<\00b\00r\00 \00/\00>\00")
+ (data (i32.const 4460) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00h\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 4492) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00<\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 4524) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00<\00/\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 4556) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00<\00i\00>\00\00\00\00\00\00\00")
+ (data (i32.const 4588) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00<\00/\00i\00>\00\00\00\00\00")
+ (data (i32.const 4620) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00<\00b\00>\00\00\00\00\00\00\00")
+ (data (i32.const 4652) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00<\00/\00b\00>\00\00\00\00\00")
+ (data (i32.const 4684) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00<\00s\00>\00\00\00\00\00\00\00")
+ (data (i32.const 4716) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00<\00/\00s\00>\00\00\00\00\00")
+ (data (i32.const 4748) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00<\00u\00l\00>\00\00\00\00\00")
+ (data (i32.const 4780) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00<\00/\00u\00l\00>\00\00\00")
+ (data (i32.const 4812) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00<\00o\00l\00>\00\00\00\00\00")
+ (data (i32.const 4844) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00<\00/\00o\00l\00>\00\00\00")
+ (data (i32.const 4876) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00<\00l\00i\00>\00\00\00\00\00")
+ (data (i32.const 4908) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00<\00/\00l\00i\00>\00\00\00")
+ (data (i32.const 4940) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00<\00i\00m\00g\00 \00\00\00")
+ (data (i32.const 4972) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00s\00r\00c\00=\00\"\00\00\00")
+ (data (i32.const 5004) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\"\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 5036) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00a\00l\00t\00=\00\"\00\00\00")
+ (data (i32.const 5068) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00 \00/\00>\00\00\00\00\00\00\00")
+ (data (i32.const 5100) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00<\00a\00 \00\00\00\00\00\00\00")
+ (data (i32.const 5132) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00h\00r\00e\00f\00=\00\"\00")
+ (data (i32.const 5164) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00\"\00>\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 5196) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00<\00/\00a\00>\00\00\00\00\00")
+ (data (i32.const 5228) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00<\00q\00>\00\00\00\00\00\00\00")
+ (data (i32.const 5260) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00<\00/\00q\00>\00\00\00\00\00")
+ (data (i32.const 5292) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00<\00c\00o\00d\00e\00>\00")
+ (data (i32.const 5324) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\00<\00/\00c\00o\00d\00e\00>\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 5372) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00<\00h\00r\00 \00/\00>\00")
+ (data (i32.const 5404) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00*\00\00\00O\00b\00j\00e\00c\00t\00 \00a\00l\00r\00e\00a\00d\00y\00 \00p\00i\00n\00n\00e\00d\00\00\00")
+ (data (i32.const 5468) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00O\00b\00j\00e\00c\00t\00 \00i\00s\00 \00n\00o\00t\00 \00p\00i\00n\00n\00e\00d\00\00\00\00\00")
+ (data (i32.const 5536) "\07\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02A\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02A\00\00\00\00\00\00")
  (table $0 1 funcref)
- (global $lib/assembly/as-bind/__asbind_entryfile_flag i32 (i32.const 1))
- (global $lib/assembly/as-bind/__asbind_String_ID i32 (i32.const 1))
- (global $lib/assembly/as-bind/__asbind_ArrayBuffer_ID i32 (i32.const 0))
- (global $lib/assembly/as-bind/__asbind_ArrayBufferView_ID i32 (i32.const 2))
- (global $lib/assembly/as-bind/__asbind_Int8Array_ID i32 (i32.const 3))
- (global $lib/assembly/as-bind/__asbind_Uint8Array_ID i32 (i32.const 4))
- (global $lib/assembly/as-bind/__asbind_Int16Array_ID i32 (i32.const 5))
- (global $lib/assembly/as-bind/__asbind_Uint16Array_ID i32 (i32.const 6))
- (global $lib/assembly/as-bind/__asbind_Int32Array_ID i32 (i32.const 7))
- (global $lib/assembly/as-bind/__asbind_Uint32Array_ID i32 (i32.const 8))
- (global $lib/assembly/as-bind/__asbind_Float32Array_ID i32 (i32.const 9))
- (global $lib/assembly/as-bind/__asbind_Float64Array_ID i32 (i32.const 10))
- (global $lib/assembly/as-bind/__asbind_Int64Array_ID i32 (i32.const 11))
- (global $lib/assembly/as-bind/__asbind_Uint64Array_ID i32 (i32.const 12))
- (global $lib/assembly/as-bind/__asbind_I32Array_ID i32 (i32.const 13))
- (global $lib/assembly/as-bind/__asbind_I64Array_ID i32 (i32.const 14))
- (global $lib/assembly/as-bind/__asbind_StringArray_ID i32 (i32.const 15))
- (global $lib/assembly/as-bind/__asbind_BoolArray_ID i32 (i32.const 16))
- (global $lib/assembly/as-bind/__asbind_I32ArrayArray_ID i32 (i32.const 17))
- (global $lib/assembly/as-bind/__asbind_I64ArrayArray_ID i32 (i32.const 18))
- (global $lib/assembly/as-bind/__asbind_StringArrayArray_ID i32 (i32.const 19))
- (global $lib/assembly/as-bind/__asbind_BoolArrayArray_ID i32 (i32.const 20))
- (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.NEWLINE i32 (i32.const 32))
- (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.WHITESPACE i32 (i32.const 80))
- (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.HEADER i32 (i32.const 128))
- (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.ITALICS i32 (i32.const 160))
- (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.BOLD i32 (i32.const 208))
- (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.STRIKETHROUGH i32 (i32.const 240))
- (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.UNORDERED_LIST_ITEM i32 (i32.const 288))
- (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.ORDERED_LIST_ITEM i32 (i32.const 352))
- (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.IMAGE_START i32 (i32.const 416))
- (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.BRACKET_START i32 (i32.const 464))
- (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.BRACKET_END i32 (i32.const 512))
- (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.PAREN_START i32 (i32.const 560))
- (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.PAREN_END i32 (i32.const 608))
- (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.BLOCK_QUOTE i32 (i32.const 656))
- (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.CODE_BLOCK i32 (i32.const 704))
- (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.INLINE_CODE i32 (i32.const 752))
- (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.HORIZONTAL_LINE i32 (i32.const 800))
- (global $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.CHARACTER i32 (i32.const 848))
- (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/threshold (mut i32) (i32.const 1024))
- (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/toSpace (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
- (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
- (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $examples/markdown-parser/assembly/tokenizer/tokenizer/tokens (mut i32) (i32.const 0))
- (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.NEWLINE i32 (i32.const 32))
- (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.WHITESPACE i32 (i32.const 80))
- (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.HEADER i32 (i32.const 128))
- (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.ITALICS i32 (i32.const 160))
- (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.BOLD i32 (i32.const 208))
- (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.STRIKETHROUGH i32 (i32.const 240))
- (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.UNORDERED_LIST i32 (i32.const 1392))
- (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.ORDERED_LIST i32 (i32.const 1440))
- (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.LIST_ITEM i32 (i32.const 1488))
- (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.IMAGE i32 (i32.const 1536))
- (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.LINK i32 (i32.const 1568))
- (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.BLOCK_QUOTE i32 (i32.const 656))
- (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.CODE_BLOCK i32 (i32.const 704))
- (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.INLINE_CODE i32 (i32.const 752))
- (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.HORIZONTAL_LINE i32 (i32.const 800))
- (global $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.CHARACTER i32 (i32.const 848))
- (global $~lib/rt/__rtti_base i32 (i32.const 5568))
- (global $~lib/memory/__data_end i32 (i32.const 5772))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 22156))
- (global $~lib/memory/__heap_base i32 (i32.const 22156))
- (export "__asbind_entryfile_flag" (global $lib/assembly/as-bind/__asbind_entryfile_flag))
- (export "__asbind_String_ID" (global $lib/assembly/as-bind/__asbind_String_ID))
- (export "__asbind_ArrayBuffer_ID" (global $lib/assembly/as-bind/__asbind_ArrayBuffer_ID))
- (export "__asbind_ArrayBufferView_ID" (global $lib/assembly/as-bind/__asbind_ArrayBufferView_ID))
- (export "__asbind_Int8Array_ID" (global $lib/assembly/as-bind/__asbind_Int8Array_ID))
- (export "__asbind_Uint8Array_ID" (global $lib/assembly/as-bind/__asbind_Uint8Array_ID))
- (export "__asbind_Int16Array_ID" (global $lib/assembly/as-bind/__asbind_Int16Array_ID))
- (export "__asbind_Uint16Array_ID" (global $lib/assembly/as-bind/__asbind_Uint16Array_ID))
- (export "__asbind_Int32Array_ID" (global $lib/assembly/as-bind/__asbind_Int32Array_ID))
- (export "__asbind_Uint32Array_ID" (global $lib/assembly/as-bind/__asbind_Uint32Array_ID))
- (export "__asbind_Float32Array_ID" (global $lib/assembly/as-bind/__asbind_Float32Array_ID))
- (export "__asbind_Float64Array_ID" (global $lib/assembly/as-bind/__asbind_Float64Array_ID))
- (export "__asbind_Int64Array_ID" (global $lib/assembly/as-bind/__asbind_Int64Array_ID))
- (export "__asbind_Uint64Array_ID" (global $lib/assembly/as-bind/__asbind_Uint64Array_ID))
- (export "__asbind_I32Array_ID" (global $lib/assembly/as-bind/__asbind_I32Array_ID))
- (export "__asbind_I64Array_ID" (global $lib/assembly/as-bind/__asbind_I64Array_ID))
- (export "__asbind_StringArray_ID" (global $lib/assembly/as-bind/__asbind_StringArray_ID))
- (export "__asbind_BoolArray_ID" (global $lib/assembly/as-bind/__asbind_BoolArray_ID))
- (export "__asbind_I32ArrayArray_ID" (global $lib/assembly/as-bind/__asbind_I32ArrayArray_ID))
- (export "__asbind_I64ArrayArray_ID" (global $lib/assembly/as-bind/__asbind_I64ArrayArray_ID))
- (export "__asbind_StringArrayArray_ID" (global $lib/assembly/as-bind/__asbind_StringArrayArray_ID))
- (export "__asbind_BoolArrayArray_ID" (global $lib/assembly/as-bind/__asbind_BoolArrayArray_ID))
+ (elem $0 (i32.const 1))
  (export "__new" (func $~lib/rt/itcms/__new))
  (export "__pin" (func $~lib/rt/itcms/__pin))
  (export "__unpin" (func $~lib/rt/itcms/__unpin))
@@ -581,7 +537,7 @@
   if
    i32.const 0
    i32.const 1328
-   i32.const 273
+   i32.const 268
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -597,18 +553,11 @@
   local.get $3
   i32.const 12
   i32.ge_u
-  if (result i32)
-   local.get $3
-   i32.const 1073741820
-   i32.lt_u
-  else
-   i32.const 0
-  end
   i32.eqz
   if
    i32.const 0
    i32.const 1328
-   i32.const 275
+   i32.const 270
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -624,12 +573,21 @@
    i32.shr_u
    local.set $5
   else
-   i32.const 31
    local.get $3
+   local.tee $6
+   i32.const 1073741820
+   local.tee $7
+   local.get $6
+   local.get $7
+   i32.lt_u
+   select
+   local.set $6
+   i32.const 31
+   local.get $6
    i32.clz
    i32.sub
    local.set $4
-   local.get $3
+   local.get $6
    local.get $4
    i32.const 4
    i32.sub
@@ -662,41 +620,41 @@
   if
    i32.const 0
    i32.const 1328
-   i32.const 288
+   i32.const 284
    i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
   local.get $1
   i32.load offset=4
-  local.set $6
+  local.set $8
   local.get $1
   i32.load offset=8
-  local.set $7
-  local.get $6
+  local.set $9
+  local.get $8
   if
-   local.get $6
-   local.get $7
+   local.get $8
+   local.get $9
    call $~lib/rt/tlsf/Block#set:next
   end
-  local.get $7
+  local.get $9
   if
-   local.get $7
-   local.get $6
+   local.get $9
+   local.get $8
    call $~lib/rt/tlsf/Block#set:prev
   end
   local.get $1
   local.get $0
   local.set $10
   local.get $4
-  local.set $9
+  local.set $6
   local.get $5
-  local.set $8
+  local.set $7
   local.get $10
-  local.get $9
+  local.get $6
   i32.const 4
   i32.shl
-  local.get $8
+  local.get $7
   i32.add
   i32.const 2
   i32.shl
@@ -709,55 +667,55 @@
    local.get $4
    local.set $10
    local.get $5
-   local.set $9
-   local.get $7
-   local.set $8
+   local.set $6
+   local.get $9
+   local.set $7
    local.get $11
    local.get $10
    i32.const 4
    i32.shl
-   local.get $9
+   local.get $6
    i32.add
    i32.const 2
    i32.shl
    i32.add
-   local.get $8
-   i32.store offset=96
    local.get $7
+   i32.store offset=96
+   local.get $9
    i32.eqz
    if
     local.get $0
-    local.set $9
+    local.set $6
     local.get $4
-    local.set $8
-    local.get $9
-    local.get $8
+    local.set $7
+    local.get $6
+    local.get $7
     i32.const 2
     i32.shl
     i32.add
     i32.load offset=4
-    local.set $9
+    local.set $6
     local.get $0
-    local.set $8
+    local.set $7
     local.get $4
     local.set $11
-    local.get $9
+    local.get $6
     i32.const 1
     local.get $5
     i32.shl
     i32.const -1
     i32.xor
     i32.and
-    local.tee $9
+    local.tee $6
     local.set $10
-    local.get $8
+    local.get $7
     local.get $11
     i32.const 2
     i32.shl
     i32.add
     local.get $10
     i32.store offset=4
-    local.get $9
+    local.get $6
     i32.eqz
     if
      local.get $0
@@ -836,11 +794,11 @@
   i32.const 1
   i32.and
   if
+   local.get $0
+   local.get $4
+   call $~lib/rt/tlsf/removeBlock
+   local.get $1
    local.get $2
-   i32.const 3
-   i32.const -1
-   i32.xor
-   i32.and
    i32.const 4
    i32.add
    local.get $5
@@ -849,73 +807,60 @@
    i32.xor
    i32.and
    i32.add
+   local.tee $2
+   call $~lib/rt/common/BLOCK#set:mmInfo
+   local.get $1
    local.set $3
    local.get $3
-   i32.const 1073741820
-   i32.lt_u
-   if
-    local.get $0
-    local.get $4
-    call $~lib/rt/tlsf/removeBlock
-    local.get $1
-    local.get $2
-    i32.const 3
-    i32.and
-    local.get $3
-    i32.or
-    local.tee $2
-    call $~lib/rt/common/BLOCK#set:mmInfo
-    local.get $1
-    local.set $6
-    local.get $6
-    i32.const 4
-    i32.add
-    local.get $6
-    i32.load
-    i32.const 3
-    i32.const -1
-    i32.xor
-    i32.and
-    i32.add
-    local.set $4
-    local.get $4
-    i32.load
-    local.set $5
-   end
+   i32.const 4
+   i32.add
+   local.get $3
+   i32.load
+   i32.const 3
+   i32.const -1
+   i32.xor
+   i32.and
+   i32.add
+   local.set $4
+   local.get $4
+   i32.load
+   local.set $5
   end
   local.get $2
   i32.const 2
   i32.and
   if
    local.get $1
-   local.set $6
-   local.get $6
+   local.set $3
+   local.get $3
    i32.const 4
    i32.sub
    i32.load
-   local.set $6
-   local.get $6
-   i32.load
    local.set $3
+   local.get $3
+   i32.load
+   local.set $6
    i32.const 1
    drop
-   local.get $3
+   local.get $6
    i32.const 1
    i32.and
    i32.eqz
    if
     i32.const 0
     i32.const 1328
-    i32.const 224
+    i32.const 221
     i32.const 16
     call $~lib/builtins/abort
     unreachable
    end
+   local.get $0
    local.get $3
-   i32.const 3
-   i32.const -1
-   i32.xor
-   i32.and
+   call $~lib/rt/tlsf/removeBlock
+   local.get $3
+   local.set $1
+   local.get $1
+   local.get $6
    i32.const 4
    i32.add
    local.get $2
@@ -924,25 +869,8 @@
    i32.xor
    i32.and
    i32.add
-   local.set $7
-   local.get $7
-   i32.const 1073741820
-   i32.lt_u
-   if
-    local.get $0
-    local.get $6
-    call $~lib/rt/tlsf/removeBlock
-    local.get $6
-    local.get $3
-    i32.const 3
-    i32.and
-    local.get $7
-    i32.or
-    local.tee $2
-    call $~lib/rt/common/BLOCK#set:mmInfo
-    local.get $6
-    local.set $1
-   end
+   local.tee $2
+   call $~lib/rt/common/BLOCK#set:mmInfo
   end
   local.get $4
   local.get $5
@@ -954,24 +882,17 @@
   i32.const -1
   i32.xor
   i32.and
-  local.set $8
+  local.set $7
   i32.const 1
   drop
-  local.get $8
+  local.get $7
   i32.const 12
   i32.ge_u
-  if (result i32)
-   local.get $8
-   i32.const 1073741820
-   i32.lt_u
-  else
-   i32.const 0
-  end
   i32.eqz
   if
    i32.const 0
    i32.const 1328
-   i32.const 239
+   i32.const 233
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -981,7 +902,7 @@
   local.get $1
   i32.const 4
   i32.add
-  local.get $8
+  local.get $7
   i32.add
   local.get $4
   i32.eq
@@ -989,7 +910,7 @@
   if
    i32.const 0
    i32.const 1328
-   i32.const 240
+   i32.const 234
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -999,24 +920,33 @@
   i32.sub
   local.get $1
   i32.store
-  local.get $8
+  local.get $7
   i32.const 256
   i32.lt_u
   if
    i32.const 0
-   local.set $9
-   local.get $8
+   local.set $8
+   local.get $7
    i32.const 4
    i32.shr_u
-   local.set $10
+   local.set $9
   else
+   local.get $7
+   local.tee $3
+   i32.const 1073741820
+   local.tee $6
+   local.get $3
+   local.get $6
+   i32.lt_u
+   select
+   local.set $3
    i32.const 31
-   local.get $8
+   local.get $3
    i32.clz
    i32.sub
-   local.set $9
+   local.set $8
+   local.get $3
    local.get $8
-   local.get $9
    i32.const 4
    i32.sub
    i32.shr_u
@@ -1024,21 +954,21 @@
    i32.const 4
    i32.shl
    i32.xor
-   local.set $10
-   local.get $9
+   local.set $9
+   local.get $8
    i32.const 8
    i32.const 1
    i32.sub
    i32.sub
-   local.set $9
+   local.set $8
   end
   i32.const 1
   drop
-  local.get $9
+  local.get $8
   i32.const 23
   i32.lt_u
   if (result i32)
-   local.get $10
+   local.get $9
    i32.const 16
    i32.lt_u
   else
@@ -1048,18 +978,18 @@
   if
    i32.const 0
    i32.const 1328
-   i32.const 256
+   i32.const 251
    i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  local.set $7
-  local.get $9
+  local.set $10
+  local.get $8
   local.set $3
-  local.get $10
+  local.get $9
   local.set $6
-  local.get $7
+  local.get $10
   local.get $3
   i32.const 4
   i32.shl
@@ -1084,14 +1014,14 @@
   end
   local.get $0
   local.set $12
+  local.get $8
+  local.set $10
   local.get $9
-  local.set $7
-  local.get $10
   local.set $3
   local.get $1
   local.set $6
   local.get $12
-  local.get $7
+  local.get $10
   i32.const 4
   i32.shl
   local.get $3
@@ -1105,17 +1035,17 @@
   local.get $0
   i32.load
   i32.const 1
-  local.get $9
+  local.get $8
   i32.shl
   i32.or
   call $~lib/rt/tlsf/Root#set:flMap
   local.get $0
   local.set $13
-  local.get $9
+  local.get $8
   local.set $12
   local.get $0
   local.set $3
-  local.get $9
+  local.get $8
   local.set $6
   local.get $3
   local.get $6
@@ -1124,16 +1054,16 @@
   i32.add
   i32.load offset=4
   i32.const 1
-  local.get $10
+  local.get $9
   i32.shl
   i32.or
-  local.set $7
+  local.set $10
   local.get $13
   local.get $12
   i32.const 2
   i32.shl
   i32.add
-  local.get $7
+  local.get $10
   i32.store offset=4
  )
  (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -1153,7 +1083,7 @@
   if
    i32.const 0
    i32.const 1328
-   i32.const 381
+   i32.const 377
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -1196,7 +1126,7 @@
    if
     i32.const 0
     i32.const 1328
-    i32.const 388
+    i32.const 384
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -1229,7 +1159,7 @@
    if
     i32.const 0
     i32.const 1328
-    i32.const 401
+    i32.const 397
     i32.const 5
     call $~lib/builtins/abort
     unreachable
@@ -1472,7 +1402,7 @@
   if
    i32.const 0
    i32.const 1328
-   i32.const 565
+   i32.const 559
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -1799,12 +1729,12 @@
  (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
   local.get $0
   i32.const 1073741820
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 992
    i32.const 1328
-   i32.const 462
-   i32.const 30
+   i32.const 458
+   i32.const 29
    call $~lib/builtins/abort
    unreachable
   end
@@ -1887,7 +1817,7 @@
   if
    i32.const 0
    i32.const 1328
-   i32.const 334
+   i32.const 330
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -1952,7 +1882,7 @@
     if
      i32.const 0
      i32.const 1328
-     i32.const 347
+     i32.const 343
      i32.const 18
      call $~lib/builtins/abort
      unreachable
@@ -2103,7 +2033,7 @@
   if
    i32.const 0
    i32.const 1328
-   i32.const 361
+   i32.const 357
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -2212,7 +2142,7 @@
    if
     i32.const 0
     i32.const 1328
-    i32.const 500
+    i32.const 496
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -2232,7 +2162,7 @@
   if
    i32.const 0
    i32.const 1328
-   i32.const 502
+   i32.const 498
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -2298,15 +2228,15 @@
    local.get $5
    local.get $3
    i32.add
-   i32.const 4
-   i32.sub
    local.set $6
    local.get $5
    local.get $4
    i32.store8
    local.get $6
+   i32.const 1
+   i32.sub
    local.get $4
-   i32.store8 offset=3
+   i32.store8
    local.get $3
    i32.const 2
    i32.le_u
@@ -2320,11 +2250,15 @@
    local.get $4
    i32.store8 offset=2
    local.get $6
+   i32.const 2
+   i32.sub
    local.get $4
-   i32.store8 offset=2
+   i32.store8
    local.get $6
+   i32.const 3
+   i32.sub
    local.get $4
-   i32.store8 offset=1
+   i32.store8
    local.get $3
    i32.const 6
    i32.le_u
@@ -2335,6 +2269,8 @@
    local.get $4
    i32.store8 offset=3
    local.get $6
+   i32.const 4
+   i32.sub
    local.get $4
    i32.store8
    local.get $3
@@ -2372,15 +2308,15 @@
    local.get $5
    local.get $3
    i32.add
-   i32.const 28
-   i32.sub
    local.set $6
    local.get $5
    local.get $8
    i32.store
    local.get $6
+   i32.const 4
+   i32.sub
    local.get $8
-   i32.store offset=24
+   i32.store
    local.get $3
    i32.const 8
    i32.le_u
@@ -2394,11 +2330,15 @@
    local.get $8
    i32.store offset=8
    local.get $6
+   i32.const 12
+   i32.sub
    local.get $8
-   i32.store offset=16
+   i32.store
    local.get $6
+   i32.const 8
+   i32.sub
    local.get $8
-   i32.store offset=20
+   i32.store
    local.get $3
    i32.const 24
    i32.le_u
@@ -2418,17 +2358,25 @@
    local.get $8
    i32.store offset=24
    local.get $6
+   i32.const 28
+   i32.sub
    local.get $8
    i32.store
    local.get $6
+   i32.const 24
+   i32.sub
    local.get $8
-   i32.store offset=4
+   i32.store
    local.get $6
+   i32.const 20
+   i32.sub
    local.get $8
-   i32.store offset=8
+   i32.store
    local.get $6
+   i32.const 16
+   i32.sub
    local.get $8
-   i32.store offset=12
+   i32.store
    i32.const 24
    local.get $5
    i32.const 4
@@ -2628,6 +2576,14 @@
   i32.store offset=12
  )
  (func $start:examples/markdown-parser/assembly/tokenizer/tokenizer
+  memory.size
+  i32.const 16
+  i32.shl
+  global.get $~lib/memory/__heap_base
+  i32.sub
+  i32.const 1
+  i32.shr_u
+  global.set $~lib/rt/itcms/threshold
   i32.const 1104
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/pinSpace
@@ -2782,6 +2738,85 @@
    end
   end
   i32.const 0
+ )
+ (func $~lib/string/String#indexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  local.get $1
+  call $~lib/string/String#get:length
+  local.set $3
+  local.get $3
+  i32.eqz
+  if
+   i32.const 0
+   return
+  end
+  local.get $0
+  call $~lib/string/String#get:length
+  local.set $4
+  local.get $4
+  i32.eqz
+  if
+   i32.const -1
+   return
+  end
+  local.get $2
+  local.tee $5
+  i32.const 0
+  local.tee $6
+  local.get $5
+  local.get $6
+  i32.gt_s
+  select
+  local.tee $6
+  local.get $4
+  local.tee $5
+  local.get $6
+  local.get $5
+  i32.lt_s
+  select
+  local.set $7
+  local.get $4
+  local.get $3
+  i32.sub
+  local.set $4
+  loop $for-loop|0
+   local.get $7
+   local.get $4
+   i32.le_s
+   local.set $6
+   local.get $6
+   if
+    local.get $0
+    local.get $7
+    local.get $1
+    i32.const 0
+    local.get $3
+    call $~lib/util/string/compareImpl
+    i32.eqz
+    if
+     local.get $7
+     return
+    end
+    local.get $7
+    i32.const 1
+    i32.add
+    local.set $7
+    br $for-loop|0
+   end
+  end
+  i32.const -1
+ )
+ (func $~lib/string/String#includes (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/string/String#indexOf
+  i32.const -1
+  i32.ne
  )
  (func $~lib/util/memory/memcpy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -4081,16 +4116,17 @@
   call $~lib/memory/memory.copy
   local.get $3
  )
- (func $~lib/array/ensureSize (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
+ (func $~lib/array/ensureCapacity (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
   local.get $0
   i32.load offset=8
-  local.set $3
+  local.set $4
   local.get $1
-  local.get $3
+  local.get $4
   local.get $2
   i32.shr_u
   i32.gt_u
@@ -4103,47 +4139,75 @@
    if
     i32.const 896
     i32.const 944
-    i32.const 14
+    i32.const 17
     i32.const 48
     call $~lib/builtins/abort
     unreachable
    end
    local.get $0
    i32.load
-   local.set $4
+   local.set $5
    local.get $1
+   local.tee $6
+   i32.const 8
+   local.tee $7
+   local.get $6
+   local.get $7
+   i32.gt_u
+   select
    local.get $2
    i32.shl
-   local.set $5
-   local.get $4
-   local.get $5
-   call $~lib/rt/itcms/__renew
    local.set $6
-   local.get $6
    local.get $3
+   if
+    local.get $4
+    i32.const 1
+    i32.shl
+    local.tee $7
+    i32.const 1073741820
+    local.tee $8
+    local.get $7
+    local.get $8
+    i32.lt_u
+    select
+    local.tee $8
+    local.get $6
+    local.tee $7
+    local.get $8
+    local.get $7
+    i32.gt_u
+    select
+    local.set $6
+   end
+   local.get $5
+   local.get $6
+   call $~lib/rt/itcms/__renew
+   local.set $8
+   local.get $8
+   local.get $4
    i32.add
    i32.const 0
-   local.get $5
-   local.get $3
-   i32.sub
-   call $~lib/memory/memory.fill
    local.get $6
    local.get $4
+   i32.sub
+   call $~lib/memory/memory.fill
+   local.get $8
+   local.get $5
    i32.ne
    if
     local.get $0
-    local.get $6
+    local.get $8
     i32.store
     local.get $0
-    local.get $6
+    local.get $8
     i32.store offset=4
     local.get $0
-    local.get $6
+    local.get $8
     i32.const 0
     call $~lib/rt/itcms/__link
    end
    local.get $0
-   local.get $5
+   local.get $6
    i32.store offset=8
   end
  )
@@ -4160,7 +4224,8 @@
   local.get $0
   local.get $3
   i32.const 2
-  call $~lib/array/ensureSize
+  i32.const 1
+  call $~lib/array/ensureCapacity
   i32.const 1
   drop
   local.get $0
@@ -4179,6 +4244,11 @@
   local.get $3
   call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#set:length_
   local.get $3
+ )
+ (func $~lib/string/String.__concat (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
+  call $~lib/string/String#concat
  )
  (func $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length (param $0 i32) (result i32)
   local.get $0
@@ -4235,6 +4305,48 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
+ (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  local.get $0
+  local.get $1
+  i32.eq
+  if
+   i32.const 1
+   return
+  end
+  local.get $0
+  i32.const 0
+  i32.eq
+  if (result i32)
+   i32.const 1
+  else
+   local.get $1
+   i32.const 0
+   i32.eq
+  end
+  if
+   i32.const 0
+   return
+  end
+  local.get $0
+  call $~lib/string/String#get:length
+  local.set $2
+  local.get $2
+  local.get $1
+  call $~lib/string/String#get:length
+  i32.ne
+  if
+   i32.const 0
+   return
+  end
+  local.get $0
+  i32.const 0
+  local.get $1
+  i32.const 0
+  local.get $2
+  call $~lib/util/string/compareImpl
+  i32.eqz
+ )
  (func $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#push (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -4248,7 +4360,8 @@
   local.get $0
   local.get $3
   i32.const 2
-  call $~lib/array/ensureSize
+  i32.const 1
+  call $~lib/array/ensureCapacity
   i32.const 1
   drop
   local.get $0
@@ -4358,14 +4471,14 @@
     i32.const 100
     i32.rem_u
     local.set $7
-    i32.const 2828
+    i32.const 2796
     local.get $6
     i32.const 2
     i32.shl
     i32.add
     i64.load32_u
     local.set $8
-    i32.const 2828
+    i32.const 2796
     local.get $7
     i32.const 2
     i32.shl
@@ -4408,7 +4521,7 @@
    i32.const 2
    i32.sub
    local.set $2
-   i32.const 2828
+   i32.const 2796
    local.get $10
    i32.const 2
    i32.shl
@@ -4431,7 +4544,7 @@
    i32.const 2
    i32.sub
    local.set $2
-   i32.const 2828
+   i32.const 2796
    local.get $1
    i32.const 2
    i32.shl
@@ -4481,7 +4594,7 @@
     i32.const 1
     i32.shl
     i32.add
-    i32.const 3248
+    i32.const 3216
     local.get $1
     i32.wrap_i64
     i32.const 255
@@ -4503,7 +4616,7 @@
   i32.and
   if
    local.get $0
-   i32.const 3248
+   i32.const 3216
    local.get $1
    i32.wrap_i64
    i32.const 6
@@ -4626,7 +4739,7 @@
     i32.const 1
     i32.shl
     i32.add
-    i32.const 4304
+    i32.const 4272
     local.get $1
     local.get $6
     i64.and
@@ -4662,7 +4775,7 @@
     i32.const 1
     i32.shl
     i32.add
-    i32.const 4304
+    i32.const 4272
     local.get $1
     local.get $6
     local.get $4
@@ -4690,6 +4803,37 @@
   local.get $1
   call $~lib/util/number/itoa32
  )
+ (func $examples/markdown-parser/assembly/parser/parser/addTokensToAst (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 0
+  local.set $2
+  loop $for-loop|0
+   local.get $2
+   local.get $0
+   call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
+   i32.lt_s
+   local.set $3
+   local.get $3
+   if
+    local.get $1
+    local.get $0
+    local.get $2
+    call $examples/markdown-parser/assembly/parser/parser/addAstNode
+    local.set $4
+    local.get $2
+    local.get $4
+    i32.add
+    local.set $2
+    local.get $2
+    i32.const 1
+    i32.add
+    local.set $2
+    br $for-loop|0
+   end
+  end
+ )
  (func $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#get:length (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
@@ -4707,7 +4851,7 @@
    i32.const 3
    i32.eq
    if
-    i32.const 5456
+    i32.const 5424
     i32.const 1056
     i32.const 337
     i32.const 7
@@ -4739,7 +4883,7 @@
   i32.const 3
   i32.ne
   if
-   i32.const 5520
+   i32.const 5488
    i32.const 1056
    i32.const 351
    i32.const 5
@@ -4809,11 +4953,6 @@
   i32.const 0
   drop
   i32.const 0
-  if (result i32)
-   i32.const 1
-  else
-   i32.const 0
-  end
   drop
  )
  (func $~lib/rt/__visit_globals (param $0 i32)
@@ -4824,22 +4963,22 @@
   i32.const 896
   local.get $0
   call $~lib/rt/itcms/__visit
-  i32.const 2496
+  i32.const 2464
   local.get $0
   call $~lib/rt/itcms/__visit
   i32.const 992
   local.get $0
   call $~lib/rt/itcms/__visit
-  i32.const 5456
+  i32.const 5424
   local.get $0
   call $~lib/rt/itcms/__visit
-  i32.const 5520
+  i32.const 5488
   local.get $0
   call $~lib/rt/itcms/__visit
-  i32.const 3248
+  i32.const 3216
   local.get $0
   call $~lib/rt/itcms/__visit
-  i32.const 4304
+  i32.const 4272
   local.get $0
   call $~lib/rt/itcms/__visit
   global.get $examples/markdown-parser/assembly/tokenizer/tokenizer/tokens
@@ -5099,345 +5238,6 @@
    call $~lib/rt/itcms/__visit
   end
  )
- (func $~lib/typedarray/Int8Array~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/arraybuffer/ArrayBufferView~visit
- )
- (func $~lib/typedarray/Uint8Array~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/arraybuffer/ArrayBufferView~visit
- )
- (func $~lib/typedarray/Int16Array~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/arraybuffer/ArrayBufferView~visit
- )
- (func $~lib/typedarray/Uint16Array~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/arraybuffer/ArrayBufferView~visit
- )
- (func $~lib/typedarray/Int32Array~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/arraybuffer/ArrayBufferView~visit
- )
- (func $~lib/typedarray/Uint32Array~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/arraybuffer/ArrayBufferView~visit
- )
- (func $~lib/typedarray/Float32Array~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/arraybuffer/ArrayBufferView~visit
- )
- (func $~lib/typedarray/Float64Array~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/arraybuffer/ArrayBufferView~visit
- )
- (func $~lib/typedarray/Int64Array~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/arraybuffer/ArrayBufferView~visit
- )
- (func $~lib/typedarray/Uint64Array~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/arraybuffer/ArrayBufferView~visit
- )
- (func $~lib/array/Array<i32>#__visit (param $0 i32) (param $1 i32)
-  i32.const 0
-  drop
-  local.get $0
-  i32.load
-  local.get $1
-  call $~lib/rt/itcms/__visit
- )
- (func $~lib/array/Array<i32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<i32>#__visit
- )
- (func $~lib/array/Array<i64>#__visit (param $0 i32) (param $1 i32)
-  i32.const 0
-  drop
-  local.get $0
-  i32.load
-  local.get $1
-  call $~lib/rt/itcms/__visit
- )
- (func $~lib/array/Array<i64>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<i64>#__visit
- )
- (func $~lib/array/Array<~lib/string/String>#__visit (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  i32.const 1
-  drop
-  local.get $0
-  i32.load offset=4
-  local.set $2
-  local.get $2
-  local.get $0
-  i32.load offset=12
-  i32.const 2
-  i32.shl
-  i32.add
-  local.set $3
-  loop $while-continue|0
-   local.get $2
-   local.get $3
-   i32.lt_u
-   local.set $4
-   local.get $4
-   if
-    local.get $2
-    i32.load
-    local.set $5
-    local.get $5
-    if
-     local.get $5
-     local.get $1
-     call $~lib/rt/itcms/__visit
-    end
-    local.get $2
-    i32.const 4
-    i32.add
-    local.set $2
-    br $while-continue|0
-   end
-  end
-  local.get $0
-  i32.load
-  local.get $1
-  call $~lib/rt/itcms/__visit
- )
- (func $~lib/array/Array<~lib/string/String>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<~lib/string/String>#__visit
- )
- (func $~lib/array/Array<bool>#__visit (param $0 i32) (param $1 i32)
-  i32.const 0
-  drop
-  local.get $0
-  i32.load
-  local.get $1
-  call $~lib/rt/itcms/__visit
- )
- (func $~lib/array/Array<bool>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<bool>#__visit
- )
- (func $~lib/array/Array<~lib/array/Array<i32>>#__visit (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  i32.const 1
-  drop
-  local.get $0
-  i32.load offset=4
-  local.set $2
-  local.get $2
-  local.get $0
-  i32.load offset=12
-  i32.const 2
-  i32.shl
-  i32.add
-  local.set $3
-  loop $while-continue|0
-   local.get $2
-   local.get $3
-   i32.lt_u
-   local.set $4
-   local.get $4
-   if
-    local.get $2
-    i32.load
-    local.set $5
-    local.get $5
-    if
-     local.get $5
-     local.get $1
-     call $~lib/rt/itcms/__visit
-    end
-    local.get $2
-    i32.const 4
-    i32.add
-    local.set $2
-    br $while-continue|0
-   end
-  end
-  local.get $0
-  i32.load
-  local.get $1
-  call $~lib/rt/itcms/__visit
- )
- (func $~lib/array/Array<~lib/array/Array<i32>>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<~lib/array/Array<i32>>#__visit
- )
- (func $~lib/array/Array<~lib/array/Array<i64>>#__visit (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  i32.const 1
-  drop
-  local.get $0
-  i32.load offset=4
-  local.set $2
-  local.get $2
-  local.get $0
-  i32.load offset=12
-  i32.const 2
-  i32.shl
-  i32.add
-  local.set $3
-  loop $while-continue|0
-   local.get $2
-   local.get $3
-   i32.lt_u
-   local.set $4
-   local.get $4
-   if
-    local.get $2
-    i32.load
-    local.set $5
-    local.get $5
-    if
-     local.get $5
-     local.get $1
-     call $~lib/rt/itcms/__visit
-    end
-    local.get $2
-    i32.const 4
-    i32.add
-    local.set $2
-    br $while-continue|0
-   end
-  end
-  local.get $0
-  i32.load
-  local.get $1
-  call $~lib/rt/itcms/__visit
- )
- (func $~lib/array/Array<~lib/array/Array<i64>>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<~lib/array/Array<i64>>#__visit
- )
- (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__visit (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  i32.const 1
-  drop
-  local.get $0
-  i32.load offset=4
-  local.set $2
-  local.get $2
-  local.get $0
-  i32.load offset=12
-  i32.const 2
-  i32.shl
-  i32.add
-  local.set $3
-  loop $while-continue|0
-   local.get $2
-   local.get $3
-   i32.lt_u
-   local.set $4
-   local.get $4
-   if
-    local.get $2
-    i32.load
-    local.set $5
-    local.get $5
-    if
-     local.get $5
-     local.get $1
-     call $~lib/rt/itcms/__visit
-    end
-    local.get $2
-    i32.const 4
-    i32.add
-    local.set $2
-    br $while-continue|0
-   end
-  end
-  local.get $0
-  i32.load
-  local.get $1
-  call $~lib/rt/itcms/__visit
- )
- (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__visit
- )
- (func $~lib/array/Array<~lib/array/Array<bool>>#__visit (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  i32.const 1
-  drop
-  local.get $0
-  i32.load offset=4
-  local.set $2
-  local.get $2
-  local.get $0
-  i32.load offset=12
-  i32.const 2
-  i32.shl
-  i32.add
-  local.set $3
-  loop $while-continue|0
-   local.get $2
-   local.get $3
-   i32.lt_u
-   local.set $4
-   local.get $4
-   if
-    local.get $2
-    i32.load
-    local.set $5
-    local.get $5
-    if
-     local.get $5
-     local.get $1
-     call $~lib/rt/itcms/__visit
-    end
-    local.get $2
-    i32.const 4
-    i32.add
-    local.set $2
-    br $while-continue|0
-   end
-  end
-  local.get $0
-  i32.load
-  local.get $1
-  call $~lib/rt/itcms/__visit
- )
- (func $~lib/array/Array<~lib/array/Array<bool>>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<~lib/array/Array<bool>>#__visit
- )
  (func $examples/markdown-parser/assembly/tokenizer/token/Token~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
@@ -5590,130 +5390,22 @@
     block $examples/markdown-parser/assembly/parser/ast/AstNode
      block $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>
       block $examples/markdown-parser/assembly/tokenizer/token/Token
-       block $~lib/array/Array<~lib/array/Array<bool>>
-        block $~lib/array/Array<~lib/array/Array<~lib/string/String>>
-         block $~lib/array/Array<~lib/array/Array<i64>>
-          block $~lib/array/Array<~lib/array/Array<i32>>
-           block $~lib/array/Array<bool>
-            block $~lib/array/Array<~lib/string/String>
-             block $~lib/array/Array<i64>
-              block $~lib/array/Array<i32>
-               block $~lib/typedarray/Uint64Array
-                block $~lib/typedarray/Int64Array
-                 block $~lib/typedarray/Float64Array
-                  block $~lib/typedarray/Float32Array
-                   block $~lib/typedarray/Uint32Array
-                    block $~lib/typedarray/Int32Array
-                     block $~lib/typedarray/Uint16Array
-                      block $~lib/typedarray/Int16Array
-                       block $~lib/typedarray/Uint8Array
-                        block $~lib/typedarray/Int8Array
-                         block $~lib/arraybuffer/ArrayBufferView
-                          block $~lib/string/String
-                           block $~lib/arraybuffer/ArrayBuffer
-                            local.get $0
-                            i32.const 8
-                            i32.sub
-                            i32.load
-                            br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/typedarray/Int8Array $~lib/typedarray/Uint8Array $~lib/typedarray/Int16Array $~lib/typedarray/Uint16Array $~lib/typedarray/Int32Array $~lib/typedarray/Uint32Array $~lib/typedarray/Float32Array $~lib/typedarray/Float64Array $~lib/typedarray/Int64Array $~lib/typedarray/Uint64Array $~lib/array/Array<i32> $~lib/array/Array<i64> $~lib/array/Array<~lib/string/String> $~lib/array/Array<bool> $~lib/array/Array<~lib/array/Array<i32>> $~lib/array/Array<~lib/array/Array<i64>> $~lib/array/Array<~lib/array/Array<~lib/string/String>> $~lib/array/Array<~lib/array/Array<bool>> $examples/markdown-parser/assembly/tokenizer/token/Token $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token> $examples/markdown-parser/assembly/parser/ast/AstNode $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode> $invalid
-                           end
-                           return
-                          end
-                          return
-                         end
-                         local.get $0
-                         local.get $1
-                         call $~lib/arraybuffer/ArrayBufferView~visit
-                         return
-                        end
-                        local.get $0
-                        local.get $1
-                        call $~lib/typedarray/Int8Array~visit
-                        return
-                       end
-                       local.get $0
-                       local.get $1
-                       call $~lib/typedarray/Uint8Array~visit
-                       return
-                      end
-                      local.get $0
-                      local.get $1
-                      call $~lib/typedarray/Int16Array~visit
-                      return
-                     end
-                     local.get $0
-                     local.get $1
-                     call $~lib/typedarray/Uint16Array~visit
-                     return
-                    end
-                    local.get $0
-                    local.get $1
-                    call $~lib/typedarray/Int32Array~visit
-                    return
-                   end
-                   local.get $0
-                   local.get $1
-                   call $~lib/typedarray/Uint32Array~visit
-                   return
-                  end
-                  local.get $0
-                  local.get $1
-                  call $~lib/typedarray/Float32Array~visit
-                  return
-                 end
-                 local.get $0
-                 local.get $1
-                 call $~lib/typedarray/Float64Array~visit
-                 return
-                end
-                local.get $0
-                local.get $1
-                call $~lib/typedarray/Int64Array~visit
-                return
-               end
-               local.get $0
-               local.get $1
-               call $~lib/typedarray/Uint64Array~visit
-               return
-              end
-              local.get $0
-              local.get $1
-              call $~lib/array/Array<i32>~visit
-              return
-             end
-             local.get $0
-             local.get $1
-             call $~lib/array/Array<i64>~visit
-             return
-            end
-            local.get $0
-            local.get $1
-            call $~lib/array/Array<~lib/string/String>~visit
-            return
-           end
-           local.get $0
-           local.get $1
-           call $~lib/array/Array<bool>~visit
-           return
-          end
+       block $~lib/arraybuffer/ArrayBufferView
+        block $~lib/string/String
+         block $~lib/arraybuffer/ArrayBuffer
           local.get $0
-          local.get $1
-          call $~lib/array/Array<~lib/array/Array<i32>>~visit
-          return
+          i32.const 8
+          i32.sub
+          i32.load
+          br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $examples/markdown-parser/assembly/tokenizer/token/Token $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token> $examples/markdown-parser/assembly/parser/ast/AstNode $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode> $invalid
          end
-         local.get $0
-         local.get $1
-         call $~lib/array/Array<~lib/array/Array<i64>>~visit
          return
         end
-        local.get $0
-        local.get $1
-        call $~lib/array/Array<~lib/array/Array<~lib/string/String>>~visit
         return
        end
        local.get $0
        local.get $1
-       call $~lib/array/Array<~lib/array/Array<bool>>~visit
+       call $~lib/arraybuffer/ArrayBufferView~visit
        return
       end
       local.get $0
@@ -5746,395 +5438,51 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 22176
-   i32.const 22224
+   i32.const 22000
+   i32.const 22048
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $~lib/string/String#charAt (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  local.get $1
-  local.get $0
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store
-  local.get $3
-  call $~lib/string/String#get:length
-  i32.ge_u
-  if
-   i32.const 1600
-   local.set $3
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $3
-   return
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2
-  i32.const 1
-  call $~lib/rt/itcms/__new
-  local.tee $2
-  i32.store offset=4
-  local.get $2
-  local.get $0
-  local.get $1
-  i32.const 1
-  i32.shl
-  i32.add
-  i32.load16_u
-  i32.store16
-  local.get $2
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
- )
- (func $~lib/string/String#indexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  local.get $1
-  local.set $8
-  global.get $~lib/memory/__stack_pointer
-  local.get $8
-  i32.store
-  local.get $8
-  call $~lib/string/String#get:length
-  local.set $3
-  local.get $3
-  i32.eqz
-  if
-   i32.const 0
-   local.set $8
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $8
-   return
-  end
-  local.get $0
-  local.set $8
-  global.get $~lib/memory/__stack_pointer
-  local.get $8
-  i32.store
-  local.get $8
-  call $~lib/string/String#get:length
-  local.set $4
-  local.get $4
-  i32.eqz
-  if
-   i32.const -1
-   local.set $8
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $8
-   return
-  end
-  local.get $2
-  local.tee $5
-  i32.const 0
-  local.tee $6
-  local.get $5
-  local.get $6
-  i32.gt_s
-  select
-  local.tee $6
-  local.get $4
-  local.tee $5
-  local.get $6
-  local.get $5
-  i32.lt_s
-  select
-  local.set $7
-  local.get $4
-  local.get $3
-  i32.sub
-  local.set $4
-  loop $for-loop|0
-   local.get $7
-   local.get $4
-   i32.le_s
-   local.set $6
-   local.get $6
-   if
-    local.get $0
-    local.set $8
-    global.get $~lib/memory/__stack_pointer
-    local.get $8
-    i32.store
-    local.get $8
-    local.get $7
-    local.get $1
-    local.set $8
-    global.get $~lib/memory/__stack_pointer
-    local.get $8
-    i32.store offset=4
-    local.get $8
-    i32.const 0
-    local.get $3
-    call $~lib/util/string/compareImpl
-    i32.eqz
-    if
-     local.get $7
-     local.set $8
-     global.get $~lib/memory/__stack_pointer
-     i32.const 8
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     local.get $8
-     return
-    end
-    local.get $7
-    i32.const 1
-    i32.add
-    local.set $7
-    br $for-loop|0
-   end
-  end
-  i32.const -1
-  local.set $8
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $8
- )
- (func $~lib/string/String#includes (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  local.get $0
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store
-  local.get $3
-  local.get $1
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store offset=4
-  local.get $3
-  local.get $2
-  call $~lib/string/String#indexOf
-  i32.const -1
-  i32.ne
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
- )
  (func $examples/markdown-parser/assembly/tokenizer/tokenizer/isWhitespace (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  local.get $0
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
+  i32.const 0
   i32.store
-  local.get $1
+  local.get $0
   i32.const 1664
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
-  i32.store offset=4
+  i32.store
   local.get $1
   i32.const 0
   call $~lib/string/String#includes
   local.set $1
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
- )
- (func $~lib/string/String#concat (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store offset=8
-  local.get $1
-  i32.const 0
-  i32.eq
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1696
-   local.tee $1
-   i32.store
-  end
-  local.get $0
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  call $~lib/string/String#get:length
-  i32.const 1
-  i32.shl
-  local.set $2
-  local.get $1
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  call $~lib/string/String#get:length
-  i32.const 1
-  i32.shl
-  local.set $3
-  local.get $2
-  local.get $3
-  i32.add
-  local.set $4
-  local.get $4
-  i32.const 0
-  i32.eq
-  if
-   i32.const 1600
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   i32.const 12
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $6
-   return
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.const 1
-  call $~lib/rt/itcms/__new
-  local.tee $5
-  i32.store offset=8
-  local.get $5
-  local.get $0
-  local.get $2
-  call $~lib/memory/memory.copy
-  local.get $5
-  local.get $2
-  i32.add
-  local.get $1
-  local.get $3
-  call $~lib/memory/memory.copy
-  local.get $5
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $6
- )
- (func $~lib/string/String.__concat (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  local.get $0
-  i32.const 1696
-  local.get $0
-  i32.const 0
-  i32.ne
-  select
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  local.get $1
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store offset=4
-  local.get $2
-  call $~lib/string/String#concat
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
  )
  (func $examples/markdown-parser/assembly/tokenizer/tokenizer/checkForTriplet (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store offset=8
+  i32.store
   local.get $2
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store offset=8
-  local.get $3
   local.get $1
   i32.const 0
   i32.add
@@ -6145,20 +5493,10 @@
   i32.store
   local.get $3
   local.get $0
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store offset=4
-  local.get $3
   i32.const 0
   call $~lib/string/String#includes
   if (result i32)
    local.get $2
-   local.set $3
-   global.get $~lib/memory/__stack_pointer
-   local.get $3
-   i32.store offset=8
-   local.get $3
    local.get $1
    i32.const 1
    i32.add
@@ -6169,11 +5507,6 @@
    i32.store
    local.get $3
    local.get $0
-   local.set $3
-   global.get $~lib/memory/__stack_pointer
-   local.get $3
-   i32.store offset=4
-   local.get $3
    i32.const 0
    call $~lib/string/String#includes
   else
@@ -6181,11 +5514,6 @@
   end
   if (result i32)
    local.get $2
-   local.set $3
-   global.get $~lib/memory/__stack_pointer
-   local.get $3
-   i32.store offset=8
-   local.get $3
    local.get $1
    i32.const 2
    i32.add
@@ -6196,11 +5524,6 @@
    i32.store
    local.get $3
    local.get $0
-   local.set $3
-   global.get $~lib/memory/__stack_pointer
-   local.get $3
-   i32.store offset=4
-   local.get $3
    i32.const 0
    call $~lib/string/String#includes
   else
@@ -6208,7 +5531,7 @@
   end
   local.set $3
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $3
@@ -6244,16 +5567,11 @@
   local.get $2
   call $examples/markdown-parser/assembly/tokenizer/token/Token#set:value
   local.get $2
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
   i32.const 1632
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=8
+  i32.store offset=4
   local.get $6
   i32.const 0
   call $~lib/string/String#includes
@@ -6265,14 +5583,9 @@
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
-   local.get $6
-   local.get $3
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.store offset=8
    local.get $6
+   local.get $3
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#push
    drop
    i32.const 0
@@ -6285,11 +5598,6 @@
    return
   end
   local.get $2
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
   call $examples/markdown-parser/assembly/tokenizer/tokenizer/isWhitespace
   if
    local.get $3
@@ -6304,22 +5612,12 @@
    loop $while-continue|0
     local.get $4
     local.get $0
-    local.set $6
-    global.get $~lib/memory/__stack_pointer
-    local.get $6
-    i32.store offset=4
-    local.get $6
     call $~lib/string/String#get:length
     local.get $1
     i32.sub
     i32.lt_s
     if (result i32)
      local.get $0
-     local.set $6
-     global.get $~lib/memory/__stack_pointer
-     local.get $6
-     i32.store offset=8
-     local.get $6
      local.get $1
      local.get $4
      i32.add
@@ -6327,7 +5625,7 @@
      local.set $6
      global.get $~lib/memory/__stack_pointer
      local.get $6
-     i32.store offset=4
+     i32.store offset=8
      local.get $6
      call $examples/markdown-parser/assembly/tokenizer/tokenizer/isWhitespace
     else
@@ -6338,16 +5636,11 @@
     if
      global.get $~lib/memory/__stack_pointer
      local.get $2
-     local.set $6
-     global.get $~lib/memory/__stack_pointer
-     local.get $6
-     i32.store offset=4
-     local.get $6
      i32.const 1664
      local.set $6
      global.get $~lib/memory/__stack_pointer
      local.get $6
-     i32.store offset=8
+     i32.store offset=4
      local.get $6
      call $~lib/string/String.__concat
      local.tee $2
@@ -6366,14 +5659,9 @@
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
-   local.get $6
-   local.get $3
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.store offset=8
    local.get $6
+   local.get $3
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#push
    drop
    local.get $4
@@ -6388,16 +5676,11 @@
    return
   end
   local.get $2
+  i32.const 1696
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
   i32.store offset=4
-  local.get $6
-  i32.const 1728
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=8
   local.get $6
   i32.const 0
   call $~lib/string/String#includes
@@ -6406,20 +5689,15 @@
    global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.HEADER
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:type
    local.get $3
-   i32.const 1728
+   i32.const 1696
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:value
    global.get $examples/markdown-parser/assembly/tokenizer/tokenizer/tokens
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
-   local.get $6
-   local.get $3
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.store offset=8
    local.get $6
+   local.get $3
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#push
    drop
    i32.const 0
@@ -6432,26 +5710,16 @@
    return
   end
   local.get $2
+  i32.const 1728
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
   i32.store offset=4
   local.get $6
-  i32.const 1760
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=8
-  local.get $6
   i32.const 0
   call $~lib/string/String#includes
   if (result i32)
    local.get $0
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
-   i32.store offset=16
-   local.get $6
    local.get $1
    i32.const 1
    i32.add
@@ -6459,13 +5727,13 @@
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
+   i32.store offset=8
    local.get $6
-   i32.const 1760
+   i32.const 1728
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=8
+   i32.store offset=4
    local.get $6
    i32.const 0
    call $~lib/string/String#includes
@@ -6477,20 +5745,15 @@
    global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.ITALICS
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:type
    local.get $3
-   i32.const 1792
+   i32.const 1760
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:value
    global.get $examples/markdown-parser/assembly/tokenizer/tokenizer/tokens
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
-   local.get $6
-   local.get $3
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.store offset=8
    local.get $6
+   local.get $3
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#push
    drop
    i32.const 1
@@ -6503,26 +5766,16 @@
    return
   end
   local.get $2
+  i32.const 1792
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
   i32.store offset=4
   local.get $6
-  i32.const 1824
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=8
-  local.get $6
   i32.const 0
   call $~lib/string/String#includes
   if (result i32)
    local.get $0
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
-   i32.store offset=16
-   local.get $6
    local.get $1
    i32.const 1
    i32.add
@@ -6530,13 +5783,13 @@
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
+   i32.store offset=8
    local.get $6
-   i32.const 1824
+   i32.const 1792
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=8
+   i32.store offset=4
    local.get $6
    i32.const 0
    call $~lib/string/String#includes
@@ -6548,20 +5801,15 @@
    global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.BOLD
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:type
    local.get $3
-   i32.const 1856
+   i32.const 1824
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:value
    global.get $examples/markdown-parser/assembly/tokenizer/tokenizer/tokens
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
-   local.get $6
-   local.get $3
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.store offset=8
    local.get $6
+   local.get $3
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#push
    drop
    i32.const 1
@@ -6574,26 +5822,16 @@
    return
   end
   local.get $2
+  i32.const 1856
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
   i32.store offset=4
   local.get $6
-  i32.const 1888
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=8
-  local.get $6
   i32.const 0
   call $~lib/string/String#includes
   if (result i32)
    local.get $0
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
-   i32.store offset=16
-   local.get $6
    local.get $1
    i32.const 1
    i32.add
@@ -6601,13 +5839,13 @@
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
+   i32.store offset=8
    local.get $6
-   i32.const 1888
+   i32.const 1856
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=8
+   i32.store offset=4
    local.get $6
    i32.const 0
    call $~lib/string/String#includes
@@ -6619,20 +5857,15 @@
    global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.STRIKETHROUGH
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:type
    local.get $3
-   i32.const 1920
+   i32.const 1888
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:value
    global.get $examples/markdown-parser/assembly/tokenizer/tokenizer/tokens
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
-   local.get $6
-   local.get $3
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.store offset=8
    local.get $6
+   local.get $3
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#push
    drop
    i32.const 1
@@ -6645,26 +5878,16 @@
    return
   end
   local.get $2
+  i32.const 1728
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
   i32.store offset=4
   local.get $6
-  i32.const 1760
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=8
-  local.get $6
   i32.const 0
   call $~lib/string/String#includes
   if (result i32)
    local.get $0
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
-   i32.store offset=8
-   local.get $6
    local.get $1
    i32.const 1
    i32.add
@@ -6672,7 +5895,7 @@
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
+   i32.store offset=8
    local.get $6
    call $examples/markdown-parser/assembly/tokenizer/tokenizer/isWhitespace
   else
@@ -6683,20 +5906,15 @@
    global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.UNORDERED_LIST_ITEM
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:type
    local.get $3
-   i32.const 1952
+   i32.const 1920
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:value
    global.get $examples/markdown-parser/assembly/tokenizer/tokenizer/tokens
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
-   local.get $6
-   local.get $3
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.store offset=8
    local.get $6
+   local.get $3
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#push
    drop
    i32.const 1
@@ -6709,26 +5927,16 @@
    return
   end
   local.get $2
+  i32.const 1952
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
   i32.store offset=4
   local.get $6
-  i32.const 1984
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=8
-  local.get $6
   i32.const 0
   call $~lib/string/String#includes
   if (result i32)
    local.get $0
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
-   i32.store offset=16
-   local.get $6
    local.get $1
    i32.const 1
    i32.add
@@ -6736,13 +5944,13 @@
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
+   i32.store offset=8
    local.get $6
-   i32.const 2016
+   i32.const 1984
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=8
+   i32.store offset=4
    local.get $6
    i32.const 0
    call $~lib/string/String#includes
@@ -6751,11 +5959,6 @@
   end
   if (result i32)
    local.get $0
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
-   i32.store offset=8
-   local.get $6
    local.get $1
    i32.const 2
    i32.add
@@ -6763,7 +5966,7 @@
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
+   i32.store offset=8
    local.get $6
    call $examples/markdown-parser/assembly/tokenizer/tokenizer/isWhitespace
   else
@@ -6774,20 +5977,15 @@
    global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.ORDERED_LIST_ITEM
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:type
    local.get $3
-   i32.const 2048
+   i32.const 2016
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:value
    global.get $examples/markdown-parser/assembly/tokenizer/tokenizer/tokens
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
-   local.get $6
-   local.get $3
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.store offset=8
    local.get $6
+   local.get $3
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#push
    drop
    i32.const 1
@@ -6800,26 +5998,16 @@
    return
   end
   local.get $2
+  i32.const 2048
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
   i32.store offset=4
   local.get $6
-  i32.const 2080
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=8
-  local.get $6
   i32.const 0
   call $~lib/string/String#includes
   if (result i32)
    local.get $0
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
-   i32.store offset=16
-   local.get $6
    local.get $1
    i32.const 1
    i32.add
@@ -6827,13 +6015,13 @@
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
+   i32.store offset=8
    local.get $6
-   i32.const 2112
+   i32.const 2080
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=8
+   i32.store offset=4
    local.get $6
    i32.const 0
    call $~lib/string/String#includes
@@ -6845,20 +6033,15 @@
    global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.IMAGE_START
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:type
    local.get $3
-   i32.const 2144
+   i32.const 2112
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:value
    global.get $examples/markdown-parser/assembly/tokenizer/tokenizer/tokens
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
-   local.get $6
-   local.get $3
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.store offset=8
    local.get $6
+   local.get $3
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#push
    drop
    i32.const 1
@@ -6871,16 +6054,11 @@
    return
   end
   local.get $2
+  i32.const 2080
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
   i32.store offset=4
-  local.get $6
-  i32.const 2112
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=8
   local.get $6
   i32.const 0
   call $~lib/string/String#includes
@@ -6889,20 +6067,15 @@
    global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.BRACKET_START
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:type
    local.get $3
-   i32.const 2112
+   i32.const 2080
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:value
    global.get $examples/markdown-parser/assembly/tokenizer/tokenizer/tokens
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
-   local.get $6
-   local.get $3
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.store offset=8
    local.get $6
+   local.get $3
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#push
    drop
    i32.const 0
@@ -6915,16 +6088,11 @@
    return
   end
   local.get $2
+  i32.const 2144
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
   i32.store offset=4
-  local.get $6
-  i32.const 2176
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=8
   local.get $6
   i32.const 0
   call $~lib/string/String#includes
@@ -6933,20 +6101,15 @@
    global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.BRACKET_END
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:type
    local.get $3
-   i32.const 2176
+   i32.const 2144
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:value
    global.get $examples/markdown-parser/assembly/tokenizer/tokenizer/tokens
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
-   local.get $6
-   local.get $3
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.store offset=8
    local.get $6
+   local.get $3
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#push
    drop
    i32.const 0
@@ -6959,16 +6122,11 @@
    return
   end
   local.get $2
+  i32.const 2176
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
   i32.store offset=4
-  local.get $6
-  i32.const 2208
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=8
   local.get $6
   i32.const 0
   call $~lib/string/String#includes
@@ -6977,20 +6135,15 @@
    global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.PAREN_START
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:type
    local.get $3
-   i32.const 2208
+   i32.const 2176
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:value
    global.get $examples/markdown-parser/assembly/tokenizer/tokenizer/tokens
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
-   local.get $6
-   local.get $3
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.store offset=8
    local.get $6
+   local.get $3
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#push
    drop
    i32.const 0
@@ -7003,16 +6156,11 @@
    return
   end
   local.get $2
+  i32.const 2208
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
   i32.store offset=4
-  local.get $6
-  i32.const 2240
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=8
   local.get $6
   i32.const 0
   call $~lib/string/String#includes
@@ -7021,20 +6169,15 @@
    global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.PAREN_END
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:type
    local.get $3
-   i32.const 2240
+   i32.const 2208
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:value
    global.get $examples/markdown-parser/assembly/tokenizer/tokenizer/tokens
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
-   local.get $6
-   local.get $3
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.store offset=8
    local.get $6
+   local.get $3
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#push
    drop
    i32.const 0
@@ -7047,26 +6190,16 @@
    return
   end
   local.get $2
+  i32.const 2240
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
   i32.store offset=4
   local.get $6
-  i32.const 2272
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=8
-  local.get $6
   i32.const 0
   call $~lib/string/String#includes
   if (result i32)
    local.get $0
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
-   i32.store offset=8
-   local.get $6
    local.get $1
    i32.const 1
    i32.add
@@ -7074,7 +6207,7 @@
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
+   i32.store offset=8
    local.get $6
    call $examples/markdown-parser/assembly/tokenizer/tokenizer/isWhitespace
   else
@@ -7085,20 +6218,15 @@
    global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.BLOCK_QUOTE
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:type
    local.get $3
-   i32.const 2272
+   i32.const 2240
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:value
    global.get $examples/markdown-parser/assembly/tokenizer/tokenizer/tokens
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
-   local.get $6
-   local.get $3
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.store offset=8
    local.get $6
+   local.get $3
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#push
    drop
    i32.const 1
@@ -7110,39 +6238,29 @@
    local.get $6
    return
   end
-  i32.const 2304
+  i32.const 2272
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $1
   local.get $0
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=16
-  local.get $6
   call $examples/markdown-parser/assembly/tokenizer/tokenizer/checkForTriplet
   if
    local.get $3
    global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.CODE_BLOCK
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:type
    local.get $3
-   i32.const 2336
+   i32.const 2304
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:value
    global.get $examples/markdown-parser/assembly/tokenizer/tokenizer/tokens
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
-   local.get $6
-   local.get $3
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.store offset=8
    local.get $6
+   local.get $3
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#push
    drop
    i32.const 2
@@ -7155,16 +6273,11 @@
    return
   end
   local.get $2
+  i32.const 2272
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
   i32.store offset=4
-  local.get $6
-  i32.const 2304
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=8
   local.get $6
   i32.const 0
   call $~lib/string/String#includes
@@ -7173,20 +6286,15 @@
    global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.INLINE_CODE
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:type
    local.get $3
-   i32.const 2304
+   i32.const 2272
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:value
    global.get $examples/markdown-parser/assembly/tokenizer/tokenizer/tokens
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
-   local.get $6
-   local.get $3
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.store offset=8
    local.get $6
+   local.get $3
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#push
    drop
    i32.const 0
@@ -7198,39 +6306,29 @@
    local.get $6
    return
   end
-  i32.const 2368
+  i32.const 2336
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $1
   local.get $0
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=16
-  local.get $6
   call $examples/markdown-parser/assembly/tokenizer/tokenizer/checkForTriplet
   if
    local.get $3
    global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.HORIZONTAL_LINE
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:type
    local.get $3
-   i32.const 2400
+   i32.const 2368
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:value
    global.get $examples/markdown-parser/assembly/tokenizer/tokenizer/tokens
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
-   local.get $6
-   local.get $3
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.store offset=8
    local.get $6
+   local.get $3
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#push
    drop
    i32.const 2
@@ -7242,39 +6340,29 @@
    local.get $6
    return
   end
-  i32.const 2432
+  i32.const 2400
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $1
   local.get $0
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=16
-  local.get $6
   call $examples/markdown-parser/assembly/tokenizer/tokenizer/checkForTriplet
   if
    local.get $3
    global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.HORIZONTAL_LINE
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:type
    local.get $3
-   i32.const 2464
+   i32.const 2432
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:value
    global.get $examples/markdown-parser/assembly/tokenizer/tokenizer/tokens
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
-   local.get $6
-   local.get $3
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.store offset=8
    local.get $6
+   local.get $3
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#push
    drop
    i32.const 2
@@ -7294,7 +6382,7 @@
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
+   i32.store offset=8
    local.get $6
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
    i32.const 0
@@ -7323,13 +6411,13 @@
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
+   i32.store offset=8
    local.get $6
    global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.CHARACTER
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=8
+   i32.store offset=4
    local.get $6
    i32.const 0
    call $~lib/string/String#includes
@@ -7341,13 +6429,13 @@
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
+   i32.store offset=8
    local.get $6
    global.get $examples/markdown-parser/assembly/tokenizer/tokenizer/tokens
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=8
+   i32.store offset=4
    local.get $6
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
    i32.const 1
@@ -7357,13 +6445,13 @@
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=16
+   i32.store offset=4
    local.get $6
    global.get $examples/markdown-parser/assembly/tokenizer/tokenizer/tokens
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=20
+   i32.store offset=16
    local.get $6
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
    i32.const 1
@@ -7373,14 +6461,9 @@
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
-   local.get $6
-   local.get $2
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.store offset=8
    local.get $6
+   local.get $2
    call $~lib/string/String.__concat
    call $examples/markdown-parser/assembly/tokenizer/token/Token#set:value
    i32.const 0
@@ -7402,14 +6485,9 @@
    local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
-   local.get $6
-   local.get $3
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.store offset=8
    local.get $6
+   local.get $3
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#push
    drop
    i32.const 0
@@ -7423,12 +6501,12 @@
   end
   unreachable
  )
- (func $examples/markdown-parser/assembly/tokenizer/tokenizer/markdownTokenizer (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
+ (func $examples/markdown-parser/assembly/parser/parser/getAllTokensUntilTokenReached (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -7440,182 +6518,6 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store offset=8
-  i32.const 0
-  i32.const 0
-  call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#constructor
-  global.set $examples/markdown-parser/assembly/tokenizer/tokenizer/tokens
-  i32.const 0
-  local.set $1
-  loop $for-loop|0
-   local.get $1
-   local.get $0
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store
-   local.get $5
-   call $~lib/string/String#get:length
-   i32.lt_s
-   local.set $2
-   local.get $2
-   if
-    global.get $~lib/memory/__stack_pointer
-    local.get $0
-    local.set $5
-    global.get $~lib/memory/__stack_pointer
-    local.get $5
-    i32.store
-    local.get $5
-    local.get $1
-    call $~lib/string/String#charAt
-    local.tee $3
-    i32.store offset=4
-    local.get $0
-    local.set $5
-    global.get $~lib/memory/__stack_pointer
-    local.get $5
-    i32.store
-    local.get $5
-    local.get $1
-    local.get $3
-    local.set $5
-    global.get $~lib/memory/__stack_pointer
-    local.get $5
-    i32.store offset=8
-    local.get $5
-    call $examples/markdown-parser/assembly/tokenizer/tokenizer/addToken
-    local.set $4
-    local.get $1
-    local.get $4
-    i32.add
-    local.set $1
-    local.get $1
-    i32.const 1
-    i32.add
-    local.set $1
-    br $for-loop|0
-   end
-  end
-  global.get $examples/markdown-parser/assembly/tokenizer/tokenizer/tokens
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $5
- )
- (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  local.get $0
-  local.get $1
-  i32.eq
-  if
-   i32.const 1
-   local.set $3
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $3
-   return
-  end
-  local.get $0
-  i32.const 0
-  i32.eq
-  if (result i32)
-   i32.const 1
-  else
-   local.get $1
-   i32.const 0
-   i32.eq
-  end
-  if
-   i32.const 0
-   local.set $3
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $3
-   return
-  end
-  local.get $0
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store
-  local.get $3
-  call $~lib/string/String#get:length
-  local.set $2
-  local.get $2
-  local.get $1
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store
-  local.get $3
-  call $~lib/string/String#get:length
-  i32.ne
-  if
-   i32.const 0
-   local.set $3
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $3
-   return
-  end
-  local.get $0
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store
-  local.get $3
-  i32.const 0
-  local.get $1
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store offset=4
-  local.get $3
-  i32.const 0
-  local.get $2
-  call $~lib/util/string/compareImpl
-  i32.eqz
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
- )
- (func $examples/markdown-parser/assembly/parser/parser/getAllTokensUntilTokenReached (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 16
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store offset=8
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 0
@@ -7627,11 +6529,6 @@
   loop $for-loop|0
    local.get $4
    local.get $0
-   local.set $7
-   global.get $~lib/memory/__stack_pointer
-   local.get $7
-   i32.store offset=4
-   local.get $7
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
    i32.lt_s
    local.set $5
@@ -7639,51 +6536,26 @@
    if
     global.get $~lib/memory/__stack_pointer
     local.get $0
-    local.set $7
-    global.get $~lib/memory/__stack_pointer
-    local.get $7
-    i32.store offset=4
-    local.get $7
     local.get $4
     call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#__get
     local.tee $6
-    i32.store offset=8
+    i32.store offset=4
     local.get $6
     i32.load offset=4
     local.set $7
     global.get $~lib/memory/__stack_pointer
     local.get $7
-    i32.store offset=4
+    i32.store offset=8
     local.get $7
     local.get $2
-    local.set $7
-    global.get $~lib/memory/__stack_pointer
-    local.get $7
-    i32.store offset=12
-    local.get $7
     call $~lib/string/String.__eq
     if
      local.get $0
-     local.set $7
-     global.get $~lib/memory/__stack_pointer
-     local.get $7
-     i32.store offset=4
-     local.get $7
      call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
      local.set $4
     else
      local.get $3
-     local.set $7
-     global.get $~lib/memory/__stack_pointer
-     local.get $7
-     i32.store offset=4
-     local.get $7
      local.get $6
-     local.set $7
-     global.get $~lib/memory/__stack_pointer
-     local.get $7
-     i32.store offset=12
-     local.get $7
      call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#push
      drop
     end
@@ -7697,7 +6569,7 @@
   local.get $3
   local.set $7
   global.get $~lib/memory/__stack_pointer
-  i32.const 16
+  i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $7
@@ -7708,16 +6580,13 @@
   (local $3 i32)
   (local $4 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 16
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store offset=8
   global.get $~lib/memory/__stack_pointer
   i32.const 1600
   local.tee $1
@@ -7727,11 +6596,6 @@
   loop $for-loop|0
    local.get $2
    local.get $0
-   local.set $4
-   global.get $~lib/memory/__stack_pointer
-   local.get $4
-   i32.store offset=4
-   local.get $4
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
    i32.lt_s
    local.set $3
@@ -7739,24 +6603,14 @@
    if
     global.get $~lib/memory/__stack_pointer
     local.get $1
-    local.set $4
-    global.get $~lib/memory/__stack_pointer
-    local.get $4
-    i32.store offset=4
-    local.get $4
     local.get $0
-    local.set $4
-    global.get $~lib/memory/__stack_pointer
-    local.get $4
-    i32.store offset=12
-    local.get $4
     local.get $2
     call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#__get
     i32.load offset=8
     local.set $4
     global.get $~lib/memory/__stack_pointer
     local.get $4
-    i32.store offset=8
+    i32.store offset=4
     local.get $4
     call $~lib/string/String.__concat
     local.tee $1
@@ -7771,95 +6625,10 @@
   local.get $1
   local.set $4
   global.get $~lib/memory/__stack_pointer
-  i32.const 16
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $4
- )
- (func $examples/markdown-parser/assembly/parser/parser/checkIfTypeIsFoundBeforeOtherType (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 16
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store offset=8
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  local.get $1
-  local.get $2
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  call $examples/markdown-parser/assembly/parser/parser/getAllTokensUntilTokenReached
-  local.tee $4
-  i32.store offset=8
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  local.get $1
-  local.get $3
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  call $examples/markdown-parser/assembly/parser/parser/getAllTokensUntilTokenReached
-  local.tee $5
-  i32.store offset=12
-  local.get $4
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
-  local.get $5
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
-  i32.lt_s
-  if
-   i32.const 1
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   i32.const 16
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $6
-   return
-  else
-   i32.const 0
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   i32.const 16
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $6
-   return
-  end
-  unreachable
  )
  (func $examples/markdown-parser/assembly/parser/parser/addAstNode (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -7912,21 +6681,16 @@
   i32.store
   global.get $~lib/memory/__stack_pointer
   local.get $1
-  local.set $17
-  global.get $~lib/memory/__stack_pointer
-  local.get $17
-  i32.store offset=4
-  local.get $17
   local.get $2
   call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#__get
   local.tee $4
-  i32.store offset=8
+  i32.store offset=4
   local.get $4
   i32.load offset=4
   local.set $17
   global.get $~lib/memory/__stack_pointer
   local.get $17
-  i32.store offset=4
+  i32.store offset=8
   local.get $17
   global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.NEWLINE
   local.set $17
@@ -7944,17 +6708,7 @@
    i32.load offset=8
    call $examples/markdown-parser/assembly/parser/ast/AstNode#set:value
    local.get $0
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=4
-   local.get $17
    local.get $3
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=12
-   local.get $17
    call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#push
    drop
    i32.const 0
@@ -7971,7 +6725,7 @@
   local.set $17
   global.get $~lib/memory/__stack_pointer
   local.get $17
-  i32.store offset=4
+  i32.store offset=8
   local.get $17
   global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.WHITESPACE
   local.set $17
@@ -7989,17 +6743,7 @@
    i32.load offset=8
    call $examples/markdown-parser/assembly/parser/ast/AstNode#set:value
    local.get $0
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=4
-   local.get $17
    local.get $3
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=12
-   local.get $17
    call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#push
    drop
    i32.const 0
@@ -8016,7 +6760,7 @@
   local.set $17
   global.get $~lib/memory/__stack_pointer
   local.get $17
-  i32.store offset=4
+  i32.store offset=8
   local.get $17
   global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.HEADER
   local.set $17
@@ -8037,22 +6781,12 @@
     i32.const 1
     i32.add
     local.get $1
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
     i32.const 1
     i32.sub
     i32.lt_s
     if (result i32)
      local.get $1
-     local.set $17
-     global.get $~lib/memory/__stack_pointer
-     local.get $17
-     i32.store offset=4
-     local.get $17
      local.get $2
      local.get $5
      i32.add
@@ -8080,11 +6814,6 @@
     end
    end
    local.get $1
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=4
-   local.get $17
    local.get $2
    local.get $5
    i32.add
@@ -8101,11 +6830,6 @@
     local.set $5
     global.get $~lib/memory/__stack_pointer
     local.get $1
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     local.get $2
     local.get $5
     i32.add
@@ -8122,20 +6846,10 @@
     i32.store offset=20
     global.get $~lib/memory/__stack_pointer
     local.get $7
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     call $examples/markdown-parser/assembly/parser/parser/getTokensAsString
     local.tee $8
     i32.store offset=24
     local.get $7
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
     local.set $9
     local.get $3
@@ -8151,25 +6865,10 @@
     i32.add
     local.set $5
     local.get $0
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     local.get $3
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=12
-    local.get $17
     call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#push
     drop
     local.get $7
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     local.get $3
     i32.load offset=8
     local.set $17
@@ -8195,7 +6894,7 @@
   local.set $17
   global.get $~lib/memory/__stack_pointer
   local.get $17
-  i32.store offset=4
+  i32.store offset=8
   local.get $17
   global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.ITALICS
   local.set $17
@@ -8206,11 +6905,6 @@
   call $~lib/string/String.__eq
   if
    local.get $1
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=4
-   local.get $17
    local.get $2
    i32.const 1
    i32.add
@@ -8230,11 +6924,6 @@
    if
     global.get $~lib/memory/__stack_pointer
     local.get $1
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     local.get $2
     i32.const 1
     i32.add
@@ -8249,31 +6938,16 @@
     i32.store offset=32
     global.get $~lib/memory/__stack_pointer
     local.get $6
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     call $examples/markdown-parser/assembly/parser/parser/getTokensAsString
     local.tee $5
     i32.store offset=36
     local.get $6
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
     local.set $9
     local.get $3
     global.get $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.ITALICS
     call $examples/markdown-parser/assembly/parser/ast/AstNode#set:type
     local.get $6
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     local.get $3
     i32.load offset=8
     local.set $17
@@ -8283,17 +6957,7 @@
     local.get $17
     call $examples/markdown-parser/assembly/parser/parser/addTokensToAst
     local.get $0
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     local.get $3
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=12
-    local.get $17
     call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#push
     drop
     local.get $9
@@ -8313,7 +6977,7 @@
   local.set $17
   global.get $~lib/memory/__stack_pointer
   local.get $17
-  i32.store offset=4
+  i32.store offset=8
   local.get $17
   global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.BOLD
   local.set $17
@@ -8324,11 +6988,6 @@
   call $~lib/string/String.__eq
   if
    local.get $1
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=4
-   local.get $17
    local.get $2
    i32.const 1
    i32.add
@@ -8348,11 +7007,6 @@
    if
     global.get $~lib/memory/__stack_pointer
     local.get $1
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     local.get $2
     i32.const 1
     i32.add
@@ -8367,31 +7021,16 @@
     i32.store offset=40
     global.get $~lib/memory/__stack_pointer
     local.get $9
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     call $examples/markdown-parser/assembly/parser/parser/getTokensAsString
     local.tee $5
     i32.store offset=36
     local.get $9
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
     local.set $6
     local.get $3
     global.get $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.BOLD
     call $examples/markdown-parser/assembly/parser/ast/AstNode#set:type
     local.get $9
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     local.get $3
     i32.load offset=8
     local.set $17
@@ -8401,17 +7040,7 @@
     local.get $17
     call $examples/markdown-parser/assembly/parser/parser/addTokensToAst
     local.get $0
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     local.get $3
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=12
-    local.get $17
     call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#push
     drop
     local.get $6
@@ -8431,7 +7060,7 @@
   local.set $17
   global.get $~lib/memory/__stack_pointer
   local.get $17
-  i32.store offset=4
+  i32.store offset=8
   local.get $17
   global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.STRIKETHROUGH
   local.set $17
@@ -8442,11 +7071,6 @@
   call $~lib/string/String.__eq
   if
    local.get $1
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=4
-   local.get $17
    local.get $2
    i32.const 1
    i32.add
@@ -8466,11 +7090,6 @@
    if
     global.get $~lib/memory/__stack_pointer
     local.get $1
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     local.get $2
     i32.const 1
     i32.add
@@ -8485,31 +7104,16 @@
     i32.store offset=32
     global.get $~lib/memory/__stack_pointer
     local.get $6
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     call $examples/markdown-parser/assembly/parser/parser/getTokensAsString
     local.tee $5
     i32.store offset=36
     local.get $6
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
     local.set $9
     local.get $3
     global.get $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.STRIKETHROUGH
     call $examples/markdown-parser/assembly/parser/ast/AstNode#set:type
     local.get $6
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     local.get $3
     i32.load offset=8
     local.set $17
@@ -8519,17 +7123,7 @@
     local.get $17
     call $examples/markdown-parser/assembly/parser/parser/addTokensToAst
     local.get $0
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     local.get $3
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=12
-    local.get $17
     call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#push
     drop
     local.get $9
@@ -8549,7 +7143,7 @@
   local.set $17
   global.get $~lib/memory/__stack_pointer
   local.get $17
-  i32.store offset=4
+  i32.store offset=8
   local.get $17
   global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.UNORDERED_LIST_ITEM
   local.set $17
@@ -8566,7 +7160,7 @@
    local.set $17
    global.get $~lib/memory/__stack_pointer
    local.get $17
-   i32.store offset=4
+   i32.store offset=8
    local.get $17
    global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.ORDERED_LIST_ITEM
    local.set $17
@@ -8586,7 +7180,7 @@
    local.set $17
    global.get $~lib/memory/__stack_pointer
    local.get $17
-   i32.store offset=4
+   i32.store offset=8
    local.get $17
    global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.UNORDERED_LIST_ITEM
    local.set $17
@@ -8613,17 +7207,7 @@
     i32.store offset=40
    end
    local.get $0
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=4
-   local.get $17
    local.get $3
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=12
-   local.get $17
    call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#push
    drop
    i32.const 0
@@ -8637,20 +7221,10 @@
     local.get $6
     i32.add
     local.get $1
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
     i32.lt_s
     if (result i32)
      local.get $1
-     local.set $17
-     global.get $~lib/memory/__stack_pointer
-     local.get $17
-     i32.store offset=16
-     local.get $17
      local.get $8
      local.get $6
      i32.add
@@ -8659,14 +7233,9 @@
      local.set $17
      global.get $~lib/memory/__stack_pointer
      local.get $17
-     i32.store offset=4
+     i32.store offset=8
      local.get $17
      local.get $9
-     local.set $17
-     global.get $~lib/memory/__stack_pointer
-     local.get $17
-     i32.store offset=12
-     local.get $17
      call $~lib/string/String.__eq
     else
      i32.const 0
@@ -8691,11 +7260,6 @@
      call $examples/markdown-parser/assembly/parser/ast/AstNode#set:type
      global.get $~lib/memory/__stack_pointer
      local.get $1
-     local.set $17
-     global.get $~lib/memory/__stack_pointer
-     local.get $17
-     i32.store offset=4
-     local.get $17
      local.get $8
      i32.const 1
      i32.add
@@ -8710,28 +7274,13 @@
      i32.store offset=48
      global.get $~lib/memory/__stack_pointer
      local.get $11
-     local.set $17
-     global.get $~lib/memory/__stack_pointer
-     local.get $17
-     i32.store offset=4
-     local.get $17
      call $examples/markdown-parser/assembly/parser/parser/getTokensAsString
      local.tee $12
      i32.store offset=52
      local.get $11
-     local.set $17
-     global.get $~lib/memory/__stack_pointer
-     local.get $17
-     i32.store offset=4
-     local.get $17
      call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
      local.set $13
      local.get $11
-     local.set $17
-     global.get $~lib/memory/__stack_pointer
-     local.get $17
-     i32.store offset=4
-     local.get $17
      local.get $10
      i32.load offset=8
      local.set $17
@@ -8745,14 +7294,9 @@
      local.set $17
      global.get $~lib/memory/__stack_pointer
      local.get $17
-     i32.store offset=4
+     i32.store offset=8
      local.get $17
      local.get $10
-     local.set $17
-     global.get $~lib/memory/__stack_pointer
-     local.get $17
-     i32.store offset=12
-     local.get $17
      call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#push
      drop
      local.get $13
@@ -8774,20 +7318,10 @@
       local.get $6
       i32.add
       local.get $1
-      local.set $17
-      global.get $~lib/memory/__stack_pointer
-      local.get $17
-      i32.store offset=4
-      local.get $17
       call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
       i32.lt_s
       if (result i32)
        local.get $1
-       local.set $17
-       global.get $~lib/memory/__stack_pointer
-       local.get $17
-       i32.store offset=16
-       local.get $17
        local.get $8
        local.get $6
        i32.add
@@ -8796,7 +7330,7 @@
        local.set $17
        global.get $~lib/memory/__stack_pointer
        local.get $17
-       i32.store offset=4
+       i32.store offset=8
        local.get $17
        global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.WHITESPACE
        local.set $17
@@ -8835,7 +7369,7 @@
   local.set $17
   global.get $~lib/memory/__stack_pointer
   local.get $17
-  i32.store offset=4
+  i32.store offset=8
   local.get $17
   global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.IMAGE_START
   local.set $17
@@ -8847,11 +7381,6 @@
   if
    global.get $~lib/memory/__stack_pointer
    local.get $1
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=4
-   local.get $17
    local.get $2
    i32.const 1
    i32.add
@@ -8866,20 +7395,10 @@
    i32.store offset=24
    global.get $~lib/memory/__stack_pointer
    local.get $8
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=4
-   local.get $17
    call $examples/markdown-parser/assembly/parser/parser/getTokensAsString
    local.tee $6
    i32.store offset=32
    local.get $8
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=4
-   local.get $17
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
    local.set $5
    global.get $~lib/memory/__stack_pointer
@@ -8887,17 +7406,12 @@
    local.tee $9
    i32.store offset=40
    local.get $9
-   i32.const 4400
+   i32.const 4368
    call $examples/markdown-parser/assembly/parser/ast/AstNode#set:type
    local.get $9
    local.get $6
    call $examples/markdown-parser/assembly/parser/ast/AstNode#set:value
    local.get $1
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=16
-   local.get $17
    local.get $2
    local.get $5
    i32.add
@@ -8908,7 +7422,7 @@
    local.set $17
    global.get $~lib/memory/__stack_pointer
    local.get $17
-   i32.store offset=4
+   i32.store offset=8
    local.get $17
    global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.PAREN_START
    local.set $17
@@ -8920,11 +7434,6 @@
    if
     global.get $~lib/memory/__stack_pointer
     local.get $1
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     local.get $2
     local.get $5
     i32.add
@@ -8941,20 +7450,10 @@
     i32.store offset=20
     global.get $~lib/memory/__stack_pointer
     local.get $7
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     call $examples/markdown-parser/assembly/parser/parser/getTokensAsString
     local.tee $15
     i32.store offset=56
     local.get $7
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
     local.set $16
     local.get $3
@@ -8968,28 +7467,13 @@
     local.set $17
     global.get $~lib/memory/__stack_pointer
     local.get $17
-    i32.store offset=4
+    i32.store offset=8
     local.get $17
     local.get $9
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=12
-    local.get $17
     call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#push
     drop
     local.get $0
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     local.get $3
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=12
-    local.get $17
     call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#push
     drop
     local.get $5
@@ -9011,7 +7495,7 @@
   local.set $17
   global.get $~lib/memory/__stack_pointer
   local.get $17
-  i32.store offset=4
+  i32.store offset=8
   local.get $17
   global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.BRACKET_START
   local.set $17
@@ -9023,11 +7507,6 @@
   if
    global.get $~lib/memory/__stack_pointer
    local.get $1
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=4
-   local.get $17
    local.get $2
    i32.const 1
    i32.add
@@ -9042,20 +7521,10 @@
    i32.store offset=40
    global.get $~lib/memory/__stack_pointer
    local.get $9
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=4
-   local.get $17
    call $examples/markdown-parser/assembly/parser/parser/getTokensAsString
    local.tee $5
    i32.store offset=36
    local.get $9
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=4
-   local.get $17
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
    local.set $6
    global.get $~lib/memory/__stack_pointer
@@ -9063,17 +7532,12 @@
    local.tee $8
    i32.store offset=24
    local.get $8
-   i32.const 4432
+   i32.const 4400
    call $examples/markdown-parser/assembly/parser/ast/AstNode#set:type
    local.get $8
    local.get $5
    call $examples/markdown-parser/assembly/parser/ast/AstNode#set:value
    local.get $1
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=16
-   local.get $17
    local.get $2
    local.get $6
    i32.add
@@ -9084,7 +7548,7 @@
    local.set $17
    global.get $~lib/memory/__stack_pointer
    local.get $17
-   i32.store offset=4
+   i32.store offset=8
    local.get $17
    global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.PAREN_START
    local.set $17
@@ -9096,11 +7560,6 @@
    if
     global.get $~lib/memory/__stack_pointer
     local.get $1
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     local.get $2
     local.get $6
     i32.add
@@ -9117,20 +7576,10 @@
     i32.store offset=60
     global.get $~lib/memory/__stack_pointer
     local.get $16
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     call $examples/markdown-parser/assembly/parser/parser/getTokensAsString
     local.tee $15
     i32.store offset=56
     local.get $16
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
     local.set $7
     local.get $3
@@ -9144,28 +7593,13 @@
     local.set $17
     global.get $~lib/memory/__stack_pointer
     local.get $17
-    i32.store offset=4
+    i32.store offset=8
     local.get $17
     local.get $8
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=12
-    local.get $17
     call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#push
     drop
     local.get $0
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     local.get $3
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=12
-    local.get $17
     call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#push
     drop
     local.get $6
@@ -9187,7 +7621,7 @@
   local.set $17
   global.get $~lib/memory/__stack_pointer
   local.get $17
-  i32.store offset=4
+  i32.store offset=8
   local.get $17
   global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.BLOCK_QUOTE
   local.set $17
@@ -9199,11 +7633,6 @@
   if
    global.get $~lib/memory/__stack_pointer
    local.get $1
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=4
-   local.get $17
    local.get $2
    i32.const 1
    i32.add
@@ -9218,20 +7647,10 @@
    i32.store offset=24
    global.get $~lib/memory/__stack_pointer
    local.get $8
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=4
-   local.get $17
    call $examples/markdown-parser/assembly/parser/parser/getTokensAsString
    local.tee $6
    i32.store offset=32
    local.get $8
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=4
-   local.get $17
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
    local.set $5
    local.get $3
@@ -9241,17 +7660,7 @@
    local.get $6
    call $examples/markdown-parser/assembly/parser/ast/AstNode#set:value
    local.get $0
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=4
-   local.get $17
    local.get $3
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=12
-   local.get $17
    call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#push
    drop
    local.get $5
@@ -9270,7 +7679,7 @@
   local.set $17
   global.get $~lib/memory/__stack_pointer
   local.get $17
-  i32.store offset=4
+  i32.store offset=8
   local.get $17
   global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.CODE_BLOCK
   local.set $17
@@ -9282,11 +7691,6 @@
   if
    global.get $~lib/memory/__stack_pointer
    local.get $1
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=4
-   local.get $17
    local.get $2
    i32.const 1
    i32.add
@@ -9301,20 +7705,10 @@
    i32.store offset=36
    global.get $~lib/memory/__stack_pointer
    local.get $5
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=4
-   local.get $17
    call $examples/markdown-parser/assembly/parser/parser/getTokensAsString
    local.tee $6
    i32.store offset=32
    local.get $5
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=4
-   local.get $17
    call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
    local.set $8
    local.get $3
@@ -9324,17 +7718,7 @@
    local.get $6
    call $examples/markdown-parser/assembly/parser/ast/AstNode#set:value
    local.get $0
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=4
-   local.get $17
    local.get $3
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=12
-   local.get $17
    call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#push
    drop
    local.get $8
@@ -9353,7 +7737,7 @@
   local.set $17
   global.get $~lib/memory/__stack_pointer
   local.get $17
-  i32.store offset=4
+  i32.store offset=8
   local.get $17
   global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.INLINE_CODE
   local.set $17
@@ -9364,11 +7748,6 @@
   call $~lib/string/String.__eq
   if
    local.get $1
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=4
-   local.get $17
    local.get $2
    i32.const 1
    i32.add
@@ -9388,11 +7767,6 @@
    if
     global.get $~lib/memory/__stack_pointer
     local.get $1
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     local.get $2
     i32.const 1
     i32.add
@@ -9407,20 +7781,10 @@
     i32.store offset=24
     global.get $~lib/memory/__stack_pointer
     local.get $8
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     call $examples/markdown-parser/assembly/parser/parser/getTokensAsString
     local.tee $6
     i32.store offset=32
     local.get $8
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
     local.set $5
     local.get $3
@@ -9430,17 +7794,7 @@
     local.get $6
     call $examples/markdown-parser/assembly/parser/ast/AstNode#set:value
     local.get $0
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=4
-    local.get $17
     local.get $3
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=12
-    local.get $17
     call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#push
     drop
     local.get $5
@@ -9460,7 +7814,7 @@
   local.set $17
   global.get $~lib/memory/__stack_pointer
   local.get $17
-  i32.store offset=4
+  i32.store offset=8
   local.get $17
   global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.HORIZONTAL_LINE
   local.set $17
@@ -9471,11 +7825,6 @@
   call $~lib/string/String.__eq
   if (result i32)
    local.get $1
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=16
-   local.get $17
    local.get $2
    i32.const 1
    i32.add
@@ -9484,7 +7833,7 @@
    local.set $17
    global.get $~lib/memory/__stack_pointer
    local.get $17
-   i32.store offset=4
+   i32.store offset=8
    local.get $17
    global.get $examples/markdown-parser/assembly/tokenizer/token-type/TokenType.NEWLINE
    local.set $17
@@ -9501,17 +7850,7 @@
    global.get $examples/markdown-parser/assembly/parser/ast-node-type/AstNodeType.HORIZONTAL_LINE
    call $examples/markdown-parser/assembly/parser/ast/AstNode#set:type
    local.get $0
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=4
-   local.get $17
    local.get $3
-   local.set $17
-   global.get $~lib/memory/__stack_pointer
-   local.get $17
-   i32.store offset=12
-   local.get $17
    call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#push
    drop
    i32.const 0
@@ -9531,17 +7870,7 @@
   i32.load offset=8
   call $examples/markdown-parser/assembly/parser/ast/AstNode#set:value
   local.get $0
-  local.set $17
-  global.get $~lib/memory/__stack_pointer
-  local.get $17
-  i32.store offset=4
-  local.get $17
   local.get $3
-  local.set $17
-  global.get $~lib/memory/__stack_pointer
-  local.get $17
-  i32.store offset=12
-  local.get $17
   call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#push
   drop
   i32.const 0
@@ -9552,112 +7881,12 @@
   global.set $~lib/memory/__stack_pointer
   local.get $17
  )
- (func $examples/markdown-parser/assembly/parser/parser/addTokensToAst (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  i32.const 0
-  local.set $2
-  loop $for-loop|0
-   local.get $2
-   local.get $0
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store
-   local.get $5
-   call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
-   i32.lt_s
-   local.set $3
-   local.get $3
-   if
-    local.get $1
-    local.set $5
-    global.get $~lib/memory/__stack_pointer
-    local.get $5
-    i32.store
-    local.get $5
-    local.get $0
-    local.set $5
-    global.get $~lib/memory/__stack_pointer
-    local.get $5
-    i32.store offset=4
-    local.get $5
-    local.get $2
-    call $examples/markdown-parser/assembly/parser/parser/addAstNode
-    local.set $4
-    local.get $2
-    local.get $4
-    i32.add
-    local.set $2
-    local.get $2
-    i32.const 1
-    i32.add
-    local.set $2
-    br $for-loop|0
-   end
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $examples/markdown-parser/assembly/parser/parser/markdownTokenParser (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store offset=8
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.const 0
-  call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#constructor
-  local.tee $1
-  i32.store
-  local.get $0
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store offset=4
-  local.get $2
-  local.get $1
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store offset=8
-  local.get $2
-  call $examples/markdown-parser/assembly/parser/parser/addTokensToAst
-  local.get $1
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
- )
  (func $examples/markdown-parser/assembly/code-generator/code-generator/generateHtmlStringForAstNode (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 36
+  i32.const 32
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
@@ -9673,9 +7902,6 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store offset=24
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store offset=32
   global.get $~lib/memory/__stack_pointer
   i32.const 1600
   local.tee $3
@@ -9696,13 +7922,13 @@
   call $~lib/string/String.__eq
   if
    global.get $~lib/memory/__stack_pointer
-   i32.const 4480
+   i32.const 4448
    local.tee $3
    i32.store
    local.get $3
    local.set $5
    global.get $~lib/memory/__stack_pointer
-   i32.const 36
+   i32.const 32
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $5
@@ -9724,7 +7950,7 @@
   call $~lib/string/String.__eq
   if
    global.get $~lib/memory/__stack_pointer
-   i32.const 4512
+   i32.const 4480
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
@@ -9741,25 +7967,20 @@
    local.tee $4
    i32.store offset=12
    global.get $~lib/memory/__stack_pointer
-   i32.const 4544
+   i32.const 4512
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
    i32.store offset=16
    local.get $5
    local.get $4
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=20
-   local.get $5
    call $~lib/string/String.__concat
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
    i32.store offset=4
    local.get $5
-   i32.const 2272
+   i32.const 2240
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
@@ -9770,17 +7991,12 @@
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=4
-   local.get $5
    local.get $0
    i32.load offset=8
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
-   i32.store offset=16
+   i32.store offset=8
    local.get $5
    call $examples/markdown-parser/assembly/code-generator/code-generator/generateHtmlString
    local.set $5
@@ -9793,34 +8009,24 @@
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=4
-   local.get $5
-   i32.const 4576
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=24
-   local.get $5
-   local.get $4
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=28
-   local.get $5
-   call $~lib/string/String.__concat
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=16
-   local.get $5
-   i32.const 2272
+   i32.const 4544
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
    i32.store offset=20
+   local.get $5
+   local.get $4
+   call $~lib/string/String.__concat
+   local.set $5
+   global.get $~lib/memory/__stack_pointer
+   local.get $5
+   i32.store offset=8
+   local.get $5
+   i32.const 2240
+   local.set $5
+   global.get $~lib/memory/__stack_pointer
+   local.get $5
+   i32.store offset=16
    local.get $5
    call $~lib/string/String.__concat
    local.set $5
@@ -9834,7 +8040,7 @@
    local.get $3
    local.set $5
    global.get $~lib/memory/__stack_pointer
-   i32.const 36
+   i32.const 32
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $5
@@ -9856,22 +8062,17 @@
   call $~lib/string/String.__eq
   if
    global.get $~lib/memory/__stack_pointer
-   i32.const 4608
+   i32.const 4576
    local.tee $3
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=4
-   local.get $5
    local.get $0
    i32.load offset=8
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
-   i32.store offset=16
+   i32.store offset=8
    local.get $5
    call $examples/markdown-parser/assembly/code-generator/code-generator/generateHtmlString
    local.set $5
@@ -9884,12 +8085,7 @@
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=4
-   local.get $5
-   i32.const 4640
+   i32.const 4608
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
@@ -9901,7 +8097,7 @@
    local.get $3
    local.set $5
    global.get $~lib/memory/__stack_pointer
-   i32.const 36
+   i32.const 32
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $5
@@ -9923,22 +8119,17 @@
   call $~lib/string/String.__eq
   if
    global.get $~lib/memory/__stack_pointer
-   i32.const 4672
+   i32.const 4640
    local.tee $3
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=4
-   local.get $5
    local.get $0
    i32.load offset=8
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
-   i32.store offset=16
+   i32.store offset=8
    local.get $5
    call $examples/markdown-parser/assembly/code-generator/code-generator/generateHtmlString
    local.set $5
@@ -9951,12 +8142,7 @@
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=4
-   local.get $5
-   i32.const 4704
+   i32.const 4672
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
@@ -9968,7 +8154,7 @@
    local.get $3
    local.set $5
    global.get $~lib/memory/__stack_pointer
-   i32.const 36
+   i32.const 32
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $5
@@ -9990,22 +8176,17 @@
   call $~lib/string/String.__eq
   if
    global.get $~lib/memory/__stack_pointer
-   i32.const 4736
+   i32.const 4704
    local.tee $3
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=4
-   local.get $5
    local.get $0
    i32.load offset=8
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
-   i32.store offset=16
+   i32.store offset=8
    local.get $5
    call $examples/markdown-parser/assembly/code-generator/code-generator/generateHtmlString
    local.set $5
@@ -10018,12 +8199,7 @@
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=4
-   local.get $5
-   i32.const 4768
+   i32.const 4736
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
@@ -10035,7 +8211,7 @@
    local.get $3
    local.set $5
    global.get $~lib/memory/__stack_pointer
-   i32.const 36
+   i32.const 32
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $5
@@ -10057,22 +8233,17 @@
   call $~lib/string/String.__eq
   if
    global.get $~lib/memory/__stack_pointer
-   i32.const 4800
+   i32.const 4768
    local.tee $3
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=4
-   local.get $5
    local.get $0
    i32.load offset=8
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
-   i32.store offset=16
+   i32.store offset=8
    local.get $5
    call $examples/markdown-parser/assembly/code-generator/code-generator/generateHtmlString
    local.set $5
@@ -10085,12 +8256,7 @@
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=4
-   local.get $5
-   i32.const 4832
+   i32.const 4800
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
@@ -10102,7 +8268,7 @@
    local.get $3
    local.set $5
    global.get $~lib/memory/__stack_pointer
-   i32.const 36
+   i32.const 32
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $5
@@ -10124,22 +8290,17 @@
   call $~lib/string/String.__eq
   if
    global.get $~lib/memory/__stack_pointer
-   i32.const 4864
+   i32.const 4832
    local.tee $3
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=4
-   local.get $5
    local.get $0
    i32.load offset=8
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
-   i32.store offset=16
+   i32.store offset=8
    local.get $5
    call $examples/markdown-parser/assembly/code-generator/code-generator/generateHtmlString
    local.set $5
@@ -10152,12 +8313,7 @@
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=4
-   local.get $5
-   i32.const 4896
+   i32.const 4864
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
@@ -10169,7 +8325,7 @@
    local.get $3
    local.set $5
    global.get $~lib/memory/__stack_pointer
-   i32.const 36
+   i32.const 32
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $5
@@ -10191,22 +8347,17 @@
   call $~lib/string/String.__eq
   if
    global.get $~lib/memory/__stack_pointer
-   i32.const 4928
+   i32.const 4896
    local.tee $3
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=4
-   local.get $5
    local.get $0
    i32.load offset=8
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
-   i32.store offset=16
+   i32.store offset=8
    local.get $5
    call $examples/markdown-parser/assembly/code-generator/code-generator/generateHtmlString
    local.set $5
@@ -10219,12 +8370,7 @@
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=4
-   local.get $5
-   i32.const 4960
+   i32.const 4928
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
@@ -10236,7 +8382,7 @@
    local.get $3
    local.set $5
    global.get $~lib/memory/__stack_pointer
-   i32.const 36
+   i32.const 32
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $5
@@ -10258,40 +8404,35 @@
   call $~lib/string/String.__eq
   if
    global.get $~lib/memory/__stack_pointer
-   i32.const 4992
+   i32.const 4960
    local.tee $3
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
+   i32.const 4992
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
-   i32.store offset=4
-   local.get $5
-   i32.const 5024
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=24
+   i32.store offset=20
    local.get $5
    local.get $0
    i32.load offset=4
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
-   i32.store offset=28
+   i32.store offset=24
    local.get $5
    call $~lib/string/String.__concat
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
-   i32.store offset=16
+   i32.store offset=8
    local.get $5
-   i32.const 5056
+   i32.const 5024
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
-   i32.store offset=20
+   i32.store offset=16
    local.get $5
    call $~lib/string/String.__concat
    local.set $5
@@ -10304,23 +8445,18 @@
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
+   i32.const 5056
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
-   i32.store offset=4
-   local.get $5
-   i32.const 5088
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=24
+   i32.store offset=20
    local.get $5
    local.get $0
    i32.load offset=8
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
-   i32.store offset=32
+   i32.store offset=28
    local.get $5
    i32.const 0
    call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#__get
@@ -10328,20 +8464,20 @@
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
-   i32.store offset=28
+   i32.store offset=24
    local.get $5
    call $~lib/string/String.__concat
+   local.set $5
+   global.get $~lib/memory/__stack_pointer
+   local.get $5
+   i32.store offset=8
+   local.get $5
+   i32.const 5024
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
    i32.store offset=16
    local.get $5
-   i32.const 5056
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=20
-   local.get $5
    call $~lib/string/String.__concat
    local.set $5
    global.get $~lib/memory/__stack_pointer
@@ -10353,12 +8489,7 @@
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=4
-   local.get $5
-   i32.const 5120
+   i32.const 5088
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
@@ -10370,7 +8501,7 @@
    local.get $3
    local.set $5
    global.get $~lib/memory/__stack_pointer
-   i32.const 36
+   i32.const 32
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $5
@@ -10392,40 +8523,35 @@
   call $~lib/string/String.__eq
   if
    global.get $~lib/memory/__stack_pointer
-   i32.const 5152
+   i32.const 5120
    local.tee $3
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
+   i32.const 5152
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
-   i32.store offset=4
-   local.get $5
-   i32.const 5184
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=24
+   i32.store offset=20
    local.get $5
    local.get $0
    i32.load offset=4
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
-   i32.store offset=28
+   i32.store offset=24
    local.get $5
    call $~lib/string/String.__concat
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
-   i32.store offset=16
+   i32.store offset=8
    local.get $5
-   i32.const 5216
+   i32.const 5184
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
-   i32.store offset=20
+   i32.store offset=16
    local.get $5
    call $~lib/string/String.__concat
    local.set $5
@@ -10438,17 +8564,12 @@
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=4
-   local.get $5
    local.get $0
    i32.load offset=8
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
-   i32.store offset=16
+   i32.store offset=8
    local.get $5
    i32.const 0
    call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#__get
@@ -10463,12 +8584,7 @@
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=4
-   local.get $5
-   i32.const 5248
+   i32.const 5216
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
@@ -10480,7 +8596,7 @@
    local.get $3
    local.set $5
    global.get $~lib/memory/__stack_pointer
-   i32.const 36
+   i32.const 32
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $5
@@ -10502,16 +8618,11 @@
   call $~lib/string/String.__eq
   if
    global.get $~lib/memory/__stack_pointer
-   i32.const 5280
+   i32.const 5248
    local.tee $3
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=4
-   local.get $5
    local.get $0
    i32.load offset=4
    local.set $5
@@ -10524,12 +8635,7 @@
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=4
-   local.get $5
-   i32.const 5312
+   i32.const 5280
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
@@ -10541,7 +8647,7 @@
    local.get $3
    local.set $5
    global.get $~lib/memory/__stack_pointer
-   i32.const 36
+   i32.const 32
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $5
@@ -10581,16 +8687,11 @@
   end
   if
    global.get $~lib/memory/__stack_pointer
-   i32.const 5344
+   i32.const 5312
    local.tee $3
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=4
-   local.get $5
    local.get $0
    i32.load offset=4
    local.set $5
@@ -10603,12 +8704,7 @@
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store offset=4
-   local.get $5
-   i32.const 5376
+   i32.const 5344
    local.set $5
    global.get $~lib/memory/__stack_pointer
    local.get $5
@@ -10620,7 +8716,7 @@
    local.get $3
    local.set $5
    global.get $~lib/memory/__stack_pointer
-   i32.const 36
+   i32.const 32
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $5
@@ -10642,13 +8738,13 @@
   call $~lib/string/String.__eq
   if
    global.get $~lib/memory/__stack_pointer
-   i32.const 5424
+   i32.const 5392
    local.tee $3
    i32.store
    local.get $3
    local.set $5
    global.get $~lib/memory/__stack_pointer
-   i32.const 36
+   i32.const 32
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $5
@@ -10662,7 +8758,7 @@
   local.get $3
   local.set $5
   global.get $~lib/memory/__stack_pointer
-  i32.const 36
+  i32.const 32
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $5
@@ -10673,19 +8769,13 @@
   (local $3 i32)
   (local $4 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 24
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store offset=8
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store offset=16
   global.get $~lib/memory/__stack_pointer
   i32.const 1600
   local.tee $1
@@ -10695,11 +8785,6 @@
   loop $for-loop|0
    local.get $2
    local.get $0
-   local.set $4
-   global.get $~lib/memory/__stack_pointer
-   local.get $4
-   i32.store offset=4
-   local.get $4
    call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#get:length
    i32.lt_s
    local.set $3
@@ -10707,36 +8792,21 @@
    if
     global.get $~lib/memory/__stack_pointer
     local.get $1
+    local.get $0
+    local.get $2
+    call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#__get
     local.set $4
     global.get $~lib/memory/__stack_pointer
     local.get $4
     i32.store offset=4
     local.get $4
     local.get $0
-    local.set $4
-    global.get $~lib/memory/__stack_pointer
-    local.get $4
-    i32.store offset=20
-    local.get $4
-    local.get $2
-    call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#__get
-    local.set $4
-    global.get $~lib/memory/__stack_pointer
-    local.get $4
-    i32.store offset=12
-    local.get $4
-    local.get $0
-    local.set $4
-    global.get $~lib/memory/__stack_pointer
-    local.get $4
-    i32.store offset=16
-    local.get $4
     local.get $2
     call $examples/markdown-parser/assembly/code-generator/code-generator/generateHtmlStringForAstNode
     local.set $4
     global.get $~lib/memory/__stack_pointer
     local.get $4
-    i32.store offset=8
+    i32.store offset=4
     local.get $4
     call $~lib/string/String.__concat
     local.tee $1
@@ -10751,61 +8821,7 @@
   local.get $1
   local.set $4
   global.get $~lib/memory/__stack_pointer
-  i32.const 24
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $4
- )
- (func $examples/markdown-parser/assembly/index/convertMarkdownToHTML (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 16
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store offset=8
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.store
-  local.get $4
-  call $examples/markdown-parser/assembly/tokenizer/tokenizer/markdownTokenizer
-  local.tee $1
-  i32.store offset=4
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.store
-  local.get $4
-  call $examples/markdown-parser/assembly/parser/parser/markdownTokenParser
-  local.tee $2
-  i32.store offset=8
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.store
-  local.get $4
-  call $examples/markdown-parser/assembly/code-generator/code-generator/generateHtmlString
-  local.tee $3
-  i32.store offset=12
-  local.get $3
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  i32.const 16
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $4
@@ -10814,6 +8830,8 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -10827,7 +8845,7 @@
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 16
-   i32.const 22
+   i32.const 4
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store
@@ -10852,44 +8870,98 @@
   if
    i32.const 896
    i32.const 944
-   i32.const 58
+   i32.const 64
    i32.const 60
    call $~lib/builtins/abort
    unreachable
   end
   local.get $1
+  local.tee $2
+  i32.const 8
+  local.tee $3
+  local.get $2
+  local.get $3
+  i32.gt_u
+  select
   i32.const 2
   i32.shl
-  local.set $2
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $4
   i32.const 0
   call $~lib/rt/itcms/__new
-  local.tee $3
+  local.tee $5
   i32.store offset=4
-  local.get $3
+  local.get $5
   i32.const 0
-  local.get $2
+  local.get $4
   call $~lib/memory/memory.fill
   local.get $0
-  local.get $3
+  local.get $5
   call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#set:buffer
   local.get $0
-  local.get $3
+  local.get $5
   call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#set:dataStart
   local.get $0
-  local.get $2
+  local.get $4
   call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#set:byteLength
   local.get $0
   local.get $1
   call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#set:length_
   local.get $0
-  local.set $4
+  local.set $6
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $6
+ )
+ (func $~lib/string/String#charAt (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $1
+  local.get $0
+  call $~lib/string/String#get:length
+  i32.ge_u
+  if
+   i32.const 1600
+   local.set $3
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $3
+   return
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 2
+  i32.const 1
+  call $~lib/rt/itcms/__new
+  local.tee $2
+  i32.store
+  local.get $2
+  local.get $0
+  local.get $1
+  i32.const 1
+  i32.shl
+  i32.add
+  i32.load16_u
+  i32.store16
+  local.get $2
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
  )
  (func $examples/markdown-parser/assembly/tokenizer/token/Token#constructor (param $0 i32) (result i32)
   (local $1 i32)
@@ -10906,7 +8978,7 @@
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 12
-   i32.const 21
+   i32.const 3
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store
@@ -10928,6 +9000,71 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
+ (func $~lib/string/String#concat (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $0
+  call $~lib/string/String#get:length
+  i32.const 1
+  i32.shl
+  local.set $2
+  local.get $1
+  call $~lib/string/String#get:length
+  i32.const 1
+  i32.shl
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.add
+  local.set $4
+  local.get $4
+  i32.const 0
+  i32.eq
+  if
+   i32.const 1600
+   local.set $6
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $6
+   return
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.const 1
+  call $~lib/rt/itcms/__new
+  local.tee $5
+  i32.store
+  local.get $5
+  local.get $0
+  local.get $2
+  call $~lib/memory/memory.copy
+  local.get $5
+  local.get $2
+  i32.add
+  local.get $1
+  local.get $3
+  call $~lib/memory/memory.copy
+  local.get $5
+  local.set $6
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $6
+ )
  (func $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -10946,7 +9083,7 @@
   if
    i32.const 1184
    i32.const 944
-   i32.const 92
+   i32.const 106
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -10969,9 +9106,9 @@
   local.get $2
   i32.eqz
   if
-   i32.const 2496
+   i32.const 2464
    i32.const 944
-   i32.const 96
+   i32.const 110
    i32.const 40
    call $~lib/builtins/abort
    unreachable
@@ -10984,10 +9121,70 @@
   global.set $~lib/memory/__stack_pointer
   local.get $3
  )
+ (func $examples/markdown-parser/assembly/tokenizer/tokenizer/markdownTokenizer (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 0
+  i32.const 0
+  call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#constructor
+  global.set $examples/markdown-parser/assembly/tokenizer/tokenizer/tokens
+  i32.const 0
+  local.set $1
+  loop $for-loop|0
+   local.get $1
+   local.get $0
+   call $~lib/string/String#get:length
+   i32.lt_s
+   local.set $2
+   local.get $2
+   if
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    local.get $1
+    call $~lib/string/String#charAt
+    local.tee $3
+    i32.store
+    local.get $0
+    local.get $1
+    local.get $3
+    call $examples/markdown-parser/assembly/tokenizer/tokenizer/addToken
+    local.set $4
+    local.get $1
+    local.get $4
+    i32.add
+    local.set $1
+    local.get $1
+    i32.const 1
+    i32.add
+    local.set $1
+    br $for-loop|0
+   end
+  end
+  global.get $examples/markdown-parser/assembly/tokenizer/tokenizer/tokens
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $5
+ )
  (func $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#constructor (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -11001,7 +9198,7 @@
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 16
-   i32.const 24
+   i32.const 6
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store
@@ -11026,44 +9223,51 @@
   if
    i32.const 896
    i32.const 944
-   i32.const 58
+   i32.const 64
    i32.const 60
    call $~lib/builtins/abort
    unreachable
   end
   local.get $1
+  local.tee $2
+  i32.const 8
+  local.tee $3
+  local.get $2
+  local.get $3
+  i32.gt_u
+  select
   i32.const 2
   i32.shl
-  local.set $2
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $4
   i32.const 0
   call $~lib/rt/itcms/__new
-  local.tee $3
+  local.tee $5
   i32.store offset=4
-  local.get $3
+  local.get $5
   i32.const 0
-  local.get $2
+  local.get $4
   call $~lib/memory/memory.fill
   local.get $0
-  local.get $3
+  local.get $5
   call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#set:buffer
   local.get $0
-  local.get $3
+  local.get $5
   call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#set:dataStart
   local.get $0
-  local.get $2
+  local.get $4
   call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#set:byteLength
   local.get $0
   local.get $1
   call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#set:length_
   local.get $0
-  local.set $4
+  local.set $6
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $6
  )
  (func $examples/markdown-parser/assembly/parser/ast/AstNode#constructor (param $0 i32) (result i32)
   (local $1 i32)
@@ -11080,7 +9284,7 @@
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 12
-   i32.const 23
+   i32.const 5
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store
@@ -11160,8 +9364,8 @@
    i32.gt_s
   end
   if
-   i32.const 2624
-   i32.const 2752
+   i32.const 2592
+   i32.const 2720
    i32.const 373
    i32.const 5
    call $~lib/builtins/abort
@@ -11170,7 +9374,7 @@
   local.get $0
   i32.eqz
   if
-   i32.const 2816
+   i32.const 2784
    local.set $8
    global.get $~lib/memory/__stack_pointer
    i32.const 4
@@ -11300,6 +9504,86 @@
   global.set $~lib/memory/__stack_pointer
   local.get $8
  )
+ (func $examples/markdown-parser/assembly/parser/parser/checkIfTypeIsFoundBeforeOtherType (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  local.get $1
+  local.get $2
+  call $examples/markdown-parser/assembly/parser/parser/getAllTokensUntilTokenReached
+  local.tee $4
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  local.get $1
+  local.get $3
+  call $examples/markdown-parser/assembly/parser/parser/getAllTokensUntilTokenReached
+  local.tee $5
+  i32.store offset=4
+  local.get $4
+  call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
+  local.get $5
+  call $~lib/array/Array<examples/markdown-parser/assembly/tokenizer/token/Token>#get:length
+  i32.lt_s
+  if
+   i32.const 1
+   local.set $6
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $6
+   return
+  else
+   i32.const 0
+   local.set $6
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $6
+   return
+  end
+  unreachable
+ )
+ (func $examples/markdown-parser/assembly/parser/parser/markdownTokenParser (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.const 0
+  call $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#constructor
+  local.tee $1
+  i32.store
+  local.get $0
+  local.get $1
+  call $examples/markdown-parser/assembly/parser/parser/addTokensToAst
+  local.get $1
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+ )
  (func $~lib/array/Array<examples/markdown-parser/assembly/parser/ast/AstNode>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -11318,7 +9602,7 @@
   if
    i32.const 1184
    i32.const 944
-   i32.const 92
+   i32.const 106
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -11341,9 +9625,9 @@
   local.get $2
   i32.eqz
   if
-   i32.const 2496
+   i32.const 2464
    i32.const 944
-   i32.const 96
+   i32.const 110
    i32.const 40
    call $~lib/builtins/abort
    unreachable
@@ -11355,6 +9639,45 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $3
+ )
+ (func $examples/markdown-parser/assembly/index/convertMarkdownToHTML (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 12
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store offset=8
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  call $examples/markdown-parser/assembly/tokenizer/tokenizer/markdownTokenizer
+  local.tee $1
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  call $examples/markdown-parser/assembly/parser/parser/markdownTokenParser
+  local.tee $2
+  i32.store offset=4
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  call $examples/markdown-parser/assembly/code-generator/code-generator/generateHtmlString
+  local.tee $3
+  i32.store offset=8
+  local.get $3
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  i32.const 12
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $4
  )
  (func $export:examples/markdown-parser/assembly/index/convertMarkdownToHTML (param $0 i32) (result i32)
   (local $1 i32)
@@ -11375,4 +9698,5 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
+ ;; custom section "as-bind_bindings", size 197, contents: "{\"typeIds\":{\"~lib/string/String\":{\"id\":1,\"byteSize\":0}},\"importedFunctions\":{},\"exportedFunctions\":{\"convertMarkdownToHTML\":{\"returnType\":\"~lib/string/String\",\"parameters\":[\"~lib/string/String\"]}}}"
 )
