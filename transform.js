@@ -156,6 +156,9 @@ export default class AsBindTransform {
       exportedFunctions
     });
 
+    // Temp export of data - better for development
+    require("fs").writeFileSync("testing.types.json", this.typeData);
+
     module.addCustomSection(
       SECTION_NAME,
       new TextEncoder("utf8").encode(this.typeData)

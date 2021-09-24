@@ -1,0 +1,26 @@
+{
+  "typeIds": {
+    "~lib/string/String": { "id": 1, "byteSize": 0 },
+    "~lib/array/Array<u8>": { "id": 7, "byteSize": 16 }
+  },
+  "importedFunctions": {
+    "index": {
+      "alert": { "returnType": "void", "parameters": ["~lib/string/String"] }
+    }
+  },
+  "exportedFunctions": {
+    "convertMarkdownToHTML": {
+      "returnType": "~lib/string/String",
+      "parameters": ["~lib/string/String"]
+    },
+    "t": {
+      "returnType": "void",
+      "parameters": ["u16", "~lib/array/Array<u8>"]
+    },
+    "cb": { "returnType": "u8", "parameters": ["(~lib/string/String) => u8"] },
+    "cb2": {
+      "returnType": "u8",
+      "parameters": ["((~lib/string/String) => u8) => u8"]
+    }
+  }
+}
