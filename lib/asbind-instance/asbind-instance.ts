@@ -1,25 +1,31 @@
 // Class for asbind instances
-
 import { asbindInstantiate, asbindInstantiateSync } from "./instantiate";
 import { bindImportFunction, bindExportFunction } from "./bind-function";
-import { isReservedExportKey } from "./reserved-export-keys";
+import {
+  TypeDef,
+  WebAssemblyModuleStreaming,
+  WebAssemblyModuleSync,
+  WebAssemblyLoaderResult,
+} from "../types";
+
+import { ASUtil } from "@assemblyscript/loader";
 
 const SECTION_NAME = "as-bind_bindings";
 
 // Basically a deep-copy, but can be limited in levels.
-function copyObject(obj, { depth = Number.POSITIVE_INFINITY } = {}) {
+function copyObject<T>(obj: T, { depth = Number.POSITIVE_INFINITY } = {}): T {
   if (depth <= 0 || !obj || typeof obj !== "object") {
     return obj;
   }
   return Object.fromEntries(
     Object.entries(obj).map(([key, val]) => [
       key,
-      copyObject(val, { depth: depth - 1 })
+      copyObject(val, { depth: depth - 1 }),
     ])
-  );
+  ) as T;
 }
 
-async function compileStreaming(source) {
+async function compileStreaming(source: WebAssemblyModuleStreaming) {
   source = await Promise.resolve(source);
   if (typeof Response !== "undefined" && source instanceof Response) {
     if (WebAssembly.compileStreaming) {
@@ -27,10 +33,11 @@ async function compileStreaming(source) {
     }
     source = await source.arrayBuffer();
   }
-  return WebAssembly.compile(source);
+
+  return WebAssembly.compile(source as BufferSource);
 }
 
-function extractTypeDescriptor(module) {
+function extractTypeDescriptor(module: WebAssembly.Module): TypeDef {
   const sections = WebAssembly.Module.customSections(module, SECTION_NAME);
   const str = new TextDecoder("utf8").decode(new Uint8Array(sections[0]));
   try {
@@ -41,20 +48,20 @@ function extractTypeDescriptor(module) {
 }
 
 export default class AsbindInstance {
-  constructor() {
-    this.unboundExports = {};
-    this.exports = {};
-    this.importObject = {};
-  }
+  exports: Record<string, never> | ASUtil = {};
+  importObject: WebAssembly.Imports = {};
+  typeDescriptor: TypeDef;
+  module: WebAssembly.Module;
+  loadedModule: WebAssemblyLoaderResult;
 
-  getTypeId(typeName) {
+  getTypeId(typeName: string) {
     if (typeName in this.typeDescriptor.typeIds) {
       return this.typeDescriptor.typeIds[typeName].id;
     }
     throw Error(`Unknown type ${JSON.stringify(typeName)}`);
   }
 
-  getTypeSize(typeName) {
+  getTypeSize(typeName: string) {
     if (typeName in this.typeDescriptor.typeIds) {
       return this.typeDescriptor.typeIds[typeName].byteSize;
     }
@@ -63,7 +70,9 @@ export default class AsbindInstance {
 
   _validate() {
     if (
-      !WebAssembly.Module.exports(this.module).find(exp => exp.name === "__new")
+      !WebAssembly.Module.exports(this.module).find(
+        (exp) => exp.name === "__new"
+      )
     ) {
       throw Error(
         "The AssemblyScript wasm module was not built with --exportRuntime, which is required."
@@ -78,7 +87,10 @@ export default class AsbindInstance {
     }
   }
 
-  async _instantiate(source, importObject) {
+  async _instantiate(
+    source: WebAssemblyModuleStreaming,
+    importObject: WebAssembly.Imports
+  ) {
     this.module = await compileStreaming(source);
 
     this._validate();
@@ -89,7 +101,10 @@ export default class AsbindInstance {
     this._instantiateBindUnboundExports();
   }
 
-  _instantiateSync(source, importObject) {
+  _instantiateSync(
+    source: WebAssemblyModuleSync,
+    importObject: WebAssembly.Imports
+  ) {
     this.module = new WebAssembly.Module(source);
 
     this._validate();
@@ -99,7 +114,7 @@ export default class AsbindInstance {
     this._instantiateBindUnboundExports();
   }
 
-  _instantiateBindImportFunctions(importObject) {
+  _instantiateBindImportFunctions(importObject: WebAssembly.Imports) {
     this.importObject = copyObject(importObject, { depth: 2 });
 
     for (const [moduleName, moduleDescriptor] of Object.entries(
@@ -111,13 +126,12 @@ export default class AsbindInstance {
         this.importObject[moduleName][
           `__asbind_unbound_${importedFunctionName}`
         ] = importObject[moduleName][importedFunctionName];
-        this.importObject[moduleName][
-          importedFunctionName
-        ] = bindImportFunction(
-          this,
-          importObject[moduleName][importedFunctionName],
-          descriptor
-        );
+        this.importObject[moduleName][importedFunctionName] =
+          bindImportFunction(
+            this,
+            importObject[moduleName][importedFunctionName] as Function,
+            descriptor
+          );
       }
     }
   }

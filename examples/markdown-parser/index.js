@@ -47,15 +47,15 @@ let testMarkdown = `# __as-bind__ ~~convert~~ **markdown** to     html
 
 let asbindInstancePromise = asbind.instantiate(fetch("index.wasm"), {
   util: {
-    consoleLog: message => {
+    consoleLog: (message) => {
       console.log(message);
-    }
+    },
   },
   env: {
     abort: () => {
       console.error("AssemblyScript Import Object Aborted!");
-    }
-  }
+    },
+  },
 });
 
 class App extends Component {
@@ -64,7 +64,7 @@ class App extends Component {
 
     this.state = {
       markdown: testMarkdown,
-      html: ""
+      html: "",
     };
   }
 
@@ -98,7 +98,7 @@ ${html}
 
     this.setState({
       markdown,
-      html
+      html,
     });
   }
 
@@ -130,7 +130,7 @@ ${html}
               <h2>Markdown</h2>
               <textarea
                 value={this.state.markdown}
-                onInput={event => this.handleChange(event)}
+                onInput={(event) => this.handleChange(event)}
               ></textarea>
             </div>
             <div class="result">
@@ -138,7 +138,7 @@ ${html}
               <div
                 class="result-html"
                 dangerouslySetInnerHTML={{
-                  __html: this.state.html
+                  __html: this.state.html,
                 }}
               ></div>
             </div>

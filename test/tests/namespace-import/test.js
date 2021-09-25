@@ -1,5 +1,5 @@
-describe("as-bind", function() {
-  it("should support @external imports", async function() {
+describe("as-bind", function () {
+  it("should support @external imports", async function () {
     let from_wasm;
     let from_wasm2;
 
@@ -7,13 +7,13 @@ describe("as-bind", function() {
       my_module: {
         my_log(str) {
           from_wasm = str;
-        }
+        },
       },
       asc: {
         my_log2(str) {
           from_wasm2 = str;
-        }
-      }
+        },
+      },
     });
 
     instance.exports.fn();

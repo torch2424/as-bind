@@ -1,6 +1,9 @@
+import { TypeDefFn } from "../types";
+import AsbindInstance from "./asbind-instance";
+
 import {
   getAscToJsConverterForType,
-  getJsToAscConverterForType
+  getJsToAscConverterForType,
 } from "./type-converters";
 
 function getFunctionFromKeyPath(baseObject, keys) {
@@ -12,9 +15,9 @@ function getFunctionFromKeyPath(baseObject, keys) {
 }
 
 export function bindImportFunction(
-  asbindInstance,
-  importedFunction,
-  importedFunctionDescriptor
+  asbindInstance: AsbindInstance,
+  importedFunction: Function,
+  importedFunctionDescriptor: TypeDefFn
 ) {
   // Grab type converter functions according to the type descriptor
   const argumentConverterFunctions = importedFunctionDescriptor.parameters.map(
@@ -26,7 +29,7 @@ export function bindImportFunction(
 
   // Create a wrapper function that applies the correct converter function to arguments and
   // return value respectively.
-  return function(...args) {
+  return function (...args) {
     if (args.length != argumentConverterFunctions.length) {
       throw Error(
         `Expected ${argumentConverterFunctions.length} arguments, got ${args.length}`
@@ -51,9 +54,9 @@ export function bindImportFunction(
 // Function that takes in an asbind instance, and the key to the export function on the
 // abindInstance.exports object, to be wrapped and then re-assigned to the asbindInstance.exports.
 export function bindExportFunction(
-  asbindInstance,
-  exportedFunction,
-  exportedFunctionDescriptor
+  asbindInstance: AsbindInstance,
+  exportedFunction: Function,
+  exportedFunctionDescriptor: TypeDefFn
 ) {
   // Grab type converter functions according to the type descriptor
   const argumentConverterFunctions = exportedFunctionDescriptor.parameters.map(
@@ -89,7 +92,7 @@ export function bindExportFunction(
       return convertedParameter;
     });
     const result = exportedFunction(...newArgs);
-    pinnedArgs.forEach(arg => asbindInstance.exports.__unpin(arg));
+    pinnedArgs.forEach((arg) => asbindInstance.exports.__unpin(arg));
     return returnValueConverterFunction(
       asbindInstance,
       result,

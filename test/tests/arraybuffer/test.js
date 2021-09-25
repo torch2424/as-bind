@@ -1,5 +1,5 @@
-describe("as-bind", function() {
-  it("should handle ArrayBuffers", async function() {
+describe("as-bind", function () {
+  it("should handle ArrayBuffers", async function () {
     const instance = await AsBind.instantiate(this.rawModule, {
       asc: {
         swappedConcat(a, b) {
@@ -9,8 +9,8 @@ describe("as-bind", function() {
           result.set(b, 0);
           result.set(a, b.length);
           return result.buffer;
-        }
-      }
+        },
+      },
     });
     assert(
       new Uint8Array(

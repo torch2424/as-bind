@@ -4,80 +4,86 @@ import babel from "@rollup/plugin-babel";
 import { terser } from "rollup-plugin-terser";
 import bundleSize from "rollup-plugin-bundle-size";
 import pkg from "./package.json";
+import typescript from "@rollup/plugin-typescript";
 
 const sourcemapOption = process.env.PROD ? undefined : "inline";
 
 const babelConfig = {
   babelHelpers: "bundled",
-  presets: ["@babel/preset-env"]
+  presets: ["@babel/preset-env"],
 };
 
-let plugins = [resolve(), json(), babel(babelConfig)];
+let plugins = [
+  resolve(),
+  json(),
+  typescript({ tsconfig: "./tsconfig.json" }),
+  babel(babelConfig),
+];
 
 if (process.env.PROD) {
   plugins = [
     ...plugins,
     terser({ mangle: true, compress: true }),
-    bundleSize()
+    bundleSize(),
   ];
 }
 
 const libBundles = [
   {
-    input: "lib/lib.js",
+    input: "lib/lib.ts",
     output: {
       file: pkg.module.replace("esm", "cjs"),
       format: "cjs",
-      sourcemap: sourcemapOption
+      sourcemap: sourcemapOption,
     },
     watch: {
-      clearScreen: false
+      clearScreen: false,
     },
-    plugins
+    plugins,
   },
   {
-    input: "lib/lib.js",
+    input: "lib/lib.ts",
     output: {
       file: pkg.module,
       format: "esm",
-      sourcemap: sourcemapOption
+      sourcemap: sourcemapOption,
     },
     watch: {
-      clearScreen: false
+      clearScreen: false,
     },
-    plugins
+    plugins,
   },
   {
-    input: "lib/lib.js",
+    input: "lib/lib.ts",
     output: {
       file: pkg.iife,
       format: "iife",
       sourcemap: sourcemapOption,
-      name: "AsBindIIFE"
+      name: "AsBindIIFE",
     },
     watch: {
-      clearScreen: false
+      clearScreen: false,
     },
-    plugins
+    plugins,
   },
   {
-    input: "transform.js",
+    input: "transform.ts",
     output: {
       file: "dist/transform.cjs.js",
-      format: "cjs"
+      format: "cjs",
     },
     external: ["assemblyscript", "visitor-as/as"],
-    plugins
+    plugins,
   },
   {
-    input: "transform.js",
+    input: "transform.ts",
     output: {
       file: "dist/transform.amd.js",
-      format: "amd"
+      format: "amd",
     },
     external: ["assemblyscript", "visitor-as/as"],
-    plugins
-  }
+    plugins,
+  },
 ];
 
 export default libBundles;

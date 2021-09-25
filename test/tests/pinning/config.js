@@ -1,4 +1,4 @@
-exports.mangleCompilerParams = params => {
+exports.mangleCompilerParams = (params) => {
   // Remove runtime parameter
   const idx = params.indexOf("stub");
   params.splice(idx - 1, 2);
