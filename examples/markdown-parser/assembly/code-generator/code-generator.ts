@@ -1,10 +1,10 @@
-import {log} from "../util";
+import { log } from "../util";
 
-import {Token} from "../tokenizer/token";
-import {TokenType} from "../tokenizer/token-type";
+import { Token } from "../tokenizer/token";
+import { TokenType } from "../tokenizer/token-type";
 
-import {AstNode} from "../parser/ast";
-import {AstNodeType} from "../parser/ast-node-type";
+import { AstNode } from "../parser/ast";
+import { AstNodeType } from "../parser/ast-node-type";
 
 export function generateHtmlString(ast: Array<AstNode>): string {
   let htmlString: string = "";

@@ -2,7 +2,7 @@ import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import babel from "@rollup/plugin-babel";
 import json from "@rollup/plugin-json";
-import {terser} from "rollup-plugin-terser";
+import { terser } from "rollup-plugin-terser";
 import bundleSize from "rollup-plugin-bundle-size";
 import copy from "rollup-plugin-copy";
 import hash from "rollup-plugin-hash";
@@ -39,7 +39,7 @@ const babelPluginConfig = {
     "@babel/plugin-proposal-class-properties",
     "@babel/plugin-proposal-object-rest-spread",
     "@babel/plugin-proposal-export-default-from",
-    ["@babel/plugin-transform-react-jsx", {pragma: "h"}]
+    ["@babel/plugin-transform-react-jsx", { pragma: "h" }]
   ]
 };
 

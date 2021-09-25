@@ -1,4 +1,4 @@
-import {TypeDefFn} from "../types";
+import { TypeDefFn } from "../types";
 import AsbindInstance from "./asbind-instance";
 
 import {

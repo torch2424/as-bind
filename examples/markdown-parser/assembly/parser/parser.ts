@@ -1,10 +1,10 @@
-import {log} from "../util";
+import { log } from "../util";
 
-import {Token} from "../tokenizer/token";
-import {TokenType} from "../tokenizer/token-type";
+import { Token } from "../tokenizer/token";
+import { TokenType } from "../tokenizer/token-type";
 
-import {AstNode} from "./ast";
-import {AstNodeType} from "./ast-node-type";
+import { AstNode } from "./ast";
+import { AstNodeType } from "./ast-node-type";
 
 function addTokensToAst(tokens: Array<Token>, ast: Array<AstNode>): void {
   for (let i: i32 = 0; i < tokens.length; i++) {

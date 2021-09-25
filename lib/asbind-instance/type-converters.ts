@@ -126,64 +126,64 @@ export interface Converter {
 }
 
 export const converters = new Map<string | RegExp, Converter>([
-  ["void", {ascToJs: nop, jsToAsc: nop}],
+  ["void", { ascToJs: nop, jsToAsc: nop }],
   // Technically this matches types that don’ exist (like f8),
   // but since those can only appear if the compiler accepts them,
   // it seems unlikely for that to be a problem.
   [
     /^(i|u|f)(8|16|32|64)|[ui]size|bool|externref$/,
-    {ascToJs: nop, jsToAsc: nop}
+    { ascToJs: nop, jsToAsc: nop }
   ],
-  ["~lib/string/String", {ascToJs: getString, jsToAsc: putString}],
+  ["~lib/string/String", { ascToJs: getString, jsToAsc: putString }],
   [
     "~lib/typedarray/Int8Array",
-    {ascToJs: getArrayBufferView, jsToAsc: putArrayBufferView}
+    { ascToJs: getArrayBufferView, jsToAsc: putArrayBufferView }
   ],
   [
     "~lib/typedarray/Int16Array",
-    {ascToJs: getArrayBufferView, jsToAsc: putArrayBufferView}
+    { ascToJs: getArrayBufferView, jsToAsc: putArrayBufferView }
   ],
   [
     "~lib/typedarray/Int32Array",
-    {ascToJs: getArrayBufferView, jsToAsc: putArrayBufferView}
+    { ascToJs: getArrayBufferView, jsToAsc: putArrayBufferView }
   ],
   [
     "~lib/typedarray/Uint8Array",
-    {ascToJs: getArrayBufferView, jsToAsc: putArrayBufferView}
+    { ascToJs: getArrayBufferView, jsToAsc: putArrayBufferView }
   ],
   [
     "~lib/typedarray/Uint16Array",
-    {ascToJs: getArrayBufferView, jsToAsc: putArrayBufferView}
+    { ascToJs: getArrayBufferView, jsToAsc: putArrayBufferView }
   ],
   [
     "~lib/typedarray/Uint32Array",
-    {ascToJs: getArrayBufferView, jsToAsc: putArrayBufferView}
+    { ascToJs: getArrayBufferView, jsToAsc: putArrayBufferView }
   ],
   [
     "~lib/typedarray/Int64Array",
-    {ascToJs: getArrayBufferView, jsToAsc: putArrayBufferView}
+    { ascToJs: getArrayBufferView, jsToAsc: putArrayBufferView }
   ],
   [
     "~lib/typedarray/Uint64Array",
-    {ascToJs: getArrayBufferView, jsToAsc: putArrayBufferView}
+    { ascToJs: getArrayBufferView, jsToAsc: putArrayBufferView }
   ],
   [
     "~lib/typedarray/Uint8ClampedArray",
-    {ascToJs: getArrayBufferView, jsToAsc: putArrayBufferView}
+    { ascToJs: getArrayBufferView, jsToAsc: putArrayBufferView }
   ],
   [
     "~lib/typedarray/Float32Array",
-    {ascToJs: getArrayBufferView, jsToAsc: putArrayBufferView}
+    { ascToJs: getArrayBufferView, jsToAsc: putArrayBufferView }
   ],
   [
     "~lib/typedarray/Float64Array",
-    {ascToJs: getArrayBufferView, jsToAsc: putArrayBufferView}
+    { ascToJs: getArrayBufferView, jsToAsc: putArrayBufferView }
   ],
   [
     "~lib/arraybuffer/ArrayBuffer",
-    {ascToJs: getArrayBuffer, jsToAsc: putArrayBuffer}
+    { ascToJs: getArrayBuffer, jsToAsc: putArrayBuffer }
   ],
-  [/^~lib\/array\/Array<.+>$/, {ascToJs: getArray, jsToAsc: putArray}]
+  [/^~lib\/array\/Array<.+>$/, { ascToJs: getArray, jsToAsc: putArray }]
 ]);
 
 const warned = new Set<string>();
@@ -204,7 +204,7 @@ export function getConverterForType(typeName: string): Converter {
     );
     warned.add(typeName);
   }
-  return {ascToJs: nop, jsToAsc: nop};
+  return { ascToJs: nop, jsToAsc: nop };
 }
 
 export function getAscToJsConverterForType(typeName: string) {

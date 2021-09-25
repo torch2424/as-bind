@@ -1,7 +1,7 @@
 // Wrapper around the loader instantiate
 import loader from "@assemblyscript/loader";
 
-import {WebAssemblyLoaderResult} from "../types";
+import { WebAssemblyLoaderResult } from "../types";
 
 export async function asbindInstantiate(
   module: WebAssembly.Module,

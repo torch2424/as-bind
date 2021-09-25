@@ -1,7 +1,7 @@
-import {log} from "../util";
+import { log } from "../util";
 
-import {Token} from "./token";
-import {TokenType} from "./token-type";
+import { Token } from "./token";
+import { TokenType } from "./token-type";
 
 let tokens = new Array<Token>(0);
 

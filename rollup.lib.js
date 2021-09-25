@@ -1,7 +1,7 @@
 import resolve from "@rollup/plugin-node-resolve";
 import json from "@rollup/plugin-json";
 import babel from "@rollup/plugin-babel";
-import {terser} from "rollup-plugin-terser";
+import { terser } from "rollup-plugin-terser";
 import bundleSize from "rollup-plugin-bundle-size";
 import pkg from "./package.json";
 import typescript from "@rollup/plugin-typescript";
@@ -16,12 +16,16 @@ const babelConfig = {
 let plugins = [
   resolve(),
   json(),
-  typescript({tsconfig: "./tsconfig.json"}),
+  typescript({ tsconfig: "./tsconfig.json" }),
   babel(babelConfig)
 ];
 
 if (process.env.PROD) {
-  plugins = [...plugins, terser({mangle: true, compress: true}), bundleSize()];
+  plugins = [
+    ...plugins,
+    terser({ mangle: true, compress: true }),
+    bundleSize()
+  ];
 }
 
 const libBundles = [

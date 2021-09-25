@@ -3,7 +3,7 @@ const puppeteer = require("puppeteer");
 
 // Require rollup to compile our browser.js
 const rollup = require("rollup");
-const {nodeResolve} = require("@rollup/plugin-node-resolve");
+const { nodeResolve } = require("@rollup/plugin-node-resolve");
 
 // Get some native node libs, in order to host a static server
 const path = require("path");
@@ -32,7 +32,7 @@ http
     input: "./browser.js",
     plugins: [nodeResolve()]
   });
-  const {output} = await bundle.generate({
+  const { output } = await bundle.generate({
     format: "iife"
   });
   const browserQuickstartJs = output[0].code;

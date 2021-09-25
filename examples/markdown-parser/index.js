@@ -1,8 +1,8 @@
-import {h, render, Component} from "preact";
+import { h, render, Component } from "preact";
 import * as asbind from "../../dist/as-bind.esm";
 
 // Import our TypeScript equivalent
-import {convertMarkdownToHTML} from "../../dist/ts/index";
+import { convertMarkdownToHTML } from "../../dist/ts/index";
 import "./index.css";
 
 let testMarkdown = `# __as-bind__ ~~convert~~ **markdown** to     html

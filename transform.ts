@@ -8,7 +8,7 @@ import {
   StringLiteralExpression,
   Module
 } from "visitor-as/as";
-import {TypeDef} from "./lib/types";
+import { TypeDef } from "./lib/types";
 
 function isInternalElement(element) {
   return element.internalName.startsWith("~");

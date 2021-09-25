@@ -1,4 +1,4 @@
-import {swappedConcat} from "./imports";
+import { swappedConcat } from "./imports";
 
 export function addExclamations(s: string): string {
   return "!" + s + "!";
