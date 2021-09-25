@@ -1,6 +1,6 @@
-const { promisify } = require("util");
+const {promisify} = require("util");
 const fs = require("fs/promises");
-const { dirname, join } = require("path");
+const {dirname, join} = require("path");
 
 const Express = require("express");
 const Mocha = require("mocha");
@@ -67,7 +67,7 @@ async function getNumFailingTestsInNode() {
 
   mocha.rootHooks({
     async beforeEach() {
-      const { file } = this.currentTest;
+      const {file} = this.currentTest;
       const wasmFile = file.replace(/test\.js$/, "asc.wasm");
       this.rawModule = await fs.readFile(wasmFile);
     }
@@ -90,7 +90,7 @@ async function getNumFailingTestsInPuppeteer() {
   const browser = await pptr.launch({
     devtools: OPEN_DEVTOOLS,
     ...(process.env.PUPPETEER_EXECUTABLE_PATH?.length > 0
-      ? { executablePath: process.env.PUPPETEER_EXECUTABLE_PATH }
+      ? {executablePath: process.env.PUPPETEER_EXECUTABLE_PATH}
       : {})
   });
   const page = await browser.newPage();

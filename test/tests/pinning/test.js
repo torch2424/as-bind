@@ -12,7 +12,7 @@ describe("as-bind", function () {
 
     (async () => {
       const instance = await AsBind.instantiate(this.rawModule, {
-        asc: { string_log }
+        asc: {string_log}
       });
 
       instance.exports.trash(10000);

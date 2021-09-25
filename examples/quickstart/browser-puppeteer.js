@@ -3,7 +3,7 @@ const puppeteer = require("puppeteer");
 
 // Require rollup to compile our browser.js
 const rollup = require("rollup");
-const { nodeResolve } = require("@rollup/plugin-node-resolve");
+const {nodeResolve} = require("@rollup/plugin-node-resolve");
 
 // Get some native node libs, in order to host a static server
 const path = require("path");
@@ -32,7 +32,7 @@ http
     input: "./browser.js",
     plugins: [nodeResolve()]
   });
-  const { output } = await bundle.generate({
+  const {output} = await bundle.generate({
     format: "iife"
   });
   const browserQuickstartJs = output[0].code;
@@ -52,7 +52,9 @@ http
 
   // Listen to JS Console messages, log them, and resolve our promise on an expected message
   page.on("console", message => {
-    console.log(`${message.type().substr(0, 3).toUpperCase()} ${message.text()}`);
+    console.log(
+      `${message.type().substr(0, 3).toUpperCase()} ${message.text()}`
+    );
 
     if (message.text() === "AsBind: Hello World!") {
       pageResolve();

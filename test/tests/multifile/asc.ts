@@ -1,1 +1,1 @@
-export { swapAndPad } from "./exports";
+export {swapAndPad} from "./exports";

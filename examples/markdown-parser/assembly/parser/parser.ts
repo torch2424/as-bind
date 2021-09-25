@@ -1,10 +1,10 @@
-import { log } from "../util";
+import {log} from "../util";
 
-import { Token } from "../tokenizer/token";
-import { TokenType } from "../tokenizer/token-type";
+import {Token} from "../tokenizer/token";
+import {TokenType} from "../tokenizer/token-type";
 
-import { AstNode } from "./ast";
-import { AstNodeType } from "./ast-node-type";
+import {AstNode} from "./ast";
+import {AstNodeType} from "./ast-node-type";
 
 function addTokensToAst(tokens: Array<Token>, ast: Array<AstNode>): void {
   for (let i: i32 = 0; i < tokens.length; i++) {
@@ -29,7 +29,11 @@ function getNewAstNode(): AstNode {
   return astNode;
 }
 
-function addAstNode(ast: Array<AstNode>, tokens: Array<Token>, tokenIndex: i32): i32 {
+function addAstNode(
+  ast: Array<AstNode>,
+  tokens: Array<Token>,
+  tokenIndex: i32
+): i32 {
   let astNode: AstNode = getNewAstNode();
   let token: Token = tokens[tokenIndex];
 
@@ -196,7 +200,8 @@ function addAstNode(ast: Array<AstNode>, tokens: Array<Token>, tokenIndex: i32):
     let listItemTokenIndex = tokenIndex;
     while (
       listItemTokenIndex + tokensSkippedForWhitespace < tokens.length &&
-      tokens[listItemTokenIndex + tokensSkippedForWhitespace].type == listItemType
+      tokens[listItemTokenIndex + tokensSkippedForWhitespace].type ==
+        listItemType
     ) {
       // Add the tokens we skipped for whitespace to our other skip/index values
       tokensToSkip += tokensSkippedForWhitespace;
@@ -257,7 +262,10 @@ function addAstNode(ast: Array<AstNode>, tokens: Array<Token>, tokenIndex: i32):
 
     // We have the alt text, if this is an image
     // We need to check if this is immediately followed by a parentheses
-    if (tokens[tokenIndex + altTextOffsetTokenLength + 2].type == TokenType.PAREN_START) {
+    if (
+      tokens[tokenIndex + altTextOffsetTokenLength + 2].type ==
+      TokenType.PAREN_START
+    ) {
       let imageTokens: Array<Token> = getAllTokensUntilTokenReached(
         tokens,
         tokenIndex + altTextOffsetTokenLength + 3,
@@ -293,7 +301,8 @@ function addAstNode(ast: Array<AstNode>, tokens: Array<Token>, tokenIndex: i32):
     // We have the link content, if this is an link
     // We need to check if this is immediately followed by a parentheses
     if (
-      tokens[tokenIndex + linkContentOffsetTokenLength + 2].type == TokenType.PAREN_START
+      tokens[tokenIndex + linkContentOffsetTokenLength + 2].type ==
+      TokenType.PAREN_START
     ) {
       let urlTokens: Array<Token> = getAllTokensUntilTokenReached(
         tokens,

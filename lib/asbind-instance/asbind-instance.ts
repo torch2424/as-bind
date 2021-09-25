@@ -1,6 +1,6 @@
 // Class for asbind instances
-import { asbindInstantiate, asbindInstantiateSync } from "./instantiate";
-import { bindImportFunction, bindExportFunction } from "./bind-function";
+import {asbindInstantiate, asbindInstantiateSync} from "./instantiate";
+import {bindImportFunction, bindExportFunction} from "./bind-function";
 import {
   TypeDef,
   WebAssemblyModuleStreaming,
@@ -8,17 +8,20 @@ import {
   WebAssemblyLoaderResult
 } from "../types";
 
-import { ASUtil } from "@assemblyscript/loader";
+import {ASUtil} from "@assemblyscript/loader";
 
 const SECTION_NAME = "as-bind_bindings";
 
 // Basically a deep-copy, but can be limited in levels.
-function copyObject<T>(obj: T, { depth = Number.POSITIVE_INFINITY } = {}): T {
+function copyObject<T>(obj: T, {depth = Number.POSITIVE_INFINITY} = {}): T {
   if (depth <= 0 || !obj || typeof obj !== "object") {
     return obj;
   }
   return Object.fromEntries(
-    Object.entries(obj).map(([key, val]) => [key, copyObject(val, { depth: depth - 1 })])
+    Object.entries(obj).map(([key, val]) => [
+      key,
+      copyObject(val, {depth: depth - 1})
+    ])
   ) as T;
 }
 
@@ -66,12 +69,16 @@ export default class AsbindInstance {
   }
 
   _validate() {
-    if (!WebAssembly.Module.exports(this.module).find(exp => exp.name === "__new")) {
+    if (
+      !WebAssembly.Module.exports(this.module).find(exp => exp.name === "__new")
+    ) {
       throw Error(
         "The AssemblyScript wasm module was not built with --exportRuntime, which is required."
       );
     }
-    if (WebAssembly.Module.customSections(this.module, SECTION_NAME).length !== 1) {
+    if (
+      WebAssembly.Module.customSections(this.module, SECTION_NAME).length !== 1
+    ) {
       throw new Error(
         "The AssemblyScript wasm module was not built with the as-bind transform."
       );
@@ -92,7 +99,10 @@ export default class AsbindInstance {
     this._instantiateBindUnboundExports();
   }
 
-  _instantiateSync(source: WebAssemblyModuleSync, importObject: WebAssembly.Imports) {
+  _instantiateSync(
+    source: WebAssemblyModuleSync,
+    importObject: WebAssembly.Imports
+  ) {
     this.module = new WebAssembly.Module(source);
 
     this._validate();
@@ -103,19 +113,23 @@ export default class AsbindInstance {
   }
 
   _instantiateBindImportFunctions(importObject: WebAssembly.Imports) {
-    this.importObject = copyObject(importObject, { depth: 2 });
+    this.importObject = copyObject(importObject, {depth: 2});
 
     for (const [moduleName, moduleDescriptor] of Object.entries(
       this.typeDescriptor.importedFunctions
     )) {
-      for (const [importedFunctionName, descriptor] of Object.entries(moduleDescriptor)) {
-        this.importObject[moduleName][`__asbind_unbound_${importedFunctionName}`] =
-          importObject[moduleName][importedFunctionName];
-        this.importObject[moduleName][importedFunctionName] = bindImportFunction(
-          this,
-          importObject[moduleName][importedFunctionName] as Function,
-          descriptor
-        );
+      for (const [importedFunctionName, descriptor] of Object.entries(
+        moduleDescriptor
+      )) {
+        this.importObject[moduleName][
+          `__asbind_unbound_${importedFunctionName}`
+        ] = importObject[moduleName][importedFunctionName];
+        this.importObject[moduleName][importedFunctionName] =
+          bindImportFunction(
+            this,
+            importObject[moduleName][importedFunctionName] as Function,
+            descriptor
+          );
       }
     }
   }
@@ -123,7 +137,7 @@ export default class AsbindInstance {
   _instantiateBindUnboundExports() {
     // Wrap appropriate the appropriate export functions
     const unboundExports = this.loadedModule.exports;
-    this.exports = copyObject(unboundExports, { depth: 1 });
+    this.exports = copyObject(unboundExports, {depth: 1});
 
     for (const [exportedFunctionName, descriptor] of Object.entries(
       this.typeDescriptor.exportedFunctions

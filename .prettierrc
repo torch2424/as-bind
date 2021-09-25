@@ -2,5 +2,6 @@
   "trailingComma": "none",
   "semi": true,
   "arrowParens": "avoid",
-  "printWidth": 90
+  "printWidth": 80,
+  "bracketSpacing": false
 }

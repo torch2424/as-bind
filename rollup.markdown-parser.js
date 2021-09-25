@@ -2,7 +2,7 @@ import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import babel from "@rollup/plugin-babel";
 import json from "@rollup/plugin-json";
-import { terser } from "rollup-plugin-terser";
+import {terser} from "rollup-plugin-terser";
 import bundleSize from "rollup-plugin-bundle-size";
 import copy from "rollup-plugin-copy";
 import hash from "rollup-plugin-hash";
@@ -14,13 +14,20 @@ const fs = require("fs");
 const mkdirp = require("mkdirp");
 
 const writeIndexHtmlToBuild = bundleName => {
-  let indexHtml = fs.readFileSync("examples/markdown-parser/index.html", "utf8");
+  let indexHtml = fs.readFileSync(
+    "examples/markdown-parser/index.html",
+    "utf8"
+  );
   mkdirp.sync("dist/examples/markdown-parser");
   indexHtml = indexHtml.replace(
     "<%BUNDLE%>",
     bundleName.replace("dist/examples/markdown-parser/", "")
   );
-  fs.writeFileSync("dist/examples/markdown-parser/index.html", indexHtml, "utf8");
+  fs.writeFileSync(
+    "dist/examples/markdown-parser/index.html",
+    indexHtml,
+    "utf8"
+  );
 };
 
 const sourcemapOption = process.env.PROD ? undefined : "inline";
@@ -32,7 +39,7 @@ const babelPluginConfig = {
     "@babel/plugin-proposal-class-properties",
     "@babel/plugin-proposal-object-rest-spread",
     "@babel/plugin-proposal-export-default-from",
-    ["@babel/plugin-transform-react-jsx", { pragma: "h" }]
+    ["@babel/plugin-transform-react-jsx", {pragma: "h"}]
   ]
 };
 

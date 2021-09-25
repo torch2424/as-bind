@@ -1,8 +1,8 @@
-import { version as packVersion } from "../package.json";
+import {version as packVersion} from "../package.json";
 import AsbindInstance from "./asbind-instance/asbind-instance";
-export { converters } from "./asbind-instance/type-converters";
+export {converters} from "./asbind-instance/type-converters";
 
-import { WebAssemblyModuleStreaming, WebAssemblyModuleSync } from "./types";
+import {WebAssemblyModuleStreaming, WebAssemblyModuleSync} from "./types";
 
 export const version: string = packVersion;
 

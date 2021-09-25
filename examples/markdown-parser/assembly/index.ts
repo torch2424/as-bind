@@ -1,14 +1,14 @@
 // Wasm module to do a basic markdown to HTML
 
-import { log } from "./util";
+import {log} from "./util";
 
-import { Token } from "./tokenizer/token";
-import { markdownTokenizer } from "./tokenizer/tokenizer";
+import {Token} from "./tokenizer/token";
+import {markdownTokenizer} from "./tokenizer/tokenizer";
 
-import { AstNode } from "./parser/ast";
-import { markdownTokenParser } from "./parser/parser";
+import {AstNode} from "./parser/ast";
+import {markdownTokenParser} from "./parser/parser";
 
-import { generateHtmlString } from "./code-generator/code-generator";
+import {generateHtmlString} from "./code-generator/code-generator";
 
 // https://www.geeksforgeeks.org/compiler-design-phases-compiler/
 // https://github.com/jamiebuilds/the-super-tiny-compiler/blob/master/the-super-tiny-compiler.js
