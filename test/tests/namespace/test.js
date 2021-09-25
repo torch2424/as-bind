@@ -4,8 +4,8 @@ describe("as-bind", function () {
       asc: {
         "console.log"(str) {
           assert(str === "ok");
-        },
-      },
+        }
+      }
     });
     instance.exports.fn();
   });

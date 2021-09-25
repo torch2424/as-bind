@@ -30,10 +30,10 @@ http
   // Create a rollup bundle and get our compiled browser.js as a string
   const bundle = await rollup.rollup({
     input: "./browser.js",
-    plugins: [nodeResolve()],
+    plugins: [nodeResolve()]
   });
   const { output } = await bundle.generate({
-    format: "iife",
+    format: "iife"
   });
   const browserQuickstartJs = output[0].code;
 

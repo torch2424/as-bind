@@ -7,13 +7,13 @@ describe("as-bind", function () {
       my_module: {
         my_log(str) {
           from_wasm = str;
-        },
+        }
       },
       asc: {
         my_log2(str) {
           from_wasm2 = str;
-        },
-      },
+        }
+      }
     });
 
     instance.exports.fn();

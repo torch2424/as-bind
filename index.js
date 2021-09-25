@@ -4,8 +4,8 @@ const compiled = new WebAssembly.Module(
 );
 const imports = {
   env: {
-    abort: () => {},
-  },
+    abort: () => {}
+  }
 };
 const wasmInstance = new WebAssembly.Instance(compiled, imports);
 wasmInstance.exports._asbind_add = wasmInstance.exports.add;

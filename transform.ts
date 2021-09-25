@@ -6,7 +6,7 @@ import {
   IdentifierExpression,
   FunctionPrototype,
   StringLiteralExpression,
-  Module,
+  Module
 } from "visitor-as/as";
 import { TypeDef } from "./lib/types";
 
@@ -36,7 +36,7 @@ function getFunctionTypeDescriptor(func) {
     returnType: typeName(func.signature.returnType),
     parameters: func.signature.parameterTypes.map((parameter) =>
       typeName(parameter)
-    ),
+    )
   };
 }
 
@@ -48,7 +48,7 @@ function extractTypeIds(type) {
   }
   result[clazz.internalName] = {
     id: clazz.id,
-    byteSize: clazz.nextMemoryOffset,
+    byteSize: clazz.nextMemoryOffset
   };
   if (clazz.typeArguments) {
     for (const subType of clazz.typeArguments) {
@@ -72,7 +72,7 @@ const SECTION_NAME = "as-bind_bindings";
 export default class AsBindTransform extends Transform {
   afterCompile(module: Module) {
     const flatExportedFunctions = [
-      ...this.program.elementsByDeclaration.values(),
+      ...this.program.elementsByDeclaration.values()
     ]
       .filter((el) => elementHasFlag(el, CommonFlags.MODULE_EXPORT))
       .filter((el) => !isInternalElement(el))
@@ -80,7 +80,7 @@ export default class AsBindTransform extends Transform {
         (el) => el.declaration.kind === NodeKind.FUNCTIONDECLARATION
       ) as FunctionPrototype[];
     const flatImportedFunctions = [
-      ...this.program.elementsByDeclaration.values(),
+      ...this.program.elementsByDeclaration.values()
     ]
       .filter((el) => elementHasFlag(el, CommonFlags.DECLARE))
       .filter((el) => !isInternalElement(el))
@@ -179,7 +179,7 @@ export default class AsBindTransform extends Transform {
         JSON.stringify({
           typeIds,
           importedFunctions,
-          exportedFunctions,
+          exportedFunctions
         })
       )
     );

@@ -3,7 +3,7 @@ import AsbindInstance from "./asbind-instance";
 
 import {
   getAscToJsConverterForType,
-  getJsToAscConverterForType,
+  getJsToAscConverterForType
 } from "./type-converters";
 
 function getFunctionFromKeyPath(baseObject, keys) {

@@ -15,7 +15,7 @@ describe("as-bind", function () {
         const dv = new DataView(asbindInstance.exports.memory.buffer);
         dv.setUint32(ptr, strPtr, true);
         return ptr;
-      },
+      }
     });
     const instance = await AsBind.instantiate(this.rawModule);
     assert(instance.exports.makeAThing("hello") === "hello");

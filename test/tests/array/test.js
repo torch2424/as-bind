@@ -4,8 +4,8 @@ describe("as-bind", function () {
       asc: {
         swappedConcat(a, b) {
           return [].concat(b, a);
-        },
-      },
+        }
+      }
     });
     assert(
       instance.exports.swapAndPad([1, 2, 3], [10, 11, 12]).join(",") ===
@@ -18,8 +18,8 @@ describe("as-bind", function () {
       asc: {
         swappedConcat(a, b) {
           return [].concat(b, a);
-        },
-      },
+        }
+      }
     });
     const data = [["a", "b", "c"], ["1"], ["w", "x", "y", "z"]];
     assert(

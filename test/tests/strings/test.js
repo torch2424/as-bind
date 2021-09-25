@@ -4,8 +4,8 @@ describe("as-bind", function () {
       asc: {
         swappedConcat(a, b) {
           return b + a;
-        },
-      },
+        }
+      }
     });
     assert(instance.exports.swapAndPad("a", "b") === "!ba!");
   });

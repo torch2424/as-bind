@@ -49,13 +49,13 @@ let asbindInstancePromise = asbind.instantiate(fetch("index.wasm"), {
   util: {
     consoleLog: (message) => {
       console.log(message);
-    },
+    }
   },
   env: {
     abort: () => {
       console.error("AssemblyScript Import Object Aborted!");
-    },
-  },
+    }
+  }
 });
 
 class App extends Component {
@@ -64,7 +64,7 @@ class App extends Component {
 
     this.state = {
       markdown: testMarkdown,
-      html: "",
+      html: ""
     };
   }
 
@@ -98,7 +98,7 @@ ${html}
 
     this.setState({
       markdown,
-      html,
+      html
     });
   }
 
@@ -138,7 +138,7 @@ ${html}
               <div
                 class="result-html"
                 dangerouslySetInnerHTML={{
-                  __html: this.state.html,
+                  __html: this.state.html
                 }}
               ></div>
             </div>

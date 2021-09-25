@@ -4,8 +4,8 @@ describe("as-bind", function () {
       imports: {
         swappedConcat(a, b) {
           return b + a;
-        },
-      },
+        }
+      }
     });
     assert(typeof instance.exports.addExclamations === "undefined");
     assert(instance.exports.swapAndPad("a", "b") === "!ba!");

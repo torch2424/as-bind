@@ -15,7 +15,7 @@ export const RESERVED_RUNTIME_EXPORT_KEYS = [
   "__rtti_base",
   "__alloc",
   "__allocArray",
-  "__allocString",
+  "__allocString"
 ];
 
 export function isReservedExportKey(key: string) {

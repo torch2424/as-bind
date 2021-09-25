@@ -34,7 +34,7 @@ async function compileAllAsc() {
   for (const ascFile of ascFiles) {
     const dir = dirname(ascFile);
     let config = {
-      mangleCompilerParams() {},
+      mangleCompilerParams() {}
     };
     try {
       const configPath = require.resolve("./" + join(dir, "config.js"));
@@ -50,7 +50,7 @@ async function compileAllAsc() {
       transformFile,
       "--binaryFile",
       ascFile.replace(/\.ts$/, ".wasm"),
-      ascFile,
+      ascFile
     ];
     config.mangleCompilerParams(params);
     await asc.main(params);
@@ -70,7 +70,7 @@ async function getNumFailingTestsInNode() {
       const { file } = this.currentTest;
       const wasmFile = file.replace(/test\.js$/, "asc.wasm");
       this.rawModule = await fs.readFile(wasmFile);
-    },
+    }
   });
 
   const numFailures = await runMochaAsync(mocha);
@@ -91,7 +91,7 @@ async function getNumFailingTestsInPuppeteer() {
     devtools: OPEN_DEVTOOLS,
     ...(process.env.PUPPETEER_EXECUTABLE_PATH?.length > 0
       ? { executablePath: process.env.PUPPETEER_EXECUTABLE_PATH }
-      : {}),
+      : {})
   });
   const page = await browser.newPage();
 

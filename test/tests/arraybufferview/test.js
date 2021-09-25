@@ -11,8 +11,8 @@ describe("as-bind", function () {
         testF32Arr(data) {
           assert(data instanceof Float32Array);
           assert(data[0] == 0.5);
-        },
-      },
+        }
+      }
     });
     assert(
       instance.exports

@@ -5,7 +5,7 @@ import {
   TypeDef,
   WebAssemblyModuleStreaming,
   WebAssemblyModuleSync,
-  WebAssemblyLoaderResult,
+  WebAssemblyLoaderResult
 } from "../types";
 
 import { ASUtil } from "@assemblyscript/loader";
@@ -20,7 +20,7 @@ function copyObject<T>(obj: T, { depth = Number.POSITIVE_INFINITY } = {}): T {
   return Object.fromEntries(
     Object.entries(obj).map(([key, val]) => [
       key,
-      copyObject(val, { depth: depth - 1 }),
+      copyObject(val, { depth: depth - 1 })
     ])
   ) as T;
 }

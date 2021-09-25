@@ -39,22 +39,22 @@ const babelPluginConfig = {
     "@babel/plugin-proposal-class-properties",
     "@babel/plugin-proposal-object-rest-spread",
     "@babel/plugin-proposal-export-default-from",
-    ["@babel/plugin-transform-react-jsx", { pragma: "h" }],
-  ],
+    ["@babel/plugin-transform-react-jsx", { pragma: "h" }]
+  ]
 };
 
 let plugins = [
   postcss({
     extensions: [".css"],
-    plugins: [postcssImport()],
+    plugins: [postcssImport()]
   }),
   resolve(),
   babel(babelPluginConfig),
   commonjs(),
   json(),
   copy({
-    targets: [],
-  }),
+    targets: []
+  })
 ];
 
 if (process.env.DEV) {
@@ -66,18 +66,18 @@ if (process.env.PROD) {
     ...plugins,
     terser({
       mangle: true,
-      compress: true,
+      compress: true
     }),
     bundleSize(),
     del({
-      targets: ["dist/examples/markdown-parser/bundle.*.js"],
+      targets: ["dist/examples/markdown-parser/bundle.*.js"]
     }),
     hash({
       dest: "dist/examples/markdown-parser/bundle.[hash].js",
       callback: (bundleName) => {
         writeIndexHtmlToBuild(bundleName);
-      },
-    }),
+      }
+    })
   ];
 }
 
@@ -91,10 +91,10 @@ const mdBundles = [
       banner: fs.readFileSync(
         "examples/markdown-parser/assembly/as-mocks-banner.js",
         "utf8"
-      ),
+      )
     },
-    plugins: plugins,
-  },
+    plugins: plugins
+  }
 ];
 
 export default mdBundles;

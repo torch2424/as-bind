@@ -9,8 +9,8 @@ describe("as-bind", function () {
           result.set(b, 0);
           result.set(a, b.length);
           return result.buffer;
-        },
-      },
+        }
+      }
     });
     assert(
       new Uint8Array(
