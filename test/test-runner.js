@@ -79,7 +79,7 @@ async function getNumFailingTestsInNode() {
 
 async function runMochaAsync(mocha) {
   await mocha.loadFilesAsync();
-  return new Promise((resolve) => mocha.run(resolve));
+  return new Promise(resolve => mocha.run(resolve));
 }
 
 const PORT = process.env.PORT ?? 50123;
@@ -99,7 +99,7 @@ async function getNumFailingTestsInPuppeteer() {
   // ironically. So I have to intercept console.log()s and detect which
   // one is the JSON resport string. `result` will contain the parsed JSON.
   let result;
-  page.on("console", async (msg) => {
+  page.on("console", async msg => {
     const maybeResult = await maybeExtractMochaStatsDump(msg);
     if (maybeResult) {
       result = maybeResult;
@@ -110,14 +110,14 @@ async function getNumFailingTestsInPuppeteer() {
   // If we want DevTools open, wait for a second here so DevTools can load.
   // Otherwise we might run past `debugger` statements.
   if (OPEN_DEVTOOLS) {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1000));
   }
 
   const app = Express();
   app.use("/", Express.static("../"));
   const server = app.listen(PORT);
   await page.goto(`http://localhost:${PORT}/test/test-runner.html`);
-  const numFailures = await page.evaluate(async (testFiles) => {
+  const numFailures = await page.evaluate(async testFiles => {
     for (const testFile of testFiles) {
       // Register the test
       await runScript(`/test/${testFile}`);

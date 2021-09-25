@@ -47,7 +47,7 @@ let testMarkdown = `# __as-bind__ ~~convert~~ **markdown** to     html
 
 let asbindInstancePromise = asbind.instantiate(fetch("index.wasm"), {
   util: {
-    consoleLog: (message) => {
+    consoleLog: message => {
       console.log(message);
     }
   },
@@ -107,21 +107,18 @@ ${html}
       <div class="app">
         <h1>as-bind Markdown Parser Demo</h1>
         <p class="description">
-          as-bind is a library to handle passing high-level data structures
-          between AssemblyScript and JavaScript. This demo takes the input from
-          the markdown text area, and passes the string directly to and exported
-          function of the as-bind instantiated AssemblyScript module, and then
-          binds the returned string to the result div. The input and response
-          are logged into the JavaScript console.
+          as-bind is a library to handle passing high-level data structures between
+          AssemblyScript and JavaScript. This demo takes the input from the markdown text
+          area, and passes the string directly to and exported function of the as-bind
+          instantiated AssemblyScript module, and then binds the returned string to the
+          result div. The input and response are logged into the JavaScript console.
         </p>
         <p class="description">
           <b>as-bind version:</b> {asbind.version}
         </p>
         <nav class="link-row">
           <div>
-            <a href="https://github.com/torch2424/as-bind">
-              Source Code (Github)
-            </a>
+            <a href="https://github.com/torch2424/as-bind">Source Code (Github)</a>
           </div>
         </nav>
         <div class="editor-container">
@@ -130,7 +127,7 @@ ${html}
               <h2>Markdown</h2>
               <textarea
                 value={this.state.markdown}
-                onInput={(event) => this.handleChange(event)}
+                onInput={event => this.handleChange(event)}
               ></textarea>
             </div>
             <div class="result">

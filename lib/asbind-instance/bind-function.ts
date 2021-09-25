@@ -92,7 +92,7 @@ export function bindExportFunction(
       return convertedParameter;
     });
     const result = exportedFunction(...newArgs);
-    pinnedArgs.forEach((arg) => asbindInstance.exports.__unpin(arg));
+    pinnedArgs.forEach(arg => asbindInstance.exports.__unpin(arg));
     return returnValueConverterFunction(
       asbindInstance,
       result,

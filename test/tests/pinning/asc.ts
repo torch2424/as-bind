@@ -20,12 +20,7 @@ export function trash(amount: i32): void {
   }
 }
 
-export function string_parameter(
-  s1: string,
-  s2: string,
-  s3: string,
-  s4: string
-): void {
+export function string_parameter(s1: string, s2: string, s3: string, s4: string): void {
   string_log(s1);
   string_log(s2);
   string_log(s3);

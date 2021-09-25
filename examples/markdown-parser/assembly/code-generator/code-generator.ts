@@ -104,10 +104,7 @@ function generateHtmlStringForAstNode(
     return htmlString;
   }
 
-  if (
-    astNode.type == AstNodeType.CODE_BLOCK ||
-    astNode.type == AstNodeType.INLINE_CODE
-  ) {
+  if (astNode.type == AstNodeType.CODE_BLOCK || astNode.type == AstNodeType.INLINE_CODE) {
     htmlString = "<code>";
     htmlString += astNode.value;
     htmlString += "</code>";

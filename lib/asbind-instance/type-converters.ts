@@ -21,44 +21,26 @@ function nop(asbindInstance: AsbindInstance, value: any, typeName: string) {
   return value;
 }
 
-function getString(
-  asbindInstance: AsbindInstance,
-  value: any,
-  typeName: string
-) {
+function getString(asbindInstance: AsbindInstance, value: any, typeName: string) {
   return asbindInstance.exports.__getString(value);
 }
 
-function putString(
-  asbindInstance: AsbindInstance,
-  value: any,
-  typeName: string
-) {
+function putString(asbindInstance: AsbindInstance, value: any, typeName: string) {
   return asbindInstance.exports.__newString(value);
 }
 
-function getArrayBuffer(
-  asbindInstance: AsbindInstance,
-  value: any,
-  typeName: string
-) {
+function getArrayBuffer(asbindInstance: AsbindInstance, value: any, typeName: string) {
   return asbindInstance.exports.__getArrayBuffer(value);
 }
 
-function putArrayBuffer(
-  asbindInstance: AsbindInstance,
-  value: any,
-  typeName: string
-) {
+function putArrayBuffer(asbindInstance: AsbindInstance, value: any, typeName: string) {
   const ptr = asbindInstance.exports.__new(
     value.byteLength,
     asbindInstance.getTypeId(typeName)
   );
-  new Uint8Array(
-    asbindInstance.exports.memory.buffer,
-    ptr,
-    value.byteLength
-  ).set(new Uint8Array(value));
+  new Uint8Array(asbindInstance.exports.memory.buffer, ptr, value.byteLength).set(
+    new Uint8Array(value)
+  );
   return ptr;
 }
 
@@ -67,19 +49,16 @@ function getArrayBufferView(
   value: any,
   typeName: string
 ) {
-  return asbindInstance.exports[
-    `__get${normalizeArrayBufferViewTypeName(typeName)}View`
-  ](value);
+  return asbindInstance.exports[`__get${normalizeArrayBufferViewTypeName(typeName)}View`](
+    value
+  );
 }
 function putArrayBufferView(
   asbindInstance: AsbindInstance,
   value: any,
   typeName: string
 ) {
-  return asbindInstance.exports.__newArray(
-    asbindInstance.getTypeId(typeName),
-    value
-  );
+  return asbindInstance.exports.__newArray(asbindInstance.getTypeId(typeName), value);
 }
 
 const stdlibArray = "~lib/array/Array";
@@ -91,27 +70,17 @@ function arrayInnerType(typeName: string) {
   return typeName.slice(`${stdlibArray}<`.length, -1);
 }
 
-function getArray(
-  asbindInstance: AsbindInstance,
-  value: any,
-  typeName: string
-) {
+function getArray(asbindInstance: AsbindInstance, value: any, typeName: string) {
   const innerTypeName = arrayInnerType(typeName);
   const innerTypeConverter = getConverterForType(innerTypeName);
   const rawArray = asbindInstance.exports.__getArray(value);
-  return rawArray.map((v) =>
-    innerTypeConverter.ascToJs(asbindInstance, v, innerTypeName)
-  );
+  return rawArray.map(v => innerTypeConverter.ascToJs(asbindInstance, v, innerTypeName));
 }
 
-function putArray(
-  asbindInstance: AsbindInstance,
-  value: any,
-  typeName: string
-) {
+function putArray(asbindInstance: AsbindInstance, value: any, typeName: string) {
   const innerTypeName = arrayInnerType(typeName);
   const innerTypeConverter = getConverterForType(innerTypeName);
-  const convertedValues = value.map((v) =>
+  const convertedValues = value.map(v =>
     innerTypeConverter.jsToAsc(asbindInstance, v, innerTypeName)
   );
   return asbindInstance.exports.__newArray(
@@ -130,10 +99,7 @@ export const converters = new Map<string | RegExp, Converter>([
   // Technically this matches types that don’ exist (like f8),
   // but since those can only appear if the compiler accepts them,
   // it seems unlikely for that to be a problem.
-  [
-    /^(i|u|f)(8|16|32|64)|[ui]size|bool|externref$/,
-    { ascToJs: nop, jsToAsc: nop }
-  ],
+  [/^(i|u|f)(8|16|32|64)|[ui]size|bool|externref$/, { ascToJs: nop, jsToAsc: nop }],
   ["~lib/string/String", { ascToJs: getString, jsToAsc: putString }],
   [
     "~lib/typedarray/Int8Array",
@@ -179,10 +145,7 @@ export const converters = new Map<string | RegExp, Converter>([
     "~lib/typedarray/Float64Array",
     { ascToJs: getArrayBufferView, jsToAsc: putArrayBufferView }
   ],
-  [
-    "~lib/arraybuffer/ArrayBuffer",
-    { ascToJs: getArrayBuffer, jsToAsc: putArrayBuffer }
-  ],
+  ["~lib/arraybuffer/ArrayBuffer", { ascToJs: getArrayBuffer, jsToAsc: putArrayBuffer }],
   [/^~lib\/array\/Array<.+>$/, { ascToJs: getArray, jsToAsc: putArray }]
 ]);
 
@@ -199,9 +162,7 @@ export function getConverterForType(typeName: string): Converter {
     }
   }
   if (!warned.has(typeName)) {
-    console.warn(
-      `No converter for ${JSON.stringify(typeName)}, using pass-through`
-    );
+    console.warn(`No converter for ${JSON.stringify(typeName)}, using pass-through`);
     warned.add(typeName);
   }
   return { ascToJs: nop, jsToAsc: nop };

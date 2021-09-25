@@ -51,10 +51,8 @@ http
   });
 
   // Listen to JS Console messages, log them, and resolve our promise on an expected message
-  page.on("console", (message) => {
-    console.log(
-      `${message.type().substr(0, 3).toUpperCase()} ${message.text()}`
-    );
+  page.on("console", message => {
+    console.log(`${message.type().substr(0, 3).toUpperCase()} ${message.text()}`);
 
     if (message.text() === "AsBind: Hello World!") {
       pageResolve();
@@ -63,7 +61,7 @@ http
   });
 
   // Listen to JS / Page errors, log them, and reject our promise
-  page.on("pageerror", (err) => {
+  page.on("pageerror", err => {
     theTempValue = err.toString();
     console.log("Error: " + theTempValue);
 

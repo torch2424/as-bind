@@ -9,11 +9,7 @@ function isWhitespace(character: string): bool {
   return character.includes(" ");
 }
 
-function checkForTriplet(
-  character: string,
-  index: i32,
-  markdown: string
-): bool {
+function checkForTriplet(character: string, index: i32, markdown: string): bool {
   return (
     markdown.charAt(index + 0).includes(character) &&
     markdown.charAt(index + 1).includes(character) &&
@@ -65,10 +61,7 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
   }
 
   // Check for Italics
-  if (
-    tokenValue.includes("*") &&
-    markdown.charAt(tokenIndex + 1).includes("*")
-  ) {
+  if (tokenValue.includes("*") && markdown.charAt(tokenIndex + 1).includes("*")) {
     token.type = TokenType.ITALICS;
     token.value = "**";
 
@@ -77,10 +70,7 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
   }
 
   // Check for bold
-  if (
-    tokenValue.includes("_") &&
-    markdown.charAt(tokenIndex + 1).includes("_")
-  ) {
+  if (tokenValue.includes("_") && markdown.charAt(tokenIndex + 1).includes("_")) {
     token.type = TokenType.BOLD;
     token.value = "__";
 
@@ -89,10 +79,7 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
   }
 
   // Check for strikethrough
-  if (
-    tokenValue.includes("~") &&
-    markdown.charAt(tokenIndex + 1).includes("~")
-  ) {
+  if (tokenValue.includes("~") && markdown.charAt(tokenIndex + 1).includes("~")) {
     token.type = TokenType.STRIKETHROUGH;
     token.value = "~~";
 
@@ -101,10 +88,7 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
   }
 
   // Check for Unordered List
-  if (
-    tokenValue.includes("*") &&
-    isWhitespace(markdown.charAt(tokenIndex + 1))
-  ) {
+  if (tokenValue.includes("*") && isWhitespace(markdown.charAt(tokenIndex + 1))) {
     token.type = TokenType.UNORDERED_LIST_ITEM;
     token.value = "* ";
 
@@ -126,10 +110,7 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
   }
 
   // Check for Images
-  if (
-    tokenValue.includes("!") &&
-    markdown.charAt(tokenIndex + 1).includes("[")
-  ) {
+  if (tokenValue.includes("!") && markdown.charAt(tokenIndex + 1).includes("[")) {
     token.type = TokenType.IMAGE_START;
     token.value = "![";
 
@@ -172,10 +153,7 @@ function addToken(markdown: string, tokenIndex: i32, tokenValue: string): i32 {
   }
 
   // Check for block quotes
-  if (
-    tokenValue.includes(">") &&
-    isWhitespace(markdown.charAt(tokenIndex + 1))
-  ) {
+  if (tokenValue.includes(">") && isWhitespace(markdown.charAt(tokenIndex + 1))) {
     token.type = TokenType.BLOCK_QUOTE;
     token.value = ">";
 

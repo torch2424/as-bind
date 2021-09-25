@@ -22,8 +22,6 @@ describe("as-bind", function () {
       }
     });
     const data = [["a", "b", "c"], ["1"], ["w", "x", "y", "z"]];
-    assert(
-      instance.exports.join(data) === data.map((s) => s.join("")).join("")
-    );
+    assert(instance.exports.join(data) === data.map(s => s.join("")).join(""));
   });
 });

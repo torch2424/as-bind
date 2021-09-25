@@ -13,21 +13,14 @@ import del from "rollup-plugin-delete";
 const fs = require("fs");
 const mkdirp = require("mkdirp");
 
-const writeIndexHtmlToBuild = (bundleName) => {
-  let indexHtml = fs.readFileSync(
-    "examples/markdown-parser/index.html",
-    "utf8"
-  );
+const writeIndexHtmlToBuild = bundleName => {
+  let indexHtml = fs.readFileSync("examples/markdown-parser/index.html", "utf8");
   mkdirp.sync("dist/examples/markdown-parser");
   indexHtml = indexHtml.replace(
     "<%BUNDLE%>",
     bundleName.replace("dist/examples/markdown-parser/", "")
   );
-  fs.writeFileSync(
-    "dist/examples/markdown-parser/index.html",
-    indexHtml,
-    "utf8"
-  );
+  fs.writeFileSync("dist/examples/markdown-parser/index.html", indexHtml, "utf8");
 };
 
 const sourcemapOption = process.env.PROD ? undefined : "inline";
@@ -74,7 +67,7 @@ if (process.env.PROD) {
     }),
     hash({
       dest: "dist/examples/markdown-parser/bundle.[hash].js",
-      callback: (bundleName) => {
+      callback: bundleName => {
         writeIndexHtmlToBuild(bundleName);
       }
     })

@@ -21,11 +21,7 @@ let plugins = [
 ];
 
 if (process.env.PROD) {
-  plugins = [
-    ...plugins,
-    terser({ mangle: true, compress: true }),
-    bundleSize()
-  ];
+  plugins = [...plugins, terser({ mangle: true, compress: true }), bundleSize()];
 }
 
 const libBundles = [
