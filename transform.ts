@@ -29,16 +29,27 @@ const types = {
   i16: "number",
   u16: "number",
 
-  // TODO: add all internal types
-  "~lib/string/String": "string"
+  // TODO: add all std-lib types
+  "~lib/dataview/DataView": "DataView",
+  "~lib/string/String": "string",
+  "~lib/arraybuffer/ArrayBuffer": "ArrayBuffer",
+  "~lib/data/Date": "Date",
+  "~lib/error/Error": "Error",
+  "~lib/symbol/_Symbol": "symbol"
 };
 
 const typedPrefix = "~lib/typedarray/";
 const arrayPrefix = "~lib/array/Array<";
+const setPrefix = "~lib/set/Set<";
+const staticArray = "~lib/staticarray/StaticArray<";
 
 function typeToTs(type: string) {
   if (type.startsWith(typedPrefix)) {
-    return type.slice(typedPrefix.length);
+    type = type.slice(typedPrefix.length);
+    if (type.startsWith("Big")) {
+      type = type.slice(3);
+    }
+    return type;
   }
 
   if (type.startsWith(arrayPrefix)) {
@@ -46,6 +57,18 @@ function typeToTs(type: string) {
       type.slice(arrayPrefix.length, type.length - 1)
     )}>`;
   }
+
+  if (type.startsWith(setPrefix)) {
+    return `Set<${typeToTs(type.slice(setPrefix.length, type.length - 1))}>`;
+  }
+
+  if (type.startsWith(staticArray)) {
+    return `Array<${typeToTs(
+      type.slice(staticArray.length, type.length - 1)
+    )}>`;
+  }
+
+  // TODO: Map
 
   const tsType = types[type];
 
@@ -66,7 +89,7 @@ function elementHasFlag(el: DeclaredElement, flag: number) {
   return (el.flags & flag) != 0;
 }
 
-function typeName(type: Type) {
+function type(type: Type) {
   return type.getClass()?.internalName ?? type.toString();
 }
 
@@ -99,24 +122,22 @@ function getFunctionTypeDef(func: Function) {
         i + 1 === func.signature.parameterTypes.length
       ) {
         // This is the rest parameter
-        return `...rest:${typeToTs(typeName(parameter))}`;
+        return `...rest:${typeToTs(type(parameter))}`;
       } else {
-        return `param${i + 1}${optional}:${typeToTs(typeName(parameter))}`;
+        return `param${i + 1}${optional}:${typeToTs(type(parameter))}`;
       }
     })
     .join(", ");
 
   return `function ${func.name}(${params}): ${typeToTs(
-    typeName(func.signature.returnType)
+    type(func.signature.returnType)
   )};`;
 }
 
 function getFunctionTypeDescriptor(func: Function) {
   return {
-    returnType: typeName(func.signature.returnType),
-    parameters: func.signature.parameterTypes.map(parameter =>
-      typeName(parameter)
-    )
+    returnType: type(func.signature.returnType),
+    parameters: func.signature.parameterTypes.map(parameter => type(parameter))
   };
 }
 
@@ -363,9 +384,7 @@ export default class AsBindTransform extends Transform {
         : "let";
 
       target.elements.push(
-        `${declKind} ${exportedVar.name}: ${typeToTs(
-          typeName(exportedVar.type)
-        )}`
+        `${declKind} ${exportedVar.name}: ${typeToTs(type(exportedVar.type))}`
       );
     }
 
@@ -381,9 +400,7 @@ export default class AsBindTransform extends Transform {
         : "let";
 
       target.elements.push(
-        `${declKind} ${importedVar.name}: ${typeToTs(
-          typeName(importedVar.type)
-        )}`
+        `${declKind} ${importedVar.name}: ${typeToTs(type(importedVar.type))}`
       );
     }
 

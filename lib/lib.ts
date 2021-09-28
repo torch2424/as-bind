@@ -6,20 +6,20 @@ import { WebAssemblyModuleStreaming, WebAssemblyModuleSync } from "./types";
 
 export const version: string = packVersion;
 
-export async function instantiate(
-  source: WebAssemblyModuleStreaming,
-  importObject: WebAssembly.Imports
-) {
-  let asbindInstance = new AsbindInstance();
+export async function instantiate<
+  Imports extends WebAssembly.Imports,
+  Exports extends {}
+>(source: WebAssemblyModuleStreaming, importObject: Imports) {
+  const asbindInstance = new AsbindInstance<Imports, Exports>();
   await asbindInstance._instantiate(source, importObject);
   return asbindInstance;
 }
 
-export function instantiateSync(
-  source: WebAssemblyModuleSync,
-  importObject: WebAssembly.Imports
-) {
-  let asbindInstance = new AsbindInstance();
+export function instantiateSync<
+  Imports extends WebAssembly.Imports,
+  Exports extends {}
+>(source: WebAssemblyModuleSync, importObject: Imports) {
+  const asbindInstance = new AsbindInstance<Imports, Exports>();
   asbindInstance._instantiateSync(source, importObject);
   return asbindInstance;
 }
