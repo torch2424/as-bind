@@ -33,8 +33,29 @@ const types = {
   "~lib/string/String": "string"
 };
 
+const typedPrefix = "~lib/typedarray/";
+const arrayPrefix = "~lib/array/Array<";
+
 function typeToTs(type: string) {
-  return types[type] ?? "any";
+  if (type.startsWith(typedPrefix)) {
+    return type.slice(typedPrefix.length);
+  }
+
+  if (type.startsWith(arrayPrefix)) {
+    return `Array<${typeToTs(
+      type.slice(arrayPrefix.length, type.length - 1)
+    )}>`;
+  }
+
+  const tsType = types[type];
+
+  if (!tsType) {
+    console.warn("[WARN:] used not known type " + type);
+
+    return "any";
+  }
+
+  return tsType;
 }
 
 function isInternalElement(element: DeclaredElement) {
@@ -126,11 +147,11 @@ function extractTypeIdsFromFunction(func: Function) {
   return result;
 }
 
-function renderNamespaces(ns: Record<string, namespaceTypeDef>) {
+function renderNamespaces(ns: Record<string, namespaceTypeDef>, root = false) {
   return Object.entries(ns)
     .map(([name, namespace]) => {
       return `
-      namespace ${name} {
+      ${root ? "declare " : ""}namespace ${name} {
         ${namespace.elements.map(v => `export ${v}`).join("\n")}
         ${renderNamespaces(namespace.namespaces)}
       }
@@ -180,7 +201,7 @@ export default class AsBindTransform extends Transform {
     }
 
     if (type === "import") {
-      path.push(el.name);
+      path.push(el.internalName.split("/").slice(-1)[0]);
     }
 
     let target: namespaceTypeDef =
@@ -368,7 +389,10 @@ export default class AsBindTransform extends Transform {
 
     // console.log(JSON.stringify(typeDefs, null, 2));
     console.log(
-      renderNamespaces(typeDefs as unknown as Record<string, namespaceTypeDef>)
+      renderNamespaces(
+        typeDefs as unknown as Record<string, namespaceTypeDef>,
+        true
+      )
     );
 
     module.addCustomSection(
