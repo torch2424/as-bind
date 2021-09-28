@@ -9,9 +9,33 @@ import {
   Module,
   Function,
   DeclaredElement,
-  Type
+  Type,
+  Global,
+  Element
 } from "visitor-as/as";
 import { TypeDef } from "./lib/types";
+
+const types = {
+  void: "void",
+  i32: "number",
+  u32: "number",
+  i64: "number",
+  u64: "number",
+  f32: "number",
+  f64: "number",
+  bool: "boolean",
+  i8: "number",
+  u8: "number",
+  i16: "number",
+  u16: "number",
+
+  // TODO: add all internal types
+  "~lib/string/String": "string"
+};
+
+function typeToTs(type: string) {
+  return types[type] ?? "any";
+}
 
 function isInternalElement(element: DeclaredElement) {
   return element.internalName.startsWith("~");
@@ -32,6 +56,38 @@ function containingModule(func: Function) {
     container = container.parent;
   }
   return container;
+}
+
+interface TSTypeDef {
+  IMPORT: namespaceTypeDef;
+  EXPORT: namespaceTypeDef;
+}
+
+function getFunctionTypeDef(func: Function) {
+  const params = func.signature.parameterTypes
+    .map((parameter, i) => {
+      let optional = "";
+
+      if (i >= func.signature.requiredParameters) {
+        optional = "?";
+      }
+
+      // I got errors when using rest parameters so not shure if they work...
+      if (
+        func.signature.hasRest &&
+        i + 1 === func.signature.parameterTypes.length
+      ) {
+        // This is the rest parameter
+        return `...rest:${typeToTs(typeName(parameter))}`;
+      } else {
+        return `param${i + 1}${optional}:${typeToTs(typeName(parameter))}`;
+      }
+    })
+    .join(", ");
+
+  return `function ${func.name}(${params}): ${typeToTs(
+    typeName(func.signature.returnType)
+  )};`;
 }
 
 function getFunctionTypeDescriptor(func: Function) {
@@ -70,30 +126,116 @@ function extractTypeIdsFromFunction(func: Function) {
   return result;
 }
 
+function renderNamespaces(ns: Record<string, namespaceTypeDef>) {
+  return Object.entries(ns)
+    .map(([name, namespace]) => {
+      return `
+      namespace ${name} {
+        ${namespace.elements.map(v => `export ${v}`).join("\n")}
+        ${renderNamespaces(namespace.namespaces)}
+      }
+    `;
+    })
+    .join("\n\n");
+}
+
 const SECTION_NAME = "as-bind_bindings";
 
+interface namespaceTypeDef {
+  namespaces: Record<string, namespaceTypeDef>;
+  elements: string[];
+}
+
 export default class AsBindTransform extends Transform {
+  getElements(
+    flags: number | CommonFlags | CommonFlags[],
+    nodeKind: NodeKind
+  ): Element[] {
+    let flag: number;
+    if (Array.isArray(flags)) {
+      flag = flags.reduce((a, b) => a | b, 0);
+    } else {
+      flag = flags;
+    }
+
+    return [...this.program.elementsByDeclaration.values()]
+      .filter(el => elementHasFlag(el, flag))
+      .filter(el => !isInternalElement(el))
+      .filter(el => el.declaration.kind === nodeKind);
+  }
+
+  getTypeNamespace(
+    el: Element,
+    typeDefs: TSTypeDef,
+    type: "export" | "import"
+  ) {
+    const path = [];
+
+    while (el.parent !== el) {
+      if (el.kind === ElementKind.NAMESPACE) {
+        path.push(el.name);
+      }
+
+      el = el.parent;
+    }
+
+    if (type === "import") {
+      path.push(el.name);
+    }
+
+    let target: namespaceTypeDef =
+      type === "export" ? typeDefs.EXPORT : typeDefs.IMPORT;
+
+    path.reverse().forEach(el => {
+      if (!target.namespaces[el]) {
+        target.namespaces[el] = {
+          namespaces: {},
+          elements: []
+        };
+      }
+
+      target = target.namespaces[el];
+    });
+
+    return target;
+  }
+
   afterCompile(module: Module) {
-    const flatExportedFunctions = [
-      ...this.program.elementsByDeclaration.values()
-    ]
-      .filter(el => elementHasFlag(el, CommonFlags.MODULE_EXPORT))
-      .filter(el => !isInternalElement(el))
-      .filter(
-        el => el.declaration.kind === NodeKind.FUNCTIONDECLARATION
-      ) as FunctionPrototype[];
-    const flatImportedFunctions = [
-      ...this.program.elementsByDeclaration.values()
-    ]
-      .filter(el => elementHasFlag(el, CommonFlags.DECLARE))
-      .filter(el => !isInternalElement(el))
-      .filter(
-        v => v.declaration.kind === NodeKind.FUNCTIONDECLARATION
-      ) as FunctionPrototype[];
+    const typeDefs: TSTypeDef = {
+      IMPORT: {
+        namespaces: {},
+        // Will be empty!
+        elements: []
+      },
+      EXPORT: {
+        namespaces: {},
+        elements: []
+      }
+    };
+
+    const flatExportedFunctions = this.getElements(
+      CommonFlags.MODULE_EXPORT,
+      NodeKind.FUNCTIONDECLARATION
+    ) as FunctionPrototype[];
+
+    const flatImportedFunctions = this.getElements(
+      CommonFlags.DECLARE,
+      NodeKind.FUNCTIONDECLARATION
+    ) as FunctionPrototype[];
+
+    const flatExportedVariables = this.getElements(
+      CommonFlags.MODULE_EXPORT,
+      NodeKind.VARIABLEDECLARATION
+    ) as Global[];
+
+    const flatImportedVariables = this.getElements(
+      CommonFlags.DECLARE,
+      NodeKind.VARIABLEDECLARATION
+    ) as Global[];
 
     const typeIds: TypeDef["typeIds"] = {};
     const importedFunctions: TypeDef["importedFunctions"] = {};
-    for (let importedFunction of flatImportedFunctions) {
+    for (const importedFunction of flatImportedFunctions) {
       // An imported function with no instances is an unused imported function.
       // Skip it.
       if (!importedFunction.instances) {
@@ -153,10 +295,20 @@ export default class AsBindTransform extends Transform {
       }
       importedFunctions[moduleName][importedFunctionName] =
         getFunctionTypeDescriptor(iFunction);
+
+      let target: namespaceTypeDef = this.getTypeNamespace(
+        iFunction,
+        typeDefs,
+        "import"
+      );
+
+      target.elements.push(getFunctionTypeDef(iFunction));
+
       Object.assign(typeIds, extractTypeIdsFromFunction(iFunction));
     }
+
     const exportedFunctions = {};
-    for (let exportedFunction of flatExportedFunctions) {
+    for (const exportedFunction of flatExportedFunctions) {
       if (
         exportedFunction.instances.size > 1 ||
         !exportedFunction.instances.has("")
@@ -164,9 +316,60 @@ export default class AsBindTransform extends Transform {
         throw Error(`Can’t import or export generic functions.`);
       }
       const eFunction = exportedFunction.instances.get("");
+
+      let target: namespaceTypeDef = this.getTypeNamespace(
+        eFunction,
+        typeDefs,
+        "export"
+      );
+
+      target.elements.push(getFunctionTypeDef(eFunction));
+
       exportedFunctions[eFunction.name] = getFunctionTypeDescriptor(eFunction);
       Object.assign(typeIds, extractTypeIdsFromFunction(eFunction));
     }
+
+    for (const exportedVar of flatExportedVariables) {
+      let target: namespaceTypeDef = this.getTypeNamespace(
+        exportedVar,
+        typeDefs,
+        "import"
+      );
+
+      // exportedVar.declaration
+      const declKind = elementHasFlag(exportedVar, CommonFlags.CONST)
+        ? "const"
+        : "let";
+
+      target.elements.push(
+        `${declKind} ${exportedVar.name}: ${typeToTs(
+          typeName(exportedVar.type)
+        )}`
+      );
+    }
+
+    for (const importedVar of flatImportedVariables) {
+      let target: namespaceTypeDef = this.getTypeNamespace(
+        importedVar,
+        typeDefs,
+        "import"
+      );
+
+      const declKind = elementHasFlag(importedVar, CommonFlags.CONST)
+        ? "const"
+        : "let";
+
+      target.elements.push(
+        `${declKind} ${importedVar.name}: ${typeToTs(
+          typeName(importedVar.type)
+        )}`
+      );
+    }
+
+    // console.log(JSON.stringify(typeDefs, null, 2));
+    console.log(
+      renderNamespaces(typeDefs as unknown as Record<string, namespaceTypeDef>)
+    );
 
     module.addCustomSection(
       SECTION_NAME,
