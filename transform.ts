@@ -1,4 +1,3 @@
-import { Program } from "assemblyscript";
 import {
   CommonFlags,
   NodeKind,
@@ -30,11 +29,10 @@ const types = {
   i16: "number",
   u16: "number",
 
-  // TODO: add all std-lib types
   "~lib/dataview/DataView": "DataView",
   "~lib/string/String": "string",
   "~lib/arraybuffer/ArrayBuffer": "ArrayBuffer",
-  "~lib/data/Date": "Date",
+  "~lib/date/Date": "Date",
   "~lib/error/Error": "Error",
   "~lib/symbol/_Symbol": "symbol"
 };
@@ -42,7 +40,8 @@ const types = {
 const typedPrefix = "~lib/typedarray/";
 const arrayPrefix = "~lib/array/Array<";
 const setPrefix = "~lib/set/Set<";
-const staticArray = "~lib/staticarray/StaticArray<";
+const staticArrayPrefix = "~lib/staticarray/StaticArray<";
+const mapPrefix = "~lib/map/Map<";
 
 function typeToTs(type: string) {
   if (type.startsWith(typedPrefix)) {
@@ -63,18 +62,36 @@ function typeToTs(type: string) {
     return `Set<${typeToTs(type.slice(setPrefix.length, type.length - 1))}>`;
   }
 
-  if (type.startsWith(staticArray)) {
+  if (type.startsWith(staticArrayPrefix)) {
     return `Array<${typeToTs(
-      type.slice(staticArray.length, type.length - 1)
+      type.slice(staticArrayPrefix.length, type.length - 1)
     )}>`;
   }
 
-  // TODO: Map
+  if (type.startsWith(mapPrefix)) {
+    const genericContents = type.slice(mapPrefix.length, type.length - 1);
+
+    let index = 0;
+    let genericCount = 0;
+
+    while (genericContents.length > index) {
+      if (genericContents[index] === "<") genericCount++;
+      if (genericContents[index] === ">") genericCount--;
+
+      if (genericContents[index] === "," && genericCount === 0) {
+        return `Map<${typeToTs(genericContents.slice(0, index))},${typeToTs(
+          genericContents.slice(index + 1)
+        )}>`;
+      }
+
+      index++;
+    }
+  }
 
   const tsType = types[type];
 
   if (!tsType) {
-    console.warn("[WARN:] used not known type " + type);
+    console.warn("[WARN]: used not known type " + type);
 
     return "any";
   }
