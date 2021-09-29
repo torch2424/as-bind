@@ -4,12 +4,53 @@ type ClassObject = (new (...args: any[]) => number) & {
   wrap: (ptr: number) => any;
 };
 
+const noop = (t, v) => v;
+
+const noopHandler = {
+  as2js: noop,
+  js2as: noop
+};
+const typeHandlers: Record<
+  string,
+  {
+    as2js: (t: WrappingHandler, value: any, def: any, ...args: any) => any;
+    js2as: (t: WrappingHandler, value: any, def: any, ...args: any) => any;
+  }
+> = {
+  noop: noopHandler,
+  number: noopHandler,
+  closure: {
+    as2js: (h, value: number, def: ClosureDefiniton, hash: string) => {
+      return (...args) => {
+        const newArgs = h.wrapFunctionArguments(args, def.args);
+
+        return h.wrapValueAsToJs(
+          h.util[`__call__${hash}`](value, ...newArgs),
+          def.ret
+        );
+      };
+    },
+    js2as: () => {
+      throw new Error(
+        "Passing a JS callback to AssemblyScript is currently not supported."
+      );
+    }
+  },
+  class: {
+    js2as: (_, value) => value.__instance,
+    as2js: (h, value, className) => h.exports[className].wrap(value)
+  }
+  // Add Array, ArrayBuffer, TypedArrays etc. from type-converters
+};
+
 class WrappingHandler {
   gcRegestry = FinalizationRegistry
     ? new FinalizationRegistry((ptr: number) => this.util.__unpin(ptr))
     : { register(...args: any[]) {}, unregister(inst: any) {} };
 
-  constructor(private util: ASUtil) {}
+  constructor(public util: ASUtil) {}
+
+  exports: ASUtil;
 
   wrapObject(obj: Record<string, any>, def: ObjectDefiniton, isClass = false) {
     const _map = new Map<string, any>();
@@ -20,6 +61,11 @@ class WrappingHandler {
           return () => this.gcRegestry.unregister(wrapedObject);
         }
 
+        if (prop === "__instance" && isClass) {
+          return () => obj;
+        }
+
+        if (!def[prop]) return target[prop];
         if (_map.has(prop)) return _map.get(prop);
 
         if (def[prop].kind === "obj") {
@@ -68,10 +114,26 @@ class WrappingHandler {
       }
     });
   }
-  // This is what the type-converters are for
-  // TODO:
-  wrapValueJsToAs(obj: any, def: TypeDefinition) {}
-  wrapValueAsToJs(obj: any, def: TypeDefinition) {}
+  wrapValueJsToAs(obj: any, def: TypeDefinition) {
+    const [type, ...args] = def.type.split(":");
+
+    return (typeHandlers[type] ?? typeHandlers.noop).js2as(
+      this,
+      obj,
+      def,
+      ...args
+    );
+  }
+  wrapValueAsToJs(obj: any, def: TypeDefinition) {
+    const [type, ...args] = def.type.split(":");
+
+    return (typeHandlers[type] ?? typeHandlers.noop).as2js(
+      this,
+      obj,
+      def,
+      ...args
+    );
+  }
   classWrapper(obj: ClassObject, def: ClassDefinition, ptr: number) {
     this.util.__pin(ptr);
     const instance = obj.wrap(ptr);
@@ -103,11 +165,12 @@ class WrappingHandler {
   }
 }
 
-interface TypeDefinition {
-  type: string; // 'number', 'string', 'array', 'staticarray', typedarrays, ... 'class' /- 'unamanagedClass' -/
+type TypeDefinition = ClosureDefiniton;
+interface ClosureDefiniton extends FunctionDefinition {
+  type: `closure:${string}`;
   kind: string;
-  // TODO
 }
+
 type ObjectDefiniton = Record<string, TypeDefinition>;
 interface ClassDefinition {
   constructor: TypeDefinition[];
