@@ -2,6 +2,7 @@
   "include": ["lib/**/*.ts"],
   "files": ["transform.ts"],
   "compilerOptions": {
+    "target": "ES2017",
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "declaration": true,
