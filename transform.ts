@@ -20,7 +20,7 @@ const types = {
   i32: "number",
   u32: "number",
   i64: "number",
-  u64: "number",
+  u64: "BigInt",
   f32: "number",
   f64: "number",
   bool: "boolean",
@@ -429,12 +429,13 @@ export default class AsBindTransform extends Transform {
       );
     }
 
-    // console.log(JSON.stringify(typeDefs, null, 2));
-    console.log(
+    this.writeFile(
+      "types.d.ts",
       renderNamespaces(
         typeDefs as unknown as Record<string, namespaceTypeDef>,
         true
-      )
+      ),
+      this.baseDir
     );
 
     module.addCustomSection(
