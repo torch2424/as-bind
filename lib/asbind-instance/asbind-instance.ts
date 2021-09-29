@@ -47,9 +47,12 @@ function extractTypeDescriptor(module: WebAssembly.Module): TypeDef {
   }
 }
 
-export default class AsbindInstance {
-  exports: Record<string, never> | ASUtil = {};
-  importObject: WebAssembly.Imports = {};
+export default class AsbindInstance<
+  Import extends WebAssembly.Imports = {},
+  Exports = {}
+> {
+  exports: Exports & ASUtil = {} as any;
+  importObject: Import = {} as any;
   typeDescriptor: TypeDef;
   module: WebAssembly.Module;
   loadedModule: WebAssemblyLoaderResult;
@@ -85,10 +88,7 @@ export default class AsbindInstance {
     }
   }
 
-  async _instantiate(
-    source: WebAssemblyModuleStreaming,
-    importObject: WebAssembly.Imports
-  ) {
+  async _instantiate(source: WebAssemblyModuleStreaming, importObject: Import) {
     this.module = await compileStreaming(source);
 
     this._validate();
@@ -99,10 +99,7 @@ export default class AsbindInstance {
     this._instantiateBindUnboundExports();
   }
 
-  _instantiateSync(
-    source: WebAssemblyModuleSync,
-    importObject: WebAssembly.Imports
-  ) {
+  _instantiateSync(source: WebAssemblyModuleSync, importObject: Import) {
     this.module = new WebAssembly.Module(source);
 
     this._validate();
@@ -112,7 +109,7 @@ export default class AsbindInstance {
     this._instantiateBindUnboundExports();
   }
 
-  _instantiateBindImportFunctions(importObject: WebAssembly.Imports) {
+  _instantiateBindImportFunctions(importObject: Import) {
     this.importObject = copyObject(importObject, { depth: 2 });
 
     for (const [moduleName, moduleDescriptor] of Object.entries(
@@ -136,7 +133,7 @@ export default class AsbindInstance {
 
   _instantiateBindUnboundExports() {
     // Wrap appropriate the appropriate export functions
-    const unboundExports = this.loadedModule.exports;
+    const unboundExports = this.loadedModule.exports as Exports & ASUtil;
     this.exports = copyObject(unboundExports, { depth: 1 });
 
     for (const [exportedFunctionName, descriptor] of Object.entries(
