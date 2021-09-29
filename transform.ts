@@ -107,7 +107,7 @@ function elementHasFlag(el: DeclaredElement, flag: number) {
   return (el.flags & flag) != 0;
 }
 
-function type(type: Type) {
+function typeName(type: Type) {
   return type.getClass()?.internalName ?? type.toString();
 }
 
@@ -140,22 +140,24 @@ function getFunctionTypeDef(func: Function) {
         i + 1 === func.signature.parameterTypes.length
       ) {
         // This is the rest parameter
-        return `...rest:${typeToTs(type(parameter))}`;
+        return `...rest:${typeToTs(typeName(parameter))}`;
       } else {
-        return `param${i + 1}${optional}:${typeToTs(type(parameter))}`;
+        return `param${i + 1}${optional}:${typeToTs(typeName(parameter))}`;
       }
     })
     .join(", ");
 
   return `function ${func.name}(${params}): ${typeToTs(
-    type(func.signature.returnType)
+    typeName(func.signature.returnType)
   )};`;
 }
 
 function getFunctionTypeDescriptor(func: Function) {
   return {
-    returnType: type(func.signature.returnType),
-    parameters: func.signature.parameterTypes.map(parameter => type(parameter))
+    returnType: typeName(func.signature.returnType),
+    parameters: func.signature.parameterTypes.map(parameter =>
+      typeName(parameter)
+    )
   };
 }
 
@@ -403,7 +405,9 @@ export default class AsBindTransform extends Transform {
         : "let";
 
       target.elements.push(
-        `${declKind} ${exportedVar.name}: ${typeToTs(type(exportedVar.type))}`
+        `${declKind} ${exportedVar.name}: ${typeToTs(
+          typeName(exportedVar.type)
+        )}`
       );
     }
 
@@ -419,7 +423,9 @@ export default class AsBindTransform extends Transform {
         : "let";
 
       target.elements.push(
-        `${declKind} ${importedVar.name}: ${typeToTs(type(importedVar.type))}`
+        `${declKind} ${importedVar.name}: ${typeToTs(
+          typeName(importedVar.type)
+        )}`
       );
     }
 
