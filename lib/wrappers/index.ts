@@ -6,10 +6,10 @@ type ClassObject = (new (...args: any[]) => number) & {
 
 class WrappingHandler {
   gcRegestry = FinalizationRegistry
-    ? new FinalizationRegistry((ptr: number) => this.exports.__unpin(ptr))
+    ? new FinalizationRegistry((ptr: number) => this.util.__unpin(ptr))
     : { register(...args: any[]) {}, unregister(inst: any) {} };
 
-  constructor(private exports: ASUtil) {}
+  constructor(private util: ASUtil) {}
 
   wrapObject(obj: Record<string, any>, def: ObjectDefiniton, isClass = false) {
     const _map = new Map<string, any>();
@@ -57,14 +57,14 @@ class WrappingHandler {
   pinFunctionArgs(obj: any[], def: TypeDefinition[]) {
     obj.forEach((arg, i) => {
       if (def[i].type !== "number") {
-        this.exports.__pin(arg);
+        this.util.__pin(arg);
       }
     });
   }
   unpinFunctionArgs(obj: any[], def: TypeDefinition[]) {
     obj.forEach((arg, i) => {
       if (def[i].type !== "number") {
-        this.exports.__unpin(arg);
+        this.util.__unpin(arg);
       }
     });
   }
@@ -73,7 +73,7 @@ class WrappingHandler {
   wrapValueJsToAs(obj: any, def: TypeDefinition) {}
   wrapValueAsToJs(obj: any, def: TypeDefinition) {}
   classWrapper(obj: ClassObject, def: ClassDefinition, ptr: number) {
-    this.exports.__pin(ptr);
+    this.util.__pin(ptr);
     const instance = obj.wrap(ptr);
 
     const wrapedInstance = this.wrapObject(instance, def.members, true);
@@ -104,7 +104,7 @@ class WrappingHandler {
 }
 
 interface TypeDefinition {
-  type: string;
+  type: string; // 'number', 'string', 'array', 'staticarray', typedarrays, ... 'class' /- 'unamanagedClass' -/
   kind: string;
   // TODO
 }
