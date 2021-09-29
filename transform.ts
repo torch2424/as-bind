@@ -1,3 +1,4 @@
+import { Program } from "assemblyscript";
 import {
   CommonFlags,
   NodeKind,
@@ -172,7 +173,7 @@ function renderNamespaces(ns: Record<string, namespaceTypeDef>, root = false) {
   return Object.entries(ns)
     .map(([name, namespace]) => {
       return `
-      ${root ? "declare " : ""}namespace ${name} {
+      ${root ? "declare" : "export"} namespace ${name} {
         ${namespace.elements.map(v => `export ${v}`).join("\n")}
         ${renderNamespaces(namespace.namespaces)}
       }
@@ -189,10 +190,10 @@ interface namespaceTypeDef {
 }
 
 export default class AsBindTransform extends Transform {
-  getElements(
+  getElements<T extends Element = Element>(
     flags: number | CommonFlags | CommonFlags[],
     nodeKind: NodeKind
-  ): Element[] {
+  ): T[] {
     let flag: number;
     if (Array.isArray(flags)) {
       flag = flags.reduce((a, b) => a | b, 0);
@@ -203,7 +204,7 @@ export default class AsBindTransform extends Transform {
     return [...this.program.elementsByDeclaration.values()]
       .filter(el => elementHasFlag(el, flag))
       .filter(el => !isInternalElement(el))
-      .filter(el => el.declaration.kind === nodeKind);
+      .filter(el => el.declaration.kind === nodeKind) as unknown as T[];
   }
 
   getTypeNamespace(
@@ -255,25 +256,25 @@ export default class AsBindTransform extends Transform {
       }
     };
 
-    const flatExportedFunctions = this.getElements(
+    const flatExportedFunctions = this.getElements<FunctionPrototype>(
       CommonFlags.MODULE_EXPORT,
       NodeKind.FUNCTIONDECLARATION
-    ) as FunctionPrototype[];
+    );
 
-    const flatImportedFunctions = this.getElements(
+    const flatImportedFunctions = this.getElements<FunctionPrototype>(
       CommonFlags.DECLARE,
       NodeKind.FUNCTIONDECLARATION
-    ) as FunctionPrototype[];
+    );
 
-    const flatExportedVariables = this.getElements(
+    const flatExportedVariables = this.getElements<Global>(
       CommonFlags.MODULE_EXPORT,
       NodeKind.VARIABLEDECLARATION
-    ) as Global[];
+    );
 
-    const flatImportedVariables = this.getElements(
+    const flatImportedVariables = this.getElements<Global>(
       CommonFlags.DECLARE,
       NodeKind.VARIABLEDECLARATION
-    ) as Global[];
+    );
 
     const typeIds: TypeDef["typeIds"] = {};
     const importedFunctions: TypeDef["importedFunctions"] = {};
@@ -292,13 +293,13 @@ export default class AsBindTransform extends Transform {
 
       const iFunction = importedFunction.instances.get("")!;
 
-      let external_module;
-      let external_name;
+      let external_module: string;
+      let external_name: string;
 
       let decorators = iFunction.declaration.decorators;
 
       if (decorators) {
-        for (let decorator of decorators) {
+        for (const decorator of decorators) {
           if ((decorator.name as IdentifierExpression).text !== "external")
             continue;
           if (!decorator.args) continue; // sanity check
@@ -323,6 +324,7 @@ export default class AsBindTransform extends Transform {
       const moduleName =
         external_module ||
         containingModule(iFunction).internalName.split("/").slice(-1)[0];
+
       if (!importedFunctions.hasOwnProperty(moduleName)) {
         importedFunctions[moduleName] = {};
       }
