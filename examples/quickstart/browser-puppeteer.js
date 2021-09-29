@@ -13,8 +13,8 @@ const http = require("http");
 // Host a static server of the local directory
 // https://nodejs.org/en/knowledge/HTTP/servers/how-to-serve-static-files/
 http
-  .createServer(function(req, res) {
-    fs.readFile(__dirname + req.url, function(err, data) {
+  .createServer(function (req, res) {
+    fs.readFile(__dirname + req.url, function (err, data) {
       if (err) {
         res.writeHead(404);
         res.end(JSON.stringify(err));
@@ -53,10 +53,7 @@ http
   // Listen to JS Console messages, log them, and resolve our promise on an expected message
   page.on("console", message => {
     console.log(
-      `${message
-        .type()
-        .substr(0, 3)
-        .toUpperCase()} ${message.text()}`
+      `${message.type().substr(0, 3).toUpperCase()} ${message.text()}`
     );
 
     if (message.text() === "AsBind: Hello World!") {

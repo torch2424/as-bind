@@ -5,7 +5,7 @@
   "main": "dist/transform.cjs.js",
   "module": "dist/as-bind.esm.js",
   "iife": "dist/as-bind.iife.js",
-  "types": "dist/as-bind.d.ts",
+  "types": "dist/lib/lib.d.ts",
   "files": [
     "dist/",
     "package.json",
@@ -22,7 +22,7 @@
     "lint": "prettier --write **/*.js **/*.ts **/*.json !build/**/* !dist/**/*",
     "lint:ci": "prettier --check **/*.js **/*.ts **/*.json !build/**/* !dist/**/*",
     "lib:watch": "chokidar --initial \"lib/**/*\" -c \"run-s lib:js:build:dev test\"",
-    "lib:js:build": "rollup -c --environment LIB,PROD && cpy 'lib/as-bind.d.ts' dist",
+    "lib:js:build": "rollup -c --environment LIB,PROD",
     "lib:js:build:dev": "rollup -c --environment LIB,DEV",
     "lib:deploy": "npm run build && np",
     "md:build": "run-s md:wasm:build md:ts:build md:js:build",
@@ -54,6 +54,7 @@
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^11.2.0",
+    "@rollup/plugin-typescript": "^8.2.5",
     "assemblyscript": "~0.19.8",
     "chokidar-cli": "^2.0.0",
     "cpy-cli": "^3.1.1",
@@ -68,7 +69,7 @@
     "npm-run-all": "^4.1.5",
     "postcss-import": "^12.0.1",
     "preact": "^8.5.2",
-    "prettier": "1.18.2",
+    "prettier": "^2.4.1",
     "pretty-quick": "^1.11.1",
     "puppeteer": "^8.0.0",
     "requirejs": "^2.3.6",
@@ -81,7 +82,8 @@
     "rollup-plugin-terser": "^7.0.2",
     "sakura.css": "^1.0.0",
     "serve": "^11.2.0",
-    "typescript": "^3.9.2"
+    "tslib": "^2.3.1",
+    "typescript": "^4.4.3"
   },
   "repository": {
     "type": "git",

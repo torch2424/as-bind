@@ -1,5 +1,5 @@
-describe("as-bind", function() {
-  it("should be extensible with custom type handlers", async function() {
+describe("as-bind", function () {
+  it("should be extensible with custom type handlers", async function () {
     AsBind.converters.set(/^tests\/custom-type\/asc\/X$/, {
       ascToJs(asbindInstance, value, typeName) {
         const dv = new DataView(asbindInstance.exports.memory.buffer);

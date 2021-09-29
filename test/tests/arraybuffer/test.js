@@ -1,5 +1,5 @@
-describe("as-bind", function() {
-  it("should handle ArrayBuffers", async function() {
+describe("as-bind", function () {
+  it("should handle ArrayBuffers", async function () {
     const instance = await AsBind.instantiate(this.rawModule, {
       asc: {
         swappedConcat(a, b) {

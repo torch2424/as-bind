@@ -1,5 +1,5 @@
-describe("as-bind", function() {
-  it("should handle array", async function() {
+describe("as-bind", function () {
+  it("should handle array", async function () {
     const instance = await AsBind.instantiate(this.rawModule, {
       asc: {
         swappedConcat(a, b) {
@@ -13,7 +13,7 @@ describe("as-bind", function() {
     );
   });
 
-  it("should handle nested array", async function() {
+  it("should handle nested array", async function () {
     const instance = await AsBind.instantiate(this.rawModule, {
       asc: {
         swappedConcat(a, b) {

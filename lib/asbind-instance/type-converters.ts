@@ -1,8 +1,10 @@
+import AsbindInstance from "./asbind-instance";
+
 // Converts web platform names for the different ArrayBufferViews
 // to the names that ASC understands. Currently, that only means
 // to cut off the `Big` in `BigInt64Array`.
 const stdlibTypedArrayPrefix = "~lib/typedarray/";
-function normalizeArrayBufferViewTypeName(typeName) {
+function normalizeArrayBufferViewTypeName(typeName: string) {
   // Don’t do anything if this is not a stdlib type.
   if (!typeName.startsWith(stdlibTypedArrayPrefix)) {
     return typeName;
@@ -15,23 +17,39 @@ function normalizeArrayBufferViewTypeName(typeName) {
   return typeName;
 }
 
-function nop(asbindInstance, value, typeName) {
+function nop(asbindInstance: AsbindInstance, value: any, typeName: string) {
   return value;
 }
 
-function getString(asbindInstance, value, typeName) {
+function getString(
+  asbindInstance: AsbindInstance,
+  value: any,
+  typeName: string
+) {
   return asbindInstance.exports.__getString(value);
 }
 
-function putString(asbindInstance, value, typeName) {
+function putString(
+  asbindInstance: AsbindInstance,
+  value: any,
+  typeName: string
+) {
   return asbindInstance.exports.__newString(value);
 }
 
-function getArrayBuffer(asbindInstance, value, typeName) {
+function getArrayBuffer(
+  asbindInstance: AsbindInstance,
+  value: any,
+  typeName: string
+) {
   return asbindInstance.exports.__getArrayBuffer(value);
 }
 
-function putArrayBuffer(asbindInstance, value, typeName) {
+function putArrayBuffer(
+  asbindInstance: AsbindInstance,
+  value: any,
+  typeName: string
+) {
   const ptr = asbindInstance.exports.__new(
     value.byteLength,
     asbindInstance.getTypeId(typeName)
@@ -44,12 +62,20 @@ function putArrayBuffer(asbindInstance, value, typeName) {
   return ptr;
 }
 
-function getArrayBufferView(asbindInstance, value, typeName) {
+function getArrayBufferView(
+  asbindInstance: AsbindInstance,
+  value: any,
+  typeName: string
+) {
   return asbindInstance.exports[
     `__get${normalizeArrayBufferViewTypeName(typeName)}View`
   ](value);
 }
-function putArrayBufferView(asbindInstance, value, typeName) {
+function putArrayBufferView(
+  asbindInstance: AsbindInstance,
+  value: any,
+  typeName: string
+) {
   return asbindInstance.exports.__newArray(
     asbindInstance.getTypeId(typeName),
     value
@@ -57,7 +83,7 @@ function putArrayBufferView(asbindInstance, value, typeName) {
 }
 
 const stdlibArray = "~lib/array/Array";
-function arrayInnerType(typeName) {
+function arrayInnerType(typeName: string) {
   if (!typeName.startsWith(stdlibArray)) {
     throw Error(`${JSON.stringify(typeName)} is not an array type`);
   }
@@ -65,7 +91,11 @@ function arrayInnerType(typeName) {
   return typeName.slice(`${stdlibArray}<`.length, -1);
 }
 
-function getArray(asbindInstance, value, typeName) {
+function getArray(
+  asbindInstance: AsbindInstance,
+  value: any,
+  typeName: string
+) {
   const innerTypeName = arrayInnerType(typeName);
   const innerTypeConverter = getConverterForType(innerTypeName);
   const rawArray = asbindInstance.exports.__getArray(value);
@@ -74,7 +104,11 @@ function getArray(asbindInstance, value, typeName) {
   );
 }
 
-function putArray(asbindInstance, value, typeName) {
+function putArray(
+  asbindInstance: AsbindInstance,
+  value: any,
+  typeName: string
+) {
   const innerTypeName = arrayInnerType(typeName);
   const innerTypeConverter = getConverterForType(innerTypeName);
   const convertedValues = value.map(v =>
@@ -86,7 +120,12 @@ function putArray(asbindInstance, value, typeName) {
   );
 }
 
-export const converters = new Map([
+export interface Converter {
+  ascToJs(asbindInstance: AsbindInstance, value: any, typeName: string): any;
+  jsToAsc(asbindInstance: AsbindInstance, value: any, typeName: string): any;
+}
+
+export const converters = new Map<string | RegExp, Converter>([
   ["void", { ascToJs: nop, jsToAsc: nop }],
   // Technically this matches types that don’ exist (like f8),
   // but since those can only appear if the compiler accepts them,
@@ -147,8 +186,8 @@ export const converters = new Map([
   [/^~lib\/array\/Array<.+>$/, { ascToJs: getArray, jsToAsc: putArray }]
 ]);
 
-const warned = new Set();
-export function getConverterForType(typeName) {
+const warned = new Set<string>();
+export function getConverterForType(typeName: string): Converter {
   for (const [matcher, converter] of converters) {
     if (typeof matcher === "string") {
       if (matcher === typeName) {
@@ -168,10 +207,10 @@ export function getConverterForType(typeName) {
   return { ascToJs: nop, jsToAsc: nop };
 }
 
-export function getAscToJsConverterForType(typeName) {
-  return getConverterForType(typeName)?.ascToJs;
+export function getAscToJsConverterForType(typeName: string) {
+  return getConverterForType(typeName).ascToJs;
 }
 
-export function getJsToAscConverterForType(typeName) {
-  return getConverterForType(typeName)?.jsToAsc;
+export function getJsToAscConverterForType(typeName: string) {
+  return getConverterForType(typeName).jsToAsc;
 }

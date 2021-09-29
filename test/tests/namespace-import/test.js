@@ -1,5 +1,5 @@
-describe("as-bind", function() {
-  it("should support @external imports", async function() {
+describe("as-bind", function () {
+  it("should support @external imports", async function () {
     let from_wasm;
     let from_wasm2;
 

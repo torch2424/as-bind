@@ -1,6 +1,6 @@
-describe("as-bind", function() {
+describe("as-bind", function () {
   // Shoutout to @RehkitzDev for the repro
-  it("should not GC strings", function(done) {
+  it("should not GC strings", function (done) {
     let num_logs = 0;
     function string_log(s) {
       num_logs += 1;

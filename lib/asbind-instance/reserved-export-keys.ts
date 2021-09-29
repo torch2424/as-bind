@@ -18,7 +18,7 @@ export const RESERVED_RUNTIME_EXPORT_KEYS = [
   "__allocString"
 ];
 
-export function isReservedExportKey(key) {
+export function isReservedExportKey(key: string) {
   return RESERVED_RUNTIME_EXPORT_KEYS.some(reservedKey => {
     if (typeof reservedKey === "string") {
       return reservedKey === key;

@@ -1,5 +1,5 @@
-describe("as-bind", function() {
-  it("should handle the prototype chain on the imports object", async function() {
+describe("as-bind", function () {
+  it("should handle the prototype chain on the imports object", async function () {
     debugger;
     const asc = {
       otherThing: new WebAssembly.Global({ value: "i32", mutable: false }, 4)

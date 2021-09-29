@@ -1,5 +1,5 @@
-describe("as-bind", function() {
-  it("should handle Uint8Arrays and Float32Array", async function() {
+describe("as-bind", function () {
+  it("should handle Uint8Arrays and Float32Array", async function () {
     const instance = await AsBind.instantiate(this.rawModule, {
       asc: {
         swappedConcat(a, b) {

@@ -1,0 +1,13 @@
+{
+  "include": ["lib/**/*.ts"],
+  "files": ["transform.ts"],
+  "compilerOptions": {
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationDir": "",
+    "downlevelIteration": true,
+    "allowSyntheticDefaultImports": true,
+    "lib": ["ESNext", "DOM"]
+  }
+}

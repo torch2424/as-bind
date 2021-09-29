@@ -1,19 +1,31 @@
-import * as asc from "visitor-as/as";
-const { CommonFlags, NodeKind, ElementKind } = asc;
+import {
+  CommonFlags,
+  NodeKind,
+  ElementKind,
+  Transform,
+  IdentifierExpression,
+  FunctionPrototype,
+  StringLiteralExpression,
+  Module,
+  Function,
+  DeclaredElement,
+  Type
+} from "visitor-as/as";
+import { TypeDef } from "./lib/types";
 
-function isInternalElement(element) {
+function isInternalElement(element: DeclaredElement) {
   return element.internalName.startsWith("~");
 }
 
-function elementHasFlag(el, flag) {
+function elementHasFlag(el: DeclaredElement, flag: number) {
   return (el.flags & flag) != 0;
 }
 
-function typeName(type) {
+function typeName(type: Type) {
   return type.getClass()?.internalName ?? type.toString();
 }
 
-function containingModule(func) {
+function containingModule(func: Function) {
   let container = func.parent;
   // Only a module is it’s own parent
   while (container !== container.parent) {
@@ -22,7 +34,7 @@ function containingModule(func) {
   return container;
 }
 
-function getFunctionTypeDescriptor(func) {
+function getFunctionTypeDescriptor(func: Function) {
   return {
     returnType: typeName(func.signature.returnType),
     parameters: func.signature.parameterTypes.map(parameter =>
@@ -31,7 +43,7 @@ function getFunctionTypeDescriptor(func) {
   };
 }
 
-function extractTypeIds(type) {
+function extractTypeIds(type: Type) {
   const result = {};
   const clazz = type.getClass?.();
   if (!clazz) {
@@ -49,7 +61,7 @@ function extractTypeIds(type) {
   return result;
 }
 
-function extractTypeIdsFromFunction(func) {
+function extractTypeIdsFromFunction(func: Function) {
   const result = {};
   Object.assign(result, extractTypeIds(func.signature.returnType));
   func.signature.parameterTypes.forEach(paramType =>
@@ -60,21 +72,27 @@ function extractTypeIdsFromFunction(func) {
 
 const SECTION_NAME = "as-bind_bindings";
 
-export default class AsBindTransform {
-  afterCompile(module) {
-    /** @type {asc.Program} */
-    const program = this.program;
-    const flatExportedFunctions = [...program.elementsByDeclaration.values()]
+export default class AsBindTransform extends Transform {
+  afterCompile(module: Module) {
+    const flatExportedFunctions = [
+      ...this.program.elementsByDeclaration.values()
+    ]
       .filter(el => elementHasFlag(el, CommonFlags.MODULE_EXPORT))
       .filter(el => !isInternalElement(el))
-      .filter(el => el.declaration.kind === NodeKind.FUNCTIONDECLARATION);
-    const flatImportedFunctions = [...program.elementsByDeclaration.values()]
+      .filter(
+        el => el.declaration.kind === NodeKind.FUNCTIONDECLARATION
+      ) as FunctionPrototype[];
+    const flatImportedFunctions = [
+      ...this.program.elementsByDeclaration.values()
+    ]
       .filter(el => elementHasFlag(el, CommonFlags.DECLARE))
       .filter(el => !isInternalElement(el))
-      .filter(v => v.declaration.kind === NodeKind.FUNCTIONDECLARATION);
+      .filter(
+        v => v.declaration.kind === NodeKind.FUNCTIONDECLARATION
+      ) as FunctionPrototype[];
 
-    const typeIds = {};
-    const importedFunctions = {};
+    const typeIds: TypeDef["typeIds"] = {};
+    const importedFunctions: TypeDef["importedFunctions"] = {};
     for (let importedFunction of flatImportedFunctions) {
       // An imported function with no instances is an unused imported function.
       // Skip it.
@@ -87,23 +105,28 @@ export default class AsBindTransform {
       ) {
         throw Error(`Can’t import or export generic functions.`);
       }
-      importedFunction = importedFunction.instances.get("");
+
+      const iFunction = importedFunction.instances.get("")!;
 
       let external_module;
       let external_name;
 
-      let decorators = importedFunction.declaration.decorators;
+      let decorators = iFunction.declaration.decorators;
 
       if (decorators) {
         for (let decorator of decorators) {
-          if (decorator.name.text !== "external") continue;
+          if ((decorator.name as IdentifierExpression).text !== "external")
+            continue;
           if (!decorator.args) continue; // sanity check
 
           if (decorator.args.length > 1) {
-            external_module = decorator.args[0].value;
-            external_name = decorator.args[1].value;
+            external_module = (decorator.args[0] as StringLiteralExpression)
+              .value;
+            external_name = (decorator.args[1] as StringLiteralExpression)
+              .value;
           } else {
-            external_name = decorator.args[0].value;
+            external_name = (decorator.args[0] as StringLiteralExpression)
+              .value;
           }
         }
       }
@@ -115,26 +138,22 @@ export default class AsBindTransform {
       // (i.e. the file name without extension).
       const moduleName =
         external_module ||
-        containingModule(importedFunction)
-          .internalName.split("/")
-          .slice(-1)[0];
+        containingModule(iFunction).internalName.split("/").slice(-1)[0];
       if (!importedFunctions.hasOwnProperty(moduleName)) {
         importedFunctions[moduleName] = {};
       }
-      let importedFunctionName = importedFunction.name;
+      let importedFunctionName = iFunction.name;
       if (external_name) {
         importedFunctionName = external_name;
       } else if (
-        importedFunction.parent &&
-        importedFunction.parent.kind === ElementKind.NAMESPACE
+        iFunction.parent &&
+        iFunction.parent.kind === ElementKind.NAMESPACE
       ) {
-        importedFunctionName =
-          importedFunction.parent.name + "." + importedFunction.name;
+        importedFunctionName = iFunction.parent.name + "." + iFunction.name;
       }
-      importedFunctions[moduleName][
-        importedFunctionName
-      ] = getFunctionTypeDescriptor(importedFunction);
-      Object.assign(typeIds, extractTypeIdsFromFunction(importedFunction));
+      importedFunctions[moduleName][importedFunctionName] =
+        getFunctionTypeDescriptor(iFunction);
+      Object.assign(typeIds, extractTypeIdsFromFunction(iFunction));
     }
     const exportedFunctions = {};
     for (let exportedFunction of flatExportedFunctions) {
@@ -144,21 +163,21 @@ export default class AsBindTransform {
       ) {
         throw Error(`Can’t import or export generic functions.`);
       }
-      exportedFunction = exportedFunction.instances.get("");
-      exportedFunctions[exportedFunction.name] = getFunctionTypeDescriptor(
-        exportedFunction
-      );
-      Object.assign(typeIds, extractTypeIdsFromFunction(exportedFunction));
+      const eFunction = exportedFunction.instances.get("");
+      exportedFunctions[eFunction.name] = getFunctionTypeDescriptor(eFunction);
+      Object.assign(typeIds, extractTypeIdsFromFunction(eFunction));
     }
-    this.typeData = JSON.stringify({
-      typeIds,
-      importedFunctions,
-      exportedFunctions
-    });
 
     module.addCustomSection(
       SECTION_NAME,
-      new TextEncoder("utf8").encode(this.typeData)
+      // @ts-ignore
+      new TextEncoder("utf8").encode(
+        JSON.stringify({
+          typeIds,
+          importedFunctions,
+          exportedFunctions
+        })
+      )
     );
   }
 }

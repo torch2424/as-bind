@@ -4,6 +4,7 @@ import babel from "@rollup/plugin-babel";
 import { terser } from "rollup-plugin-terser";
 import bundleSize from "rollup-plugin-bundle-size";
 import pkg from "./package.json";
+import typescript from "@rollup/plugin-typescript";
 
 const sourcemapOption = process.env.PROD ? undefined : "inline";
 
@@ -12,7 +13,12 @@ const babelConfig = {
   presets: ["@babel/preset-env"]
 };
 
-let plugins = [resolve(), json(), babel(babelConfig)];
+let plugins = [
+  resolve(),
+  json(),
+  typescript({ tsconfig: "./tsconfig.json" }),
+  babel(babelConfig)
+];
 
 if (process.env.PROD) {
   plugins = [
@@ -24,7 +30,7 @@ if (process.env.PROD) {
 
 const libBundles = [
   {
-    input: "lib/lib.js",
+    input: "lib/lib.ts",
     output: {
       file: pkg.module.replace("esm", "cjs"),
       format: "cjs",
@@ -36,7 +42,7 @@ const libBundles = [
     plugins
   },
   {
-    input: "lib/lib.js",
+    input: "lib/lib.ts",
     output: {
       file: pkg.module,
       format: "esm",
@@ -48,7 +54,7 @@ const libBundles = [
     plugins
   },
   {
-    input: "lib/lib.js",
+    input: "lib/lib.ts",
     output: {
       file: pkg.iife,
       format: "iife",
@@ -61,7 +67,7 @@ const libBundles = [
     plugins
   },
   {
-    input: "transform.js",
+    input: "transform.ts",
     output: {
       file: "dist/transform.cjs.js",
       format: "cjs"
@@ -70,7 +76,7 @@ const libBundles = [
     plugins
   },
   {
-    input: "transform.js",
+    input: "transform.ts",
     output: {
       file: "dist/transform.amd.js",
       format: "amd"

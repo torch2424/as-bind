@@ -1,5 +1,5 @@
-describe("as-bind", function() {
-  it("should handle multiple files correctly", async function() {
+describe("as-bind", function () {
+  it("should handle multiple files correctly", async function () {
     const instance = await AsBind.instantiate(this.rawModule, {
       imports: {
         swappedConcat(a, b) {
