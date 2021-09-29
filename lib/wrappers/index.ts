@@ -89,13 +89,11 @@ class WrappingHandler {
     return wrapedObject;
   }
   wrapFunction(obj: Function, def: FunctionDefinition) {
-    return (...args) => {
-      const newArgs = this.wrapFunctionArguments(args, def.args);
-
-      const ret = this.wrapValueAsToJs(obj(...newArgs), def.ret);
-
-      return ret;
-    };
+    return (...args) =>
+      this.wrapValueAsToJs(
+        obj(...this.wrapFunctionArguments(args, def.args)),
+        def.ret
+      );
   }
   wrapFunctionArguments(obj: any[], def: TypeDefinition[]) {
     return obj.map((v, i) => this.wrapValueJsToAs(v, def[i]));
@@ -162,6 +160,7 @@ class WrappingHandler {
         return undefined;
       }
     });
+    return newConstructor;
   }
 }
 
