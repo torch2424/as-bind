@@ -19,15 +19,21 @@ const typeHandlers: Record<
 > = {
   noop: noopHandler,
   number: noopHandler,
-  closure: {
+  asCB: {
     as2js: (h, value: number, def: ClosureDefiniton, hash: string) => {
       return (...args) => {
         const newArgs = h.wrapFunctionArguments(args, def.args);
 
-        return h.wrapValueAsToJs(
+        h.pinFunctionArgs(newArgs, def.args);
+
+        const ret = h.wrapValueAsToJs(
           h.util[`__call__${hash}`](value, ...newArgs),
           def.ret
         );
+
+        h.unpinFunctionArgs(newArgs, def.args);
+
+        return ret;
       };
     },
     js2as: () => {
@@ -39,8 +45,22 @@ const typeHandlers: Record<
   class: {
     js2as: (_, value) => value.__instance,
     as2js: (h, value, className) => h.exports[className].wrap(value)
+  },
+  string: {
+    as2js: (t, v) => t.util.__getString(v),
+    js2as: (t, v) => t.util.__newString(v)
+  },
+  buffer: {
+    as2js: (t, v) => t.util.__getArrayBuffer(v),
+    js2as: (t, v) => t.util.__newArrayBuffer(v)
+  },
+  typedArray: {
+    as2js: (t, v, def, type) => t.util[`__get${type}View`](v),
+    js2as: (t, v, def, type) => t.util.__newArray(def.id, v)
   }
-  // Add Array, ArrayBuffer, TypedArrays etc. from type-converters
+  // Add Array; StaticArray from type-converters
+  // Array will get a Proxy return value to be ref only.
+  // Static Array pointers will not change so there can be some thing done more easy
 };
 
 class WrappingHandler {
@@ -89,11 +109,18 @@ class WrappingHandler {
     return wrapedObject;
   }
   wrapFunction(obj: Function, def: FunctionDefinition) {
-    return (...args) =>
-      this.wrapValueAsToJs(
+    return (...args) => {
+      this.pinFunctionArgs(args, def.args);
+
+      const ret = this.wrapValueAsToJs(
         obj(...this.wrapFunctionArguments(args, def.args)),
         def.ret
       );
+
+      this.unpinFunctionArgs(args, def.args);
+
+      return ret;
+    };
   }
   wrapFunctionArguments(obj: any[], def: TypeDefinition[]) {
     return obj.map((v, i) => this.wrapValueJsToAs(v, def[i]));
@@ -166,7 +193,7 @@ class WrappingHandler {
 
 type TypeDefinition = ClosureDefiniton;
 interface ClosureDefiniton extends FunctionDefinition {
-  type: `closure:${string}`;
+  type: `asCB:${string}`;
   kind: string;
 }
 
