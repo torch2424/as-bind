@@ -21,7 +21,7 @@ const typeHandlers: Record<
   number: noopHandler,
   asCB: {
     as2js: (h, value: number, def: ClosureDefiniton, hash: string) => {
-      return (...args) => {
+      const fn = (...args) => {
         const newArgs = h.wrapFunctionArguments(args, def.args);
 
         h.pinFunctionArgs(newArgs, def.args);
@@ -35,12 +35,12 @@ const typeHandlers: Record<
 
         return ret;
       };
+
+      fn.ptr = value;
+
+      return fn;
     },
-    js2as: () => {
-      throw new Error(
-        "Passing a JS callback to AssemblyScript is currently not supported."
-      );
-    }
+    js2as: (h, v) => v.ptr
   },
   class: {
     js2as: (_, value) => value.__instance,
