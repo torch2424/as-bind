@@ -150,22 +150,30 @@ class WrappingHandler {
   wrapValueJsToAs(obj: any, def: TypeDefinition) {
     const [type, ...args] = def.type.split(":");
 
-    return (typeHandlers[type] ?? typeHandlers.noop).js2as(
-      this,
-      obj,
-      def,
-      ...args
-    );
+    return this.getTypeHandler(type).js2as(this, obj, def, ...args);
   }
   wrapValueAsToJs(obj: any, def: TypeDefinition) {
     const [type, ...args] = def.type.split(":");
 
-    return (typeHandlers[type] ?? typeHandlers.noop).as2js(
-      this,
-      obj,
-      def,
-      ...args
-    );
+    return this.getTypeHandler(type).as2js(this, obj, def, ...args);
+  }
+  warned = new Set<string>();
+  getTypeHandler(type: string) {
+    const handler = typeHandlers[type];
+
+    if (!handler) {
+      if (this.warned.has(type)) {
+        console.warn(
+          `No converter for ${JSON.stringify(
+            type
+          )}, using pass-through\nDo you use the latest version of as-bind?`
+        );
+        this.warned.add(type);
+      }
+      return typeHandlers.noop;
+    }
+
+    return handler;
   }
   classWrapper(obj: ClassObject, def: ClassDefinition, ptr: number) {
     this.util.__pin(ptr);
