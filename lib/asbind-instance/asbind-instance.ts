@@ -47,8 +47,8 @@ function extractTypeDescriptor(module: WebAssembly.Module): TypeDef {
   }
 }
 
-export default class AsbindInstance {
-  exports: Record<string, never> | ASUtil = {};
+export default class AsbindInstance<EXPORTS = {}> {
+  exports: Record<string, never> | (ASUtil & EXPORTS) = {};
   importObject: WebAssembly.Imports = {};
   typeDescriptor: TypeDef;
   module: WebAssembly.Module;
@@ -142,7 +142,7 @@ export default class AsbindInstance {
     for (const [exportedFunctionName, descriptor] of Object.entries(
       this.typeDescriptor.exportedFunctions
     )) {
-      this.exports[exportedFunctionName] = bindExportFunction(
+      (this.exports as any)[exportedFunctionName] = bindExportFunction(
         this,
         unboundExports[exportedFunctionName],
         descriptor
