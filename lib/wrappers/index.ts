@@ -36,7 +36,14 @@ const typeHandlers: Record<
         return ret;
       };
 
+      h.util.__pin(value);
+      h.gcRegestry.register(fn, value, fn);
+
       fn.ptr = value;
+      fn.__collect = () => {
+        h.gcRegestry.unregister(fn);
+        h.util.__unpin(value);
+      };
 
       return fn;
     },
@@ -104,6 +111,7 @@ class WrappingHandler {
           return this.wrapValueJsToAs(target[prop], def[prop]);
         }
       }
+      // TODO: set value.
     });
 
     return wrapedObject;
