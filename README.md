@@ -160,6 +160,13 @@ async function start() {
 start();
 ```
 
+> Note that there might be some cases where the types are not completely acurate but in 99% of use cases they should be - except for features we currently don't include in asbind these are:
+>
+> 1. Class Support
+> 1. JS Function as Parameter
+> 1. AS Function as Return type
+> 1. Date, Map, Set, StaticArray, ...
+
 ### Manual typings
 
 Use something like this:
