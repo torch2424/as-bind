@@ -20,14 +20,21 @@ const typeHandlers: Record<
   noop: noopHandler,
   number: noopHandler,
   asCB: {
-    as2js: (h, value: number, def: ClosureDefiniton, hash: string) => {
+    as2js: (h, value: number, def: ClosureDefiniton) => {
+      const callableFunction = h.util.__getFunction(value) as (
+        ...args: any[]
+      ) => any;
+
+      h.util.__pin(value);
+      h.gcRegestry.register(callableFunction, value, callableFunction);
+
       const fn = (...args) => {
         const newArgs = h.wrapFunctionArguments(args, def.args);
 
         h.pinFunctionArgs(newArgs, def.args);
 
         const ret = h.wrapValueAsToJs(
-          h.util[`__call__${hash}`](value, ...newArgs),
+          callableFunction(value, ...newArgs),
           def.ret
         );
 
@@ -36,18 +43,16 @@ const typeHandlers: Record<
         return ret;
       };
 
-      h.util.__pin(value);
-      h.gcRegestry.register(fn, value, fn);
-
-      fn.ptr = value;
+      // Needed for path back to AS
+      fn.__ptr = value;
       fn.__collect = () => {
-        h.gcRegestry.unregister(fn);
+        h.gcRegestry.unregister(callableFunction);
         h.util.__unpin(value);
       };
 
       return fn;
     },
-    js2as: (h, v) => v.ptr
+    js2as: (h, v) => v.__ptr
   },
   class: {
     js2as: (_, value) => value.__instance,
@@ -135,6 +140,7 @@ class WrappingHandler {
   }
   pinFunctionArgs(obj: any[], def: TypeDefinition[]) {
     obj.forEach((arg, i) => {
+      // Check if pin needed
       if (def[i].type !== "number") {
         this.util.__pin(arg);
       }
@@ -142,6 +148,7 @@ class WrappingHandler {
   }
   unpinFunctionArgs(obj: any[], def: TypeDefinition[]) {
     obj.forEach((arg, i) => {
+      // Check if pin needed
       if (def[i].type !== "number") {
         this.util.__unpin(arg);
       }
@@ -207,9 +214,19 @@ class WrappingHandler {
   }
 }
 
-type TypeDefinition = ClosureDefiniton;
+type TypeDefinition = ClosureDefiniton | NoopDefiniton | NumberDefiniton;
 interface ClosureDefiniton extends FunctionDefinition {
-  type: `asCB:${string}`;
+  type: `asCB`;
+  kind: string;
+}
+
+interface NoopDefiniton {
+  type: "noop";
+  kind: string;
+}
+
+interface NumberDefiniton {
+  type: "number";
   kind: string;
 }
 
