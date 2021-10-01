@@ -1,5 +1,4 @@
 import { ASUtil } from "@assemblyscript/loader";
-import { Class } from "assemblyscript";
 import AsbindInstance from "../asbind-instance/asbind-instance";
 import {
   TYPES,
@@ -10,7 +9,8 @@ import {
   D_ImportedFunction,
   D_ExportedFunction,
   D_ClassConstructor,
-  D_ClassInstance
+  D_ClassInstance,
+  D_Namespace
 } from "./types";
 
 type as2js<RESULT, DEFINITON extends D_Value> = (
@@ -46,6 +46,7 @@ const noImpl: typeHandler = {
 };
 
 function classWrapper(
+  self: TypeHandler,
   klass: any,
   ptr: number,
   cc: D_ClassConstructor,
@@ -66,6 +67,33 @@ function classWrapper(
   return wrapedInstance;
 }
 
+// Is type NOT depending on the Webassembly.Memory?
+function isNonRefType(type: unknown) {
+  if (
+    typeof type === "string" ||
+    typeof type === "number" ||
+    typeof type === "boolean" ||
+    typeof type === "bigint"
+  )
+    return false;
+  if (type instanceof ArrayBuffer) return false;
+
+  return true;
+}
+
+const settableType = [
+  TYPES.ARRAYBUFFER,
+  TYPES.BOOLEAN,
+  TYPES.CLASS_INSTANCE,
+  TYPES.NOOP, //???
+  TYPES.NUMBER,
+  TYPES.STRING,
+  TYPES.TYPEDARRAY
+];
+function isSettableType(def: D_Value) {
+  return settableType.includes(def.type);
+}
+
 const typeHandlers: Record<TYPES, typeHandler> = {
   [TYPES.NOOP]: noop,
   [TYPES.NUMBER]: noop,
@@ -78,6 +106,7 @@ const typeHandlers: Record<TYPES, typeHandler> = {
       return this.util.__newString(value);
     }
   },
+  // NOTE: This is currently a COPY of the buffer so changing it doesn't result in a updated Webassembly.Memory
   [TYPES.ARRAYBUFFER]: {
     as2js(this: TypeHandler, ptr: number) {
       return this.util.__getArrayBuffer(ptr);
@@ -199,7 +228,7 @@ const typeHandlers: Record<TYPES, typeHandler> = {
   [TYPES.CLASS_CONSTRUCTOR]: {
     as2js(this: TypeHandler, klass: any, def: D_ClassConstructor) {
       const wraper = (ptr: number, def2: D_ClassInstance) =>
-        classWrapper(klass, ptr, def, def2);
+        classWrapper(this, klass, ptr, def, def2);
 
       this.constructorWrapers.set(
         this.currentPath.join(".") + "." + def.name,
@@ -224,7 +253,7 @@ const typeHandlers: Record<TYPES, typeHandler> = {
 
           const rawInstance = new klass(...wrapedArgs);
 
-          const wrapedInstance = classWrapper(klass, rawInstance, def);
+          const wrapedInstance = classWrapper(this, klass, rawInstance, def);
 
           return wrapedInstance;
         }
@@ -242,10 +271,66 @@ const typeHandlers: Record<TYPES, typeHandler> = {
       return this.constructorWrapers.get(def.constructorPath)(ptr, def);
     }
   },
-  [TYPES.NAMESPACE]: noImpl
+  [TYPES.NAMESPACE]: {
+    js2as(this: TypeHandler, imp: any, def: D_Namespace) {
+      // IMPORT Namespace
+      // We wrap all stuff once! We don't need to worry about generics! (for now) If we add
+      // Import function generics we have to add handlint here!
+      const newObj = {};
+
+      Object.keys(imp).forEach(key => {
+        // If a key is used that was not declared we don't modify the value
+        newObj[key] = def.content[key]
+          ? this.handleTypeValue(imp[key], def.content[key], "js2as")
+          : imp[key];
+      });
+
+      return newObj as any;
+    },
+    as2js(this: TypeHandler, value: any, def: D_Namespace) {
+      // EXPORT Namespace
+
+      // Create Copy of current location.
+      const myPath = [...this.currentPath];
+      const map = new Map<string, any>();
+
+      return new Proxy(value, {
+        get: (_, prop: string) => {
+          if (map.has(prop)) return map.get(prop);
+
+          this.currentPath = [...myPath, prop];
+
+          const wrapedValue = this.handleTypeValue(
+            value[prop],
+            def.content[prop],
+            "as2js"
+          );
+
+          if (!isNonRefType(wrapedValue)) {
+            map.set(prop, wrapedValue);
+          }
+
+          return wrapedValue;
+        },
+        set: (_, prop: string, newValue: any) => {
+          if (isSettableType(def.content[prop])) {
+            value[prop] = this.handleTypeValue(
+              newValue,
+              def.content[prop],
+              "js2as"
+            );
+            return true;
+          }
+
+          return false;
+        }
+      });
+    }
+  }
 };
 
 class TypeHandler {
+  /* Uint8Array is only for typings can be any typed Array */
   typedViewsPointer = new WeakMap<Uint8Array, number>();
   functionPointer = new WeakMap<Function, number>();
   classPointer = new WeakMap<any, number>();
@@ -255,7 +340,7 @@ class TypeHandler {
   >();
 
   currentListOfGenerics: Record<string, D_Value>;
-  currentPath: string[];
+  currentPath: string[] = [];
 
   asbind: AsbindInstance;
 
