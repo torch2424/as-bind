@@ -107,8 +107,20 @@ export interface D_Generic {
 export interface D_ClassConstructor {
   type: TYPES.CLASS_CONSTRUCTOR;
 
+  // Name should be uinique for all generics functions!
+  name: string;
+
   // Constructor arguments
   params: D_Value[];
+
+  content: Record<
+    string,
+    {
+      set: boolean;
+      get: boolean;
+      type: D_Value;
+    }
+  >;
 
   /**
    * count of generic types. These are refed by name __GEN:0 or __GEN:2 etc. - Type is GENRIC_TYPE_NAME

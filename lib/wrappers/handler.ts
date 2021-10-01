@@ -1,4 +1,5 @@
 import { ASUtil } from "@assemblyscript/loader";
+import { Class } from "assemblyscript";
 import AsbindInstance from "../asbind-instance/asbind-instance";
 import {
   TYPES,
@@ -8,7 +9,8 @@ import {
   D_CallbackJS as D_Callback,
   D_ImportedFunction,
   D_ExportedFunction,
-  D_ClassConstructor
+  D_ClassConstructor,
+  D_ClassInstance
 } from "./types";
 
 type as2js<RESULT, DEFINITON extends D_Value> = (
@@ -42,6 +44,27 @@ const noImpl: typeHandler = {
   as2js: notImplemented,
   js2as: notImplemented
 };
+
+function classWrapper(
+  klass: any,
+  ptr: number,
+  cc: D_ClassConstructor,
+  ci: D_ClassInstance = null
+) {
+  const baseWraped = klass.wrap(ptr);
+
+  // Save my generics
+  const myGenerics = {};
+  for (let i = 0; i < cc.generics; i++) {
+    myGenerics[`__GEN:${cc.name}:${i}`] = ci.generics[i];
+  }
+
+  const wrapedInstance = new Proxy(baseWraped, {
+    // TODO: write proxy handler
+  });
+
+  return wrapedInstance;
+}
 
 const typeHandlers: Record<TYPES, typeHandler> = {
   [TYPES.NOOP]: noop,
@@ -173,24 +196,37 @@ const typeHandlers: Record<TYPES, typeHandler> = {
       throw new Error("Not reachable");
     }
   },
-
   [TYPES.CLASS_CONSTRUCTOR]: {
     as2js(this: TypeHandler, klass: any, def: D_ClassConstructor) {
-      // TODO: Generate the construcror Wraper and add it to this.constructorWrapers
-      // This is from all these converters the most complex
+      const wraper = (ptr: number, def2: D_ClassInstance) =>
+        classWrapper(klass, ptr, def, def2);
+
+      this.constructorWrapers.set(
+        this.currentPath.join(".") + "." + def.name,
+        wraper
+      );
+
+      if (def.generics > 0) {
+        return class {
+          constructor() {
+            throw new Error(
+              "You can not instanciate generic classes in JS-Land!"
+            );
+          }
+        };
+      }
 
       return new Proxy(klass, {
         construct(_, args) {
-          // return new t(...args)
           const wrapedArgs = args.map((value, index) => {
             return this.handleTypeValue(value, def.params[index], "js2as");
           });
 
           const rawInstance = new klass(...wrapedArgs);
 
-          // TODO: wrap class instance
+          const wrapedInstance = classWrapper(klass, rawInstance, def);
 
-          return rawInstance;
+          return wrapedInstance;
         }
       });
     },
@@ -198,7 +234,14 @@ const typeHandlers: Record<TYPES, typeHandler> = {
       throw new Error("Not reachable");
     }
   },
-  [TYPES.CLASS_INSTANCE]: noImpl,
+  [TYPES.CLASS_INSTANCE]: {
+    js2as(this: TypeHandler, v: any) {
+      return this.classPointer.get(v);
+    },
+    as2js(this: TypeHandler, ptr: any, def: D_ClassInstance) {
+      return this.constructorWrapers.get(def.constructorPath)(ptr, def);
+    }
+  },
   [TYPES.NAMESPACE]: noImpl
 };
 
@@ -206,9 +249,12 @@ class TypeHandler {
   typedViewsPointer = new WeakMap<Uint8Array, number>();
   functionPointer = new WeakMap<Function, number>();
   classPointer = new WeakMap<any, number>();
-  constructorWrapers = new Map<string, (ptr: number) => any>();
+  constructorWrapers = new Map<
+    string,
+    (ptr: number, def: D_ClassInstance) => any
+  >();
 
-  currentListOfGenerics: Map<string, D_Value>[];
+  currentListOfGenerics: Record<string, D_Value>;
   currentPath: string[];
 
   asbind: AsbindInstance;
@@ -220,10 +266,8 @@ class TypeHandler {
 
   getCurrentGenericDefiniton(type: string): D_Value {
     // Loop reverse to generic List so that there can be overwrites
-    for (let i = this.currentListOfGenerics.length - 1; i > 0; i--) {
-      if (this.currentListOfGenerics[i].has(type)) {
-        return this.currentListOfGenerics[i].get(type);
-      }
+    if (this.currentListOfGenerics[type]) {
+      return this.currentListOfGenerics[type];
     }
 
     // Not found => Noop
