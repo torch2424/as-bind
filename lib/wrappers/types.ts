@@ -117,7 +117,6 @@ export interface D_ClassConstructor {
     string,
     {
       set: boolean;
-      get: boolean;
       type: D_Value;
     }
   >;

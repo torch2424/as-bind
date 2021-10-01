@@ -40,11 +40,6 @@ const noop: typeHandler = {
   js2as: (v: any) => v.__ptr ?? v
 };
 
-const noImpl: typeHandler = {
-  as2js: notImplemented,
-  js2as: notImplemented
-};
-
 function classWrapper(
   self: TypeHandler,
   klass: any,
@@ -53,6 +48,7 @@ function classWrapper(
   ci: D_ClassInstance = null
 ) {
   const baseWraped = klass.wrap(ptr);
+  const myPath = [...self.currentPath];
 
   // Save my generics
   const myGenerics = {};
@@ -60,8 +56,38 @@ function classWrapper(
     myGenerics[`__GEN:${cc.name}:${i}`] = ci.generics[i];
   }
 
+  const map = new Map<string, Function>();
+
   const wrapedInstance = new Proxy(baseWraped, {
-    // TODO: write proxy handler
+    get: (_, prop: string) => {
+      if (map.has(prop)) return map.get(prop);
+
+      this.currentPath = [...myPath, prop];
+
+      const wrapedValue = this.handleTypeValue(
+        baseWraped[prop],
+        cc.content[prop].type,
+        "as2js"
+      );
+
+      if (typeof wrapedValue === "function") {
+        map.set(prop, wrapedValue);
+      }
+
+      return wrapedValue;
+    },
+    set: (_, prop: string, newValue: any) => {
+      if (cc.content[prop].set && isSettableType(cc.content[prop].type)) {
+        baseWraped[prop] = this.handleTypeValue(
+          newValue,
+          cc.content[prop],
+          "js2as"
+        );
+        return true;
+      }
+
+      return false;
+    }
   });
 
   return wrapedInstance;
