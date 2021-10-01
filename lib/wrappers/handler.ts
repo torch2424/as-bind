@@ -355,7 +355,7 @@ const typeHandlers: Record<TYPES, typeHandler> = {
   }
 };
 
-class TypeHandler {
+export class TypeHandler {
   /* Uint8Array is only for typings can be any typed Array */
   typedViewsPointer = new WeakMap<Uint8Array, number>();
   functionPointer = new WeakMap<Function, number>();

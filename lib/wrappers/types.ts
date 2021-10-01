@@ -1,17 +1,17 @@
 export enum TYPES {
-  NOOP = "_", // D
-  BOOLEAN = "b", // D
-  NUMBER = "n", // D
-  CALLBACK = "cb", // D
-  EXPORTED_FUNCTION = "ef", // D
-  IMPORTED_FUNCTION = "if", // D
-  CLASS_INSTANCE = "ci", // D
-  STRING = "s", // D
-  ARRAYBUFFER = "ab", // D
-  TYPEDARRAY = "ta", // D
-  NAMESPACE = "ns", // D
-  CLASS_CONSTRUCTOR = "cc", // D
-  GENERIC = "g" // D
+  NOOP = "_",
+  BOOLEAN = "b",
+  NUMBER = "n",
+  CALLBACK = "cb",
+  EXPORTED_FUNCTION = "ef",
+  IMPORTED_FUNCTION = "if",
+  CLASS_INSTANCE = "ci",
+  STRING = "s",
+  ARRAYBUFFER = "ab",
+  TYPEDARRAY = "ta",
+  NAMESPACE = "ns",
+  CLASS_CONSTRUCTOR = "cc",
+  GENERIC = "g"
 }
 
 export type D_Value =
@@ -136,7 +136,7 @@ export interface D_ClassInstance {
   /**
    * Generics in SAME ORDER as in ClassConstructor!
    */
-  generics: [D_Value];
+  generics: D_Value[];
 }
 
 const exampleConfig: D_Intstance = {
