@@ -1,6 +1,13 @@
 import { ASUtil } from "@assemblyscript/loader";
 import AsbindInstance from "./asbind-instance";
-import { isReservedExportKey } from "./helpers";
+import {
+  isReservedExportKey,
+  noop,
+  notImplemented,
+  classWrapper,
+  isNonRefType,
+  isSettableType
+} from "./helpers";
 import {
   TYPES,
   D_Value,
@@ -12,115 +19,10 @@ import {
   D_ClassConstructor,
   D_ClassInstance,
   D_Namespace,
-  D_Intstance
+  typeHandler,
+  as2js,
+  js2as
 } from "./types";
-
-type as2js<RESULT, DEFINITON extends D_Value> = (
-  this: TypeHandler,
-  ptr: number,
-  def: DEFINITON
-) => RESULT;
-type js2as<INPUT, DEFINITON extends D_Value> = (
-  this: TypeHandler,
-  value: INPUT,
-  def: DEFINITON
-) => number;
-
-interface typeHandler {
-  as2js: as2js<any, any>;
-  js2as: js2as<any, any>;
-}
-
-const notImplemented = (val: any, def: D_Value) => {
-  throw new Error(
-    `Handeling type ${TYPES[def.type] ?? def.type} is currently not supported!`
-  );
-};
-
-const noop: typeHandler = {
-  as2js: (v: number) => v,
-  js2as: (v: any) => v.__ptr ?? v
-};
-
-function classWrapper(
-  self: TypeHandler,
-  klass: any,
-  ptr: number,
-  cc: D_ClassConstructor,
-  ci: D_ClassInstance = null
-) {
-  const baseWraped = klass.wrap(ptr);
-  const myPath = [...self.currentPath];
-
-  // Save my generics
-  const myGenerics = {};
-  for (let i = 0; i < cc.generics; i++) {
-    myGenerics[`__GEN:${cc.name}:${i}`] = ci.generics[i];
-  }
-
-  const map = new Map<string, Function>();
-
-  const wrapedInstance = new Proxy(baseWraped, {
-    get: (_, prop: string) => {
-      if (map.has(prop)) return map.get(prop);
-
-      this.currentPath = [...myPath, prop];
-
-      const wrapedValue = this.handleTypeValue(
-        baseWraped[prop],
-        cc.content[prop].type,
-        "as2js"
-      );
-
-      if (typeof wrapedValue === "function") {
-        map.set(prop, wrapedValue);
-      }
-
-      return wrapedValue;
-    },
-    set: (_, prop: string, newValue: any) => {
-      if (cc.content[prop].set && isSettableType(cc.content[prop].type)) {
-        baseWraped[prop] = this.handleTypeValue(
-          newValue,
-          cc.content[prop],
-          "js2as"
-        );
-        return true;
-      }
-
-      return false;
-    }
-  });
-
-  return wrapedInstance;
-}
-
-// Is type NOT depending on the Webassembly.Memory?
-function isNonRefType(type: unknown) {
-  if (
-    typeof type === "string" ||
-    typeof type === "number" ||
-    typeof type === "boolean" ||
-    typeof type === "bigint"
-  )
-    return false;
-  if (type instanceof ArrayBuffer) return false;
-
-  return true;
-}
-
-const settableType = [
-  TYPES.ARRAYBUFFER,
-  TYPES.BOOLEAN,
-  TYPES.CLASS_INSTANCE,
-  TYPES.NOOP, //???
-  TYPES.NUMBER,
-  TYPES.STRING,
-  TYPES.TYPEDARRAY
-];
-function isSettableType(def: D_Value) {
-  return settableType.includes(def.type);
-}
 
 const typeHandlers: Record<TYPES, typeHandler> = {
   [TYPES.NOOP]: noop,

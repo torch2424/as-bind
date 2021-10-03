@@ -1,4 +1,99 @@
 import { D_Intstance, WebAssemblyModuleStreaming } from "./types";
+import {
+  TYPES,
+  D_Value,
+  D_ClassConstructor,
+  D_ClassInstance,
+  typeHandler
+} from "./types";
+import { TypeHandler } from "./typeHandler";
+
+export const notImplemented = (val: any, def: D_Value) => {
+  throw new Error(
+    `Handeling type ${TYPES[def.type] ?? def.type} is currently not supported!`
+  );
+};
+export const noop: typeHandler = {
+  as2js: (v: number) => v,
+  js2as: (v: any) => v.__ptr ?? v
+};
+export function classWrapper(
+  self: TypeHandler,
+  klass: any,
+  ptr: number,
+  cc: D_ClassConstructor,
+  ci: D_ClassInstance = null
+) {
+  const baseWraped = klass.wrap(ptr);
+  const myPath = [...self.currentPath];
+
+  // Save my generics
+  const myGenerics = {};
+  for (let i = 0; i < cc.generics; i++) {
+    myGenerics[`__GEN:${cc.name}:${i}`] = ci.generics[i];
+  }
+
+  const map = new Map<string, Function>();
+
+  const wrapedInstance = new Proxy(baseWraped, {
+    get: (_, prop: string) => {
+      if (map.has(prop)) return map.get(prop);
+
+      this.currentPath = [...myPath, prop];
+
+      const wrapedValue = this.handleTypeValue(
+        baseWraped[prop],
+        cc.content[prop].type,
+        "as2js"
+      );
+
+      if (typeof wrapedValue === "function") {
+        map.set(prop, wrapedValue);
+      }
+
+      return wrapedValue;
+    },
+    set: (_, prop: string, newValue: any) => {
+      if (cc.content[prop].set && isSettableType(cc.content[prop].type)) {
+        baseWraped[prop] = this.handleTypeValue(
+          newValue,
+          cc.content[prop],
+          "js2as"
+        );
+        return true;
+      }
+
+      return false;
+    }
+  });
+
+  return wrapedInstance;
+}
+// Is type NOT depending on the Webassembly.Memory?
+export function isNonRefType(type: unknown) {
+  if (
+    typeof type === "string" ||
+    typeof type === "number" ||
+    typeof type === "boolean" ||
+    typeof type === "bigint"
+  )
+    return false;
+  if (type instanceof ArrayBuffer) return false;
+
+  return true;
+}
+const settableType = [
+  TYPES.ARRAYBUFFER,
+  TYPES.BOOLEAN,
+  TYPES.CLASS_INSTANCE,
+  TYPES.NOOP,
+  TYPES.NUMBER,
+  TYPES.STRING,
+  TYPES.TYPEDARRAY
+];
+export function isSettableType(def: D_Value) {
+  return settableType.includes(def.type);
+}
 
 // Runtime Export keys we don't want to bind to
 export const RESERVED_RUNTIME_EXPORT_KEYS = [

@@ -1,4 +1,5 @@
 import { ASUtil } from "@assemblyscript/loader";
+import { TypeHandler } from "./typeHandler";
 
 export type WebAssemblyModuleStreaming =
   | WebAssemblyModuleSync
@@ -8,6 +9,22 @@ export type WebAssemblyModuleSync = BufferSource;
 
 export type WebAssemblyLoaderResult<T = Record<string, never>> =
   WebAssembly.WebAssemblyInstantiatedSource & { exports: T & ASUtil };
+
+export type as2js<RESULT, DEFINITON extends D_Value> = (
+  this: TypeHandler,
+  ptr: number,
+  def: DEFINITON
+) => RESULT;
+export type js2as<INPUT, DEFINITON extends D_Value> = (
+  this: TypeHandler,
+  value: INPUT,
+  def: DEFINITON
+) => number;
+
+export interface typeHandler {
+  as2js: as2js<any, any>;
+  js2as: js2as<any, any>;
+}
 
 export enum TYPES {
   NOOP = "_",
