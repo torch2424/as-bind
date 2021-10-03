@@ -82,6 +82,20 @@ export function isNonRefType(type: unknown) {
 
   return true;
 }
+
+// Is type NOT depending on the Webassembly.Memory and can be pinned?
+export function needsPinning(type: unknown) {
+  if (
+    typeof type === "number" ||
+    typeof type === "boolean" ||
+    typeof type === "bigint"
+  )
+    return false;
+  if (type instanceof ArrayBuffer) return false;
+
+  return true;
+}
+
 const settableType = [
   TYPES.ARRAYBUFFER,
   TYPES.BOOLEAN,
@@ -151,5 +165,21 @@ export function extractTypeDescriptor(module: WebAssembly.Module): D_Intstance {
     return JSON.parse(str);
   } catch (e) {
     throw Error(`Couldn’t decode type descriptor: ${e.message}`);
+  }
+}
+
+export function createFinalizationRegistry(
+  typeHandler: TypeHandler
+): FinalizationRegistry<number> {
+  if (FinalizationRegistry) {
+    return new FinalizationRegistry((ptr: number) =>
+      typeHandler.util.__unpin(ptr)
+    );
+  } else {
+    // Simple filler so we dont have to check evrytime. (NOTE: This is technikly a valid FinalizationRegistry implementation as CB is not required to be called.)
+    return {
+      register() {},
+      unregister() {}
+    } as any;
   }
 }

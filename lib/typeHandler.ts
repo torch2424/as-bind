@@ -6,7 +6,8 @@ import {
   notImplemented,
   classWrapper,
   isNonRefType,
-  isSettableType
+  isSettableType,
+  createFinalizationRegistry
 } from "./helpers";
 import {
   TYPES,
@@ -273,6 +274,8 @@ export class TypeHandler {
 
   currentListOfGenerics: Record<string, D_Value>;
   currentPath: string[] = [];
+
+  regestry = createFinalizationRegistry(this);
 
   constructor(public asbind: AsbindInstance) {}
 
