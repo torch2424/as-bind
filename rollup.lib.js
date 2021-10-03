@@ -14,6 +14,21 @@ const babelConfig = {
 };
 
 let plugins = [
+  {
+    name: "version",
+    resolveId(id) {
+      if (id === "version:") return id;
+    },
+    load(id) {
+      if (id === "version:")
+        return `
+        export const version = ${JSON.stringify(pkg.version)}
+        export const short = ${JSON.stringify(
+          pkg.version.split(".").slice(0, 2).join(".")
+        )}
+      `;
+    }
+  },
   resolve(),
   json(),
   typescript({ tsconfig: "./tsconfig.json" }),
