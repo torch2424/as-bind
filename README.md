@@ -153,7 +153,7 @@ import { instantiate } from "as-bind";
 import * as EXPORTS from "./path/to/type/dist/entry";
 
 async function start() {
-  const a = await instantiate<EXPORTS>(fetch("..."), {});
+  const a = await instantiate<typeof EXPORTS>(fetch("..."), {});
 
   a.exports; // full types!
 }

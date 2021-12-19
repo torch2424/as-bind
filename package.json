@@ -35,7 +35,8 @@
     "md:ts:build": "tsc --project examples/markdown-parser/assembly/ --outDir dist/ts/ --module \"es2015\"",
     "md:js:build": "rollup -c --environment MD,PROD",
     "md:deploy": "run-s build md:build md:deploy:gh-pages",
-    "md:deploy:gh-pages": "gh-pages -d dist/examples/markdown-parser"
+    "md:deploy:gh-pages": "gh-pages -d dist/examples/markdown-parser",
+    "example:typegen": "tsc -p examples/typegen/tsconfig.ts.json"
   },
   "husky": {
     "hooks": {
