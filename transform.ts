@@ -11,7 +11,7 @@ import {
   DeclaredElement,
   Type
 } from "visitor-as/as";
-import { TypeDef } from "./lib/types";
+type TypeDef = any;
 
 function isInternalElement(element: DeclaredElement) {
   return element.internalName.startsWith("~");
