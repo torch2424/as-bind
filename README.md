@@ -85,9 +85,8 @@ const asyncTask = async () => {
   const asBindInstance = await AsBind.instantiate(wasm);
 
   // You can now use your wasm / as-bind instance!
-  const response = asBindInstance.exports.myExportedFunctionThatTakesAString(
-    "Hello World!"
-  );
+  const response =
+    asBindInstance.exports.myExportedFunctionThatTakesAString("Hello World!");
   console.log(response); // AsBind: Hello World!
 };
 asyncTask();
@@ -109,12 +108,81 @@ const asyncTask = async () => {
   const asBindInstance = await AsBind.instantiate(wasm);
 
   // You can now use your wasm / as-bind instance!
-  const response = asBindInstance.exports.myExportedFunctionThatTakesAString(
-    "Hello World!"
-  );
+  const response =
+    asBindInstance.exports.myExportedFunctionThatTakesAString("Hello World!");
   console.log(response); // AsBind: Hello World!
 };
 asyncTask();
+```
+
+## Typings
+
+You can get near optimal typing following these steps:
+
+1. Add typescript to your dev dependencies
+2. Add a tsconfig.ts.json (name doesn't matter but keep it diffrent from tsconfig.json) with the following content:
+
+```json
+{
+  "files": ["./path/to/entry/index.ts"],
+  "compilerOptions": {
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "declarationDir": "./types-dist",
+    "types": ["assemblyscript/std/portable"]
+  }
+}
+```
+
+3. Add a build script to your package.json something like:
+
+```json
+{
+  "scripts": {
+    "gen-types": "tsc -p ./tsconfig.ts.json"
+  }
+}
+```
+
+4. Run `npm run gen-types` or `yarn gen-types` evrytime you want to regenerate the types.
+5. If you use CI it is highly recomended - but also without CI put the typings output into your versioncontrol (like git).
+6. Integrate it in the asBind instantiate call. Here is a quick example:
+
+```ts
+import { instantiate } from "as-bind";
+import * as EXPORTS from "./path/to/type/dist/entry";
+
+async function start() {
+  const a = await instantiate<typeof EXPORTS>(fetch("..."), {});
+
+  a.exports; // full types!
+}
+start();
+```
+
+> Note that there might be some cases where the types are not completely acurate but in 99% of use cases they should be - except for features we currently don't include in asbind these are:
+>
+> 1. Class Support
+> 1. JS Function as Parameter
+> 1. AS Function as Return type
+> 1. Date, Map, Set, StaticArray, ...
+
+### Manual typings
+
+Use something like this:
+
+```ts
+import { instantiate } from "as-bind";
+
+async function start() {
+  const a = await instantiate<{ exampleFn(a: number): number }>(
+    fetch("..."),
+    {}
+  );
+
+  a.exports.exampleFn;
+}
+start();
 ```
 
 ## Additional Examples

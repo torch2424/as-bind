@@ -1,0 +1,9 @@
+{
+  "files": ["./assembly/example-entry.ts"],
+  "compilerOptions": {
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "declarationDir": "./types-dist",
+    "types": ["assemblyscript/std/portable"]
+  }
+}
