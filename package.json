@@ -57,7 +57,7 @@
     "@rollup/plugin-typescript": "^8.2.5",
     "assemblyscript": "~0.19.8",
     "chokidar-cli": "^2.0.0",
-    "cpy-cli": "^3.1.1",
+    "cpy-cli": "^4.2.0",
     "express": "^4.17.1",
     "gh-pages": "^2.1.1",
     "glob": "^7.1.6",
