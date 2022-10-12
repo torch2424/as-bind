@@ -81,7 +81,7 @@
     "rollup-plugin-postcss": "^4.0.0",
     "rollup-plugin-terser": "^7.0.2",
     "sakura.css": "^1.0.0",
-    "serve": "^11.2.0",
+    "serve": "^14.0.1",
     "tslib": "^2.3.1",
     "typescript": "^4.4.3"
   },
