@@ -1,10 +1,12 @@
 import resolve from "@rollup/plugin-node-resolve";
 import json from "@rollup/plugin-json";
-import babel from "@rollup/plugin-babel";
+import { babel } from "@rollup/plugin-babel";
 import { terser } from "rollup-plugin-terser";
 import bundleSize from "rollup-plugin-bundle-size";
-import pkg from "./package.json";
 import typescript from "@rollup/plugin-typescript";
+import fs from "fs/promises";
+
+const pkg = JSON.parse(await fs.readFile("./package.json", "utf8"));
 
 const sourcemapOption = process.env.PROD ? undefined : "inline";
 

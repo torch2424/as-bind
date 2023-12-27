@@ -1,6 +1,6 @@
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
-import babel from "@rollup/plugin-babel";
+import { babel } from "@rollup/plugin-babel";
 import json from "@rollup/plugin-json";
 import { terser } from "rollup-plugin-terser";
 import bundleSize from "rollup-plugin-bundle-size";
@@ -9,9 +9,8 @@ import hash from "rollup-plugin-hash";
 import postcss from "rollup-plugin-postcss";
 import postcssImport from "postcss-import";
 import del from "rollup-plugin-delete";
-
-const fs = require("fs");
-const mkdirp = require("mkdirp");
+import fs from "fs";
+import mkdirp from "mkdirp";
 
 const writeIndexHtmlToBuild = bundleName => {
   let indexHtml = fs.readFileSync(
