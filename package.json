@@ -19,7 +19,7 @@
     "serve": "serve dist -p 8080",
     "test": "run-s build test:lib test:quickstart",
     "test:lib": "node ./test/test-runner.mjs",
-    "test:quickstart": "(cd examples/quickstart && npm install && npm run test)",
+    "test:quickstart": "(cd examples/quickstart && pnpm install && npm run test)",
     "lint": "prettier --write **/*.js **/*.ts **/*.json !build/**/* !dist/**/*",
     "lint:ci": "prettier --check **/*.js **/*.ts **/*.json !build/**/* !dist/**/*",
     "lib:watch": "chokidar --initial \"lib/**/*\" -c \"run-s lib:js:build:dev test\"",
