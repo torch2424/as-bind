@@ -82,7 +82,7 @@ if (process.env.PROD) {
 
 const mdBundles = [
   {
-    input: "examples/markdown-parser/index.js",
+    input: "examples/markdown-parser/index.mjs",
     output: {
       file: "dist/examples/markdown-parser/index.iife.js",
       format: "iife",
