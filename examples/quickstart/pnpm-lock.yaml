@@ -57,9 +57,12 @@ packages:
     resolution: {integrity: sha512-Zo9HgPCtNouDgJ+LGtrzVOjSg8+7WGQktIKLwAfaNrlOK1mWGlz1ejsAF/YqUEqAGjUTeB5fEg8gH9Aui6w9xA==}
     dev: false
 
-  /visitor-as@0.5.0:
-    resolution: {integrity: sha512-U2P13pa7BAnfj6IEbP4feS1Rci6NT4GlDcwpqkk90u7LGalc5jH9aMuWnxTC8RJJ92iZzDQ8Lea5/OnLDsgzlw==}
+  /visitor-as@0.8.0(assemblyscript@0.19.23):
+    resolution: {integrity: sha512-tW9Vfr2AnGCckcfujL7QPbfrY7D0hNcYwi5DWx8wBfBjgCWhfIXEEojqS5JrzRnQI+LllTEUfGAIdLaxaaBNpw==}
+    peerDependencies:
+      assemblyscript: ^0.19.22
     dependencies:
+      assemblyscript: 0.19.23
       lodash.clonedeep: 4.5.0
       ts-mixer: 5.4.1
     dev: false
@@ -74,5 +77,5 @@ packages:
     dependencies:
       '@assemblyscript/loader': 0.19.23
       assemblyscript: 0.19.23
-      visitor-as: 0.5.0
+      visitor-as: 0.8.0(assemblyscript@0.19.23)
     dev: false
