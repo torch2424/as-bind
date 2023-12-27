@@ -10,7 +10,7 @@ import postcss from "rollup-plugin-postcss";
 import postcssImport from "postcss-import";
 import del from "rollup-plugin-delete";
 import fs from "fs";
-import mkdirp from "mkdirp";
+import { mkdirp } from "mkdirp";
 
 const writeIndexHtmlToBuild = bundleName => {
   let indexHtml = fs.readFileSync(

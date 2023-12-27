@@ -1,17 +1,15 @@
-import { promisify } from "util";
 import fs from "fs/promises";
 import { dirname, join } from "path";
 import { createRequire } from "module";
 
 import Express from "express";
 import Mocha from "mocha";
-import globOrig from "glob";
+import { glob } from "glob";
 import pptr from "puppeteer";
 import asc from "assemblyscript/cli/asc";
 import AsBind from "../dist/as-bind.cjs.js";
 
 const require = createRequire(import.meta.url);
-const glob = promisify(globOrig);
 globalThis.AsBind = AsBind;
 
 async function main() {
