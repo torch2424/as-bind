@@ -33,14 +33,14 @@
     "md:wasm:watch": "chokidar --initial \"examples/markdown-parser/assembly/**/*\" -c \"run-s md:wasm:build\"",
     "md:ts:watch": "chokidar --initial \"examples/markdown-parser/assembly/**/*\" -c \"run-s md:ts:build\"",
     "md:js:watch": "chokidar --initial \"examples/markdown-parser/**/*\" -c \"rollup -c --environment MD,DEV\"",
-    "md:wasm:build": "asc examples/markdown-parser/assembly/index.ts --transform ./dist/transform.cjs.js -b dist/examples/markdown-parser/index.wasm -t dist/examples/markdown-parser/index.wat --sourceMap dist/examples/markdown-parser/index.wasm.map --runtime incremental --exportRuntime",
+    "md:wasm:build": "asc examples/markdown-parser/assembly/index.ts --transform ./dist/transform.cjs.js -o dist/examples/markdown-parser/index.wasm -t dist/examples/markdown-parser/index.wat --sourceMap dist/examples/markdown-parser/index.wasm.map --runtime incremental --exportRuntime",
     "md:ts:build": "tsc --project examples/markdown-parser/assembly/ --outDir dist/ts/ --module \"es2015\"",
     "md:js:build": "rollup -c --environment MD,PROD",
     "md:deploy": "run-s build md:build md:deploy:gh-pages",
     "md:deploy:gh-pages": "gh-pages -d dist/examples/markdown-parser"
   },
   "devDependencies": {
-    "@assemblyscript/loader": "~0.19.23",
+    "@assemblyscript/loader": "~0.27.22",
     "@babel/core": "^7.23.6",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
     "@babel/plugin-proposal-export-default-from": "^7.23.3",
@@ -52,7 +52,7 @@
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-typescript": "^11.1.5",
-    "assemblyscript": "~0.19.23",
+    "assemblyscript": "~0.27.22",
     "chokidar-cli": "^3.0.0",
     "cpy-cli": "^5.0.0",
     "desm": "^1.3.0",
@@ -116,10 +116,7 @@
   ],
   "homepage": "https://github.com/torch2424/as-bind#readme",
   "peerDependencies": {
-    "@assemblyscript/loader": "0.19.x",
-    "assemblyscript": "0.19.x"
-  },
-  "dependencies": {
-    "visitor-as": "~0.8.0"
+    "@assemblyscript/loader": "0.27.x",
+    "assemblyscript": "0.27.x"
   }
 }

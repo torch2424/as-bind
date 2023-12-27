@@ -6,7 +6,7 @@ import Express from "express";
 import Mocha from "mocha";
 import { glob } from "glob";
 import pptr from "puppeteer";
-import asc from "assemblyscript/cli/asc";
+import asc from "assemblyscript/dist/asc.js";
 import AsBind from "../dist/as-bind.cjs.js";
 
 const require = createRequire(import.meta.url);
