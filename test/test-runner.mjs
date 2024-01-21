@@ -1,4 +1,5 @@
 import fs from "fs/promises";
+import fsSync from "fs";
 import { dirname, join } from "path";
 import { createRequire } from "module";
 
@@ -43,18 +44,32 @@ async function compileAllAsc() {
       Object.assign(config, m);
     } catch (e) {}
     console.log(`Compiling ${ascFile}...`);
+
+    const wasmFile = ascFile.replace(/\.ts$/, ".wasm");
+    if (fsSync.existsSync(wasmFile)) {
+      await fs.unlink(wasmFile);
+    }
+
     const params = [
       "--runtime",
       "stub",
       "--exportRuntime",
       "--transform",
       transformFile,
-      "--binaryFile",
+      "--outFile",
       ascFile.replace(/\.ts$/, ".wasm"),
       ascFile
     ];
     config.mangleCompilerParams(params);
-    await asc.main(params);
+    const result = await asc.main(params, {
+      stderr: process.stderr,
+      stdout: process.stdout
+    });
+
+    if (result.error !== null) {
+      console.error(`Failed to compile ${ascFile}`);
+      process.exit(1);
+    }
   }
 }
 
