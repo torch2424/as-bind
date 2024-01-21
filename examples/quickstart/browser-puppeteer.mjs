@@ -1,14 +1,17 @@
 // Use pupeteer to run in the browser
-const puppeteer = require("puppeteer");
+import puppeteer from "puppeteer";
 
-// Require rollup to compile our browser.js
-const rollup = require("rollup");
-const { nodeResolve } = require("@rollup/plugin-node-resolve");
+// Import rollup to compile our browser.js
+import { rollup } from "rollup";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
+import desm from "desm";
 
 // Get some native node libs, in order to host a static server
-const path = require("path");
-const fs = require("fs");
-const http = require("http");
+import path from "path";
+import fs from "fs";
+import http from "http";
+
+const __dirname = desm(import.meta.url);
 
 // Host a static server of the local directory
 // https://nodejs.org/en/knowledge/HTTP/servers/how-to-serve-static-files/
@@ -28,8 +31,8 @@ http
 
 (async () => {
   // Create a rollup bundle and get our compiled browser.js as a string
-  const bundle = await rollup.rollup({
-    input: "./browser.js",
+  const bundle = await rollup({
+    input: `${__dirname}/browser.mjs`,
     plugins: [nodeResolve()]
   });
   const { output } = await bundle.generate({
@@ -37,7 +40,7 @@ http
   });
   const browserQuickstartJs = output[0].code;
 
-  // Launch the pupeteer browser and page
+  console.log("Launching the pupeteer browser and page...");
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.goto("http://localhost:8000/browser.html");

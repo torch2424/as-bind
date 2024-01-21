@@ -1,12 +1,14 @@
 import resolve from "@rollup/plugin-node-resolve";
 import json from "@rollup/plugin-json";
-import babel from "@rollup/plugin-babel";
+import { babel } from "@rollup/plugin-babel";
 import { terser } from "rollup-plugin-terser";
 import bundleSize from "rollup-plugin-bundle-size";
-import pkg from "./package.json";
 import typescript from "@rollup/plugin-typescript";
+import fs from "fs/promises";
 
-const sourcemapOption = process.env.PROD ? undefined : "inline";
+const pkg = JSON.parse(await fs.readFile("./package.json", "utf8"));
+
+const sourcemapOption = process.env.PROD ? true : "inline";
 
 const babelConfig = {
   babelHelpers: "bundled",
@@ -70,7 +72,8 @@ const libBundles = [
     input: "transform.ts",
     output: {
       file: "dist/transform.cjs.js",
-      format: "cjs"
+      format: "cjs",
+      sourcemap: sourcemapOption
     },
     external: ["assemblyscript", "visitor-as/as"],
     plugins
@@ -79,7 +82,8 @@ const libBundles = [
     input: "transform.ts",
     output: {
       file: "dist/transform.amd.js",
-      format: "amd"
+      format: "amd",
+      sourcemap: sourcemapOption
     },
     external: ["assemblyscript", "visitor-as/as"],
     plugins

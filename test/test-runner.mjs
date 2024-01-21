@@ -1,18 +1,19 @@
-const { promisify } = require("util");
-const fs = require("fs/promises");
-const { dirname, join } = require("path");
+import fs from "fs/promises";
+import { dirname, join } from "path";
+import { createRequire } from "module";
 
-const Express = require("express");
-const Mocha = require("mocha");
-const glob = promisify(require("glob"));
-const pptr = require("puppeteer");
+import Express from "express";
+import Mocha from "mocha";
+import { glob } from "glob";
+import pptr from "puppeteer";
+import asc from "assemblyscript/cli/asc";
+import AsBind from "../dist/as-bind.cjs.js";
 
-const asc = require("assemblyscript/cli/asc");
-
-globalThis.AsBind = require("../dist/as-bind.cjs.js");
+const require = createRequire(import.meta.url);
+globalThis.AsBind = AsBind;
 
 async function main() {
-  process.chdir(__dirname);
+  process.chdir("./test");
   await asc.ready;
 
   await compileAllAsc();
