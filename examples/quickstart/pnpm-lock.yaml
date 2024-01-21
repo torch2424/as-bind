@@ -1,0 +1,46 @@
+lockfileVersion: '6.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+dependencies:
+  as-bind:
+    specifier: file:../..
+    version: file:../..(@assemblyscript/loader@0.27.23)(assemblyscript@0.27.23)
+
+packages:
+
+  /@assemblyscript/loader@0.27.23:
+    resolution: {integrity: sha512-ViqcdUR4/RskDJwq1H9Divb1cqY+LPXf++FMGgrrZboZI/JXWXwRH1M7HSByK6AwUDpLFrsY+ijW5eLrsVsbFQ==}
+    dev: false
+
+  /assemblyscript@0.27.23:
+    resolution: {integrity: sha512-+oLTB2IapORXof+bel+HliNUuEScUW4jpBIwV3Y4fDGiT0cu1qI+AJ1SG2RbJqvMo7fbUBGXv2ESq3iE9hK2rQ==}
+    engines: {node: '>=16', npm: '>=7'}
+    hasBin: true
+    dependencies:
+      binaryen: 116.0.0-nightly.20240114
+      long: 5.2.3
+    dev: false
+
+  /binaryen@116.0.0-nightly.20240114:
+    resolution: {integrity: sha512-0GZrojJnuhoe+hiwji7QFaL3tBlJoA+KFUN7ouYSDGZLSo9CKM8swQX8n/UcbR0d1VuZKU+nhogNzv423JEu5A==}
+    hasBin: true
+    dev: false
+
+  /long@5.2.3:
+    resolution: {integrity: sha512-lcHwpNoggQTObv5apGNCTdJrO69eHOZMi4BNC+rTLER8iHAqGrUVeLh/irVIM7zTw2bOXA8T6uNPeujwOLg/2Q==}
+    dev: false
+
+  file:../..(@assemblyscript/loader@0.27.23)(assemblyscript@0.27.23):
+    resolution: {directory: ../.., type: directory}
+    id: file:../..
+    name: as-bind
+    peerDependencies:
+      '@assemblyscript/loader': 0.27.x
+      assemblyscript: 0.27.x
+    dependencies:
+      '@assemblyscript/loader': 0.27.23
+      assemblyscript: 0.27.23
+    dev: false

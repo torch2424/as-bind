@@ -2,7 +2,6 @@ import {
   CommonFlags,
   NodeKind,
   ElementKind,
-  Transform,
   IdentifierExpression,
   FunctionPrototype,
   StringLiteralExpression,
@@ -10,7 +9,8 @@ import {
   Function,
   DeclaredElement,
   Type
-} from "visitor-as/as";
+} from "assemblyscript/dist/assemblyscript.js";
+import { Transform } from "assemblyscript/dist/transform.js";
 import { TypeDef } from "./lib/types";
 
 function isInternalElement(element: DeclaredElement) {
@@ -77,18 +77,18 @@ export default class AsBindTransform extends Transform {
     const flatExportedFunctions = [
       ...this.program.elementsByDeclaration.values()
     ]
-      .filter(el => elementHasFlag(el, CommonFlags.MODULE_EXPORT))
+      .filter(el => elementHasFlag(el, CommonFlags.ModuleExport))
       .filter(el => !isInternalElement(el))
       .filter(
-        el => el.declaration.kind === NodeKind.FUNCTIONDECLARATION
+        el => el.declaration.kind === NodeKind.FunctionDeclaration
       ) as FunctionPrototype[];
     const flatImportedFunctions = [
       ...this.program.elementsByDeclaration.values()
     ]
-      .filter(el => elementHasFlag(el, CommonFlags.DECLARE))
+      .filter(el => elementHasFlag(el, CommonFlags.Declare))
       .filter(el => !isInternalElement(el))
       .filter(
-        v => v.declaration.kind === NodeKind.FUNCTIONDECLARATION
+        v => v.declaration.kind === NodeKind.FunctionDeclaration
       ) as FunctionPrototype[];
 
     const typeIds: TypeDef["typeIds"] = {};
@@ -108,8 +108,8 @@ export default class AsBindTransform extends Transform {
 
       const iFunction = importedFunction.instances.get("")!;
 
-      let external_module;
-      let external_name;
+      let external_module: string | undefined;
+      let external_name: string | undefined;
 
       let decorators = iFunction.declaration.decorators;
 
@@ -147,7 +147,7 @@ export default class AsBindTransform extends Transform {
         importedFunctionName = external_name;
       } else if (
         iFunction.parent &&
-        iFunction.parent.kind === ElementKind.NAMESPACE
+        iFunction.parent.kind === ElementKind.Namespace
       ) {
         importedFunctionName = iFunction.parent.name + "." + iFunction.name;
       }

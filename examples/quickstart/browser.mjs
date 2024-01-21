@@ -21,4 +21,6 @@ const asyncTask = async () => {
     asBindInstance.exports.myExportedFunctionThatTakesAString("Hello World!");
   console.log(response); // AsBind: Hello World!
 };
-asyncTask();
+asyncTask().catch(e => {
+  throw e;
+});

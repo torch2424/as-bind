@@ -1,5 +1,5 @@
-import libBundles from "./rollup.lib";
-import mdBundles from "./rollup.markdown-parser";
+import libBundles from "./rollup.lib.mjs";
+import mdBundles from "./rollup.markdown-parser.mjs";
 
 let exports = [];
 

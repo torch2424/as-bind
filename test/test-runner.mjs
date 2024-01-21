@@ -1,18 +1,20 @@
-const { promisify } = require("util");
-const fs = require("fs/promises");
-const { dirname, join } = require("path");
+import fs from "fs/promises";
+import fsSync from "fs";
+import { dirname, join } from "path";
+import { createRequire } from "module";
 
-const Express = require("express");
-const Mocha = require("mocha");
-const glob = promisify(require("glob"));
-const pptr = require("puppeteer");
+import Express from "express";
+import Mocha from "mocha";
+import { glob } from "glob";
+import pptr from "puppeteer";
+import asc from "assemblyscript/dist/asc.js";
+import AsBind from "../dist/as-bind.cjs.js";
 
-const asc = require("assemblyscript/cli/asc");
-
-globalThis.AsBind = require("../dist/as-bind.cjs.js");
+const require = createRequire(import.meta.url);
+globalThis.AsBind = AsBind;
 
 async function main() {
-  process.chdir(__dirname);
+  process.chdir("./test");
   await asc.ready;
 
   await compileAllAsc();
@@ -42,18 +44,32 @@ async function compileAllAsc() {
       Object.assign(config, m);
     } catch (e) {}
     console.log(`Compiling ${ascFile}...`);
+
+    const wasmFile = ascFile.replace(/\.ts$/, ".wasm");
+    if (fsSync.existsSync(wasmFile)) {
+      await fs.unlink(wasmFile);
+    }
+
     const params = [
       "--runtime",
       "stub",
       "--exportRuntime",
       "--transform",
       transformFile,
-      "--binaryFile",
+      "--outFile",
       ascFile.replace(/\.ts$/, ".wasm"),
       ascFile
     ];
     config.mangleCompilerParams(params);
-    await asc.main(params);
+    const result = await asc.main(params, {
+      stderr: process.stderr,
+      stdout: process.stdout
+    });
+
+    if (result.error !== null) {
+      console.error(`Failed to compile ${ascFile}`);
+      process.exit(1);
+    }
   }
 }
 

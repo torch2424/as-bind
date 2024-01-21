@@ -8,6 +8,7 @@
     "declarationDir": "",
     "downlevelIteration": true,
     "allowSyntheticDefaultImports": true,
-    "lib": ["ESNext", "DOM"]
+    "lib": ["ESNext", "DOM"],
+    "target": "ESNext",
   }
 }
