@@ -8,7 +8,7 @@ import fs from "fs/promises";
 
 const pkg = JSON.parse(await fs.readFile("./package.json", "utf8"));
 
-const sourcemapOption = process.env.PROD ? undefined : "inline";
+const sourcemapOption = process.env.PROD ? true : "inline";
 
 const babelConfig = {
   babelHelpers: "bundled",
