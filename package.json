@@ -15,9 +15,10 @@
   "scripts": {
     "clean": "shx rm -rf dist",
     "build": "run-s clean lib:js:build",
+    "build:dev": "run-s clean lib:js:build:dev",
     "dev": "run-p lib:watch lib:test:watch",
     "serve": "serve dist -p 8080",
-    "test": "run-s build test:lib test:quickstart",
+    "test": "run-s build:dev test:lib test:quickstart",
     "test:lib": "node ./test/test-runner.mjs",
     "test:quickstart": "(cd examples/quickstart && pnpm install && npm run test)",
     "lint": "prettier --write **/*.js **/*.ts **/*.json !build/**/* !dist/**/*",

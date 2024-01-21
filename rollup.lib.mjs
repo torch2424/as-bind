@@ -72,7 +72,8 @@ const libBundles = [
     input: "transform.ts",
     output: {
       file: "dist/transform.cjs.js",
-      format: "cjs"
+      format: "cjs",
+      sourcemap: sourcemapOption
     },
     external: ["assemblyscript", "visitor-as/as"],
     plugins
@@ -81,7 +82,8 @@ const libBundles = [
     input: "transform.ts",
     output: {
       file: "dist/transform.amd.js",
-      format: "amd"
+      format: "amd",
+      sourcemap: sourcemapOption
     },
     external: ["assemblyscript", "visitor-as/as"],
     plugins
